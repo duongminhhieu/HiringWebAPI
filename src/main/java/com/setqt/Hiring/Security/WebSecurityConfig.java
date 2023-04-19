@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -26,9 +27,10 @@ public class WebSecurityConfig {
 
 	@Autowired
 	public PasswordEncoder passwordEncoder;
-
+ 
+	@Autowired
+	JwtFilter jwtFilter;
 	
-
 	@Bean
 	public AuthenticationEntryPoint authenticationEntryPoint() {
 //		return new LoginUrlAuthenticationEntryPoint("https://baomoi.com/");
@@ -51,11 +53,12 @@ public class WebSecurityConfig {
 
 					.authorizeHttpRequests(auth -> {
 
-						auth.requestMatchers("/getAll" ).permitAll();
+//						auth.requestMatchers("/getAll" ).permitAll();
 						auth.requestMatchers("/auth/**" ).permitAll();
 
 						auth.anyRequest().authenticated();
 					})
+					.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 
 					.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint()).and()
 
