@@ -26,7 +26,8 @@ public class CustomUserDetail implements UserDetails {
 		Collection<Role> userRole= user.getRoles();
 		ArrayList<SimpleGrantedAuthority> listRole= new ArrayList<SimpleGrantedAuthority>();
 		for(Role i : userRole) {
-			listRole.add(new SimpleGrantedAuthority(i.getNameRole()));
+//			System.out.println(i.getNameRole());
+			listRole.add(new SimpleGrantedAuthority("ROLE_"+i.getNameRole()));
 		}
 		
 		return listRole;

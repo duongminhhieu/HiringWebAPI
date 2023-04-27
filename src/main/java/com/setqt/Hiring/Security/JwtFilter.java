@@ -48,7 +48,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			String jwt = getJwtFromRequest(request);
 			
 			if (jwt!= null) {
-				System.out.println("-----"+jwt);
+//				System.out.println("-----"+jwt);
 			if ( tokenProvider.validateToken(jwt)) {
 				// Lấy user từ chuỗi jwt
 				String userId = tokenProvider.getUsernameFromToken(jwt);

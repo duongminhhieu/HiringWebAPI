@@ -60,7 +60,7 @@ public class AuthenticationController {
 
 		String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
 		
-		System.out.println("sdsd===="+jwt);
+//		System.out.println("sdsd===="+jwt);
 		return  ResponseEntity.status(HttpStatus.OK).body( 
 					new com.setqt.Hiring.Model.ResponseObject("ok","successfully authentication",jwt));
 		
