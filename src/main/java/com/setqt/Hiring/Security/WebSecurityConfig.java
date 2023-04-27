@@ -53,10 +53,14 @@ public class WebSecurityConfig {
 
 					.authorizeHttpRequests(auth -> {
 
+<<<<<<< HEAD
 //						auth.requestMatchers("/company/**" ).permitAll();
 //						auth.requestMatchers("/getAll" ).hasRole("ADMIN");
+=======
+						auth.requestMatchers("/getAll" ).permitAll();
+>>>>>>> 264fe5f4ec782396de75ad9d4b43d3a9ec6cb215
 						auth.requestMatchers("/auth/**" ).permitAll();
-
+						auth.requestMatchers("/api/v1/**").permitAll();
 						auth.anyRequest().authenticated();
 					})
 					.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
