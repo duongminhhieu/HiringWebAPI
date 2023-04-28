@@ -116,5 +116,10 @@ public class FirebaseImageService implements IStorageService {
         blob.delete();
     }
 
+    @Override
+    public String update(String name, MultipartFile file) throws IOException {
+        return null;
+    }
+
 
 }

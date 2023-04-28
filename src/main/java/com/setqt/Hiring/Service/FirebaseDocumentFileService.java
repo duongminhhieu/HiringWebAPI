@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
@@ -83,7 +84,24 @@ public class FirebaseDocumentFileService implements IStorageService{
 
     @Override
     public void delete(String name) throws IOException {
+        Bucket bucket = StorageClient.getInstance().bucket();
 
+        if (StringUtils.isEmpty(name)) {
+            throw new RuntimeException("invalid file name");
+        }
+
+        Blob blob = bucket.get("cvs_candidates/" + name);
+
+        if (blob == null) {
+            throw new RuntimeException("file not found");
+        }
+
+        blob.delete();
+    }
+
+    @Override
+    public String update(String name, MultipartFile file) throws IOException {
+        return null;
     }
 
     @Data

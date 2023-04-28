@@ -19,12 +19,14 @@ public interface IStorageService {
 
     void delete(String name) throws IOException;
 
+    String update(String name, MultipartFile file) throws IOException;
+
     default String getExtension(String originalFileName) {
         return StringUtils.getFilenameExtension(originalFileName);
     }
 
     default String generateFileName(String originalFileName) {
-        return UUID.randomUUID().toString() + getExtension(originalFileName);
+        return UUID.randomUUID().toString(); //+ getExtension(originalFileName);
     }
 
     default byte[] getByteArrays(BufferedImage bufferedImage, String format) throws IOException {
