@@ -88,4 +88,39 @@ public class FileController {
         }
     }
 
+
+    @PutMapping("/updateImage/{name}")
+    public ResponseEntity<ResponseObject> updateImage(@PathVariable String name, @RequestParam("file") MultipartFile file) {
+        try {
+            firebaseImageService = new FirebaseImageService();
+
+            String imageUrl = firebaseImageService.update(name, file);
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "update file image successfully", imageUrl)
+            );
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+                    new ResponseObject("ok", exception.getMessage(), "")
+            );
+        }
+    }
+
+    @PutMapping("/updateDocument/{name}")
+    public ResponseEntity<ResponseObject> updateFile(@PathVariable String name, @RequestParam("file") MultipartFile file) {
+        try {
+            firebaseDocumentFileService = new FirebaseDocumentFileService();
+
+            String imageUrl = firebaseDocumentFileService.update(name, file);
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "update file document successfully", imageUrl)
+            );
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+                    new ResponseObject("ok", exception.getMessage(), "")
+            );
+        }
+    }
+
 }

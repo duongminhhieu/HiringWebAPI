@@ -101,7 +101,8 @@ public class FirebaseDocumentFileService implements IStorageService{
 
     @Override
     public String update(String name, MultipartFile file) throws IOException {
-        return null;
+        delete(name);
+        return getFileUrl(save(file));
     }
 
     @Data
