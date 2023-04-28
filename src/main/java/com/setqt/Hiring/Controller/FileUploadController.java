@@ -2,8 +2,11 @@ package com.setqt.Hiring.Controller;
 
 
 import com.setqt.Hiring.Model.ResponseObject;
+import com.setqt.Hiring.Service.FirebaseDocumentFileService;
+import com.setqt.Hiring.Service.FirebaseImageService;
 import com.setqt.Hiring.Service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,21 +23,43 @@ import java.util.stream.Collectors;
 public class FileUploadController {
 
     @Autowired
-    private IStorageService storageService;
+    private FirebaseImageService firebaseImageService;
+    @Autowired
+    private FirebaseDocumentFileService firebaseDocumentFileService;
 
-
-    @PostMapping("")
-    public ResponseEntity<ResponseObject> uploadFile(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/fileImage")
+    public ResponseEntity<ResponseObject> uploadImageFile(@RequestParam("file") MultipartFile file) {
         try {
-            // save file to Firebase
-            String fileName = storageService.save(file);
+            firebaseImageService = new FirebaseImageService();
 
-            String imageUrl = storageService.getFileUrl(fileName);
+            // save file to Firebase
+            String fileName = firebaseImageService.save(file);
+
+            String imageUrl = firebaseImageService.getFileUrl(fileName);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "upload file successfully", imageUrl)
             );
-            //06a290064eb94a02a58bfeef36002483.png => how to open this file in Web Browser ?
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
+                    new ResponseObject("ok", exception.getMessage(), "")
+            );
+        }
+    }
+
+    @PostMapping("/fileDocument")
+    public ResponseEntity<ResponseObject> uploadDocumentFile(@RequestParam("file") MultipartFile file) {
+        try {
+
+            firebaseDocumentFileService = new FirebaseDocumentFileService();
+            // save file to Firebase
+            String fileName = firebaseDocumentFileService.save(file);
+
+            String imageUrl = firebaseDocumentFileService.getFileUrl(fileName);
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "upload file successfully", imageUrl)
+            );
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
                     new ResponseObject("ok", exception.getMessage(), "")

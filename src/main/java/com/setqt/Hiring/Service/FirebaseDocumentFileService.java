@@ -8,8 +8,6 @@ import com.google.cloud.storage.Storage;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.StorageClient;
-import com.setqt.Hiring.Config.FirebaseConfig;
-import com.setqt.Hiring.Utils.Properties;
 import lombok.Data;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
@@ -28,26 +25,13 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class FirebaseImageService implements IStorageService {
+public class FirebaseDocumentFileService implements IStorageService{
 
-    // Get the Storage instance
-    Storage storage;
-    @EventListener
-    public void init(ApplicationReadyEvent event) {
 
-        try {
-            storage = StorageClient.getInstance().bucket().getStorage();
-        } catch (Exception ex) {
-
-            ex.printStackTrace();
-
-        }
-    }
-
-    private boolean isImageFile(MultipartFile file) {
+    private boolean isDocumentFile(MultipartFile file) {
         //Let install FileNameUtils
         String fileExtension = FilenameUtils.getExtension(file.getOriginalFilename());
-        return Arrays.asList(new String[] {"png","jpg","jpeg", "bmp"})
+        return Arrays.asList(new String[] {"doc","docx","pdf"})
                 .contains(fileExtension.trim().toLowerCase());
     }
 
@@ -55,20 +39,19 @@ public class FirebaseImageService implements IStorageService {
     public String getFileUrl(String name) {
         Bucket bucket = StorageClient.getInstance().bucket();
         // Get the file URL
-        BlobId blobId = BlobId.of(bucket.getName(), name);
+        BlobId blobId = BlobId.of(bucket.getName(),"cvs_candidates/" + name);
         Blob blob = bucket.getStorage().get(blobId);
         return blob.signUrl(100000, TimeUnit.DAYS).toString();
     }
 
     @Override
     public String save(MultipartFile file) throws IOException {
-
         if (file.isEmpty()) {
             throw new RuntimeException("Failed to store empty file.");
         }
         //check file is image ?
-        if(!isImageFile(file)) {
-            throw new RuntimeException("You can only upload image file");
+        if(!isDocumentFile(file)) {
+            throw new RuntimeException("You can only upload document file (pdf, doc, docx)");
         }
         //file must be <= 5Mb
         float fileSizeInMegabytes = file.getSize() / 1_000_000.0f;
@@ -77,23 +60,23 @@ public class FirebaseImageService implements IStorageService {
         }
 
         Bucket bucket = StorageClient.getInstance().bucket();
+
         String name = generateFileName(file.getOriginalFilename());
 
-        bucket.create(name, file.getBytes(), file.getContentType());
+        bucket.create( "cvs_candidates/" + name, file.getBytes(), file.getContentType());
 
         return name;
     }
 
     @Override
     public String save(BufferedImage bufferedImage, String originalFileName) throws IOException {
-
         byte[] bytes = getByteArrays(bufferedImage, getExtension(originalFileName));
 
         Bucket bucket = StorageClient.getInstance().bucket();
 
         String name = generateFileName(originalFileName);
 
-        bucket.create(name, bytes);
+        bucket.create("cvs_candidates/" + name, bytes);
 
         return name;
     }
@@ -101,20 +84,13 @@ public class FirebaseImageService implements IStorageService {
     @Override
     public void delete(String name) throws IOException {
 
-        Bucket bucket = StorageClient.getInstance().bucket();
-
-        if (StringUtils.isEmpty(name)) {
-            throw new IOException("invalid file name");
-        }
-
-        Blob blob = bucket.get(name);
-
-        if (blob == null) {
-            throw new IOException("file not found");
-        }
-
-        blob.delete();
     }
 
+    @Data
+    @Configuration
+    @ConfigurationProperties(prefix = "firebase.document")
+    public class Properties {
+        private String bucketName;
 
+    }
 }
