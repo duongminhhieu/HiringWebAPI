@@ -60,7 +60,7 @@ public class WebSecurityConfig {
 						auth.requestMatchers("/company/getAll").permitAll();
 
 						auth.requestMatchers("/auth/**" ).permitAll();
-						auth.requestMatchers("/api/v1/**").permitAll();
+						auth.requestMatchers("/api/v1/FileUpload/**").permitAll();
 						auth.anyRequest().authenticated();
 					})
 					.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

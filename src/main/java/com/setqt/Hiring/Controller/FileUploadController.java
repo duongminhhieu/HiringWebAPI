@@ -4,6 +4,7 @@ package com.setqt.Hiring.Controller;
 import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Service.IStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 public class FileUploadController {
 
     @Autowired
+@Qualifier("imageService")
     private IStorageService storageService;
 
 
