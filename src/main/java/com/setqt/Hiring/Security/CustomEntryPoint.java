@@ -27,9 +27,8 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 		this.message=mgs;
 		this.status=status;
 	}
-	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
-			org.springframework.security.core.AuthenticationException authException)
+			AuthenticationException authException)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		 response.setContentType("application/json;charset=UTF-8");
@@ -42,5 +41,13 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 	        ObjectMapper mapper = new ObjectMapper();
 	        mapper.writeValue(response.getOutputStream(), error);
 	}
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+			org.springframework.security.core.AuthenticationException authException)
+			throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }
