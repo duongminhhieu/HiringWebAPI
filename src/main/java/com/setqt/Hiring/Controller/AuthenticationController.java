@@ -72,8 +72,6 @@ public class AuthenticationController {
 
 	}
 
-
-
 	@PostMapping("/signin")
 		public ResponseEntity<String> authenticateUser(@RequestBody AuthenRequest loginDto){
 //	    	String passEn = passEncoder.encode(loginDto.getPassword());

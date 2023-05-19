@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.setqt.Hiring.Model.Company;
+import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Service.CompanyService;
+import com.setqt.Hiring.Service.EmployerService;
 
 @RestController
 @RequestMapping("/company")
@@ -22,6 +24,8 @@ public class HomeController {
 
 	@Autowired
 	private CompanyService comService;
+	@Autowired
+	private EmployerService employerService;
 	@Autowired
 	private JwtTokenHelper jwtHelper;
 
@@ -32,6 +36,15 @@ public class HomeController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ResponseObject("failed", "not found data", null));
 
+		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+	}
+	@GetMapping("/test")
+	public ResponseEntity<ResponseObject> tests() {
+		List<Employer> result = employerService.findAll();
+		if (result.isEmpty())
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ResponseObject("failed", "not found data", null));
+		
 		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 	}
 
