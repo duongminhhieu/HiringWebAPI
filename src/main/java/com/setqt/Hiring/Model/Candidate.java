@@ -2,36 +2,33 @@ package com.setqt.Hiring.Model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.User;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table; 
+import jakarta.persistence.*;
+import lombok.ToString;
 
 @Entity
 //@IdClass(CandidatePK.class)
 @Table(name = "Candidate")
 public class Candidate implements Serializable{
-	
-	
-//	@GeneratedValue(strategy = GenerationType.AUTO)
-//	private Long id;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
+	@JsonBackReference
 	private User user;
+
+	@OneToMany(mappedBy = "candidate")
+	@JsonManagedReference
+	private List<Report> reports;
+
+
 	private String fullName;
 	
 	private String email;
@@ -40,7 +37,7 @@ public class Candidate implements Serializable{
 	private String address;
 	private Date dob;
 	private String avatar;
-	private String [] skill;
+	private String[] skill;
 	private String experience;
 	public Candidate(User user, String fullName, String email, String gender, String phone, String address, Date dob,
 			String avatar, String[] skill, String experience) {
@@ -56,6 +53,27 @@ public class Candidate implements Serializable{
 		this.skill = skill;
 		this.experience = experience;
 	}
+
+	public Candidate() {
+
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public List<Report> getReports() {
+		return reports;
+	}
+
+	public void setReports(List<Report> reports) {
+		this.reports = reports;
+	}
+
 	public User getUser() {
 		return user;
 	}

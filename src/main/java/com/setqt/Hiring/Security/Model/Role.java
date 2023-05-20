@@ -3,6 +3,7 @@ package com.setqt.Hiring.Security.Model;
 import java.util.Collection;
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -14,6 +15,7 @@ public class Role {
 	private String nameRole;
 	private static final long serialVersionUID = -297333281792804226L;
 	@ManyToMany(mappedBy = "roles")
+	@JsonBackReference
 //	private Collection<User> users;
 	private java.util.Set<User> roles = new HashSet<>();
 	public Role(String name) {

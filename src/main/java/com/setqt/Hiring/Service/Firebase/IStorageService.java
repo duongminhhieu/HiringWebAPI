@@ -1,4 +1,4 @@
-package com.setqt.Hiring.Service;
+package com.setqt.Hiring.Service.Firebase;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

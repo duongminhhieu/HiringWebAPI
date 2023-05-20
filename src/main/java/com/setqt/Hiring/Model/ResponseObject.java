@@ -1,5 +1,15 @@
 package com.setqt.Hiring.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 public class ResponseObject {
 
 
@@ -27,7 +37,6 @@ public class ResponseObject {
 		this.data = data;
 	}
 	public ResponseObject(String status, String message, Object data) {
-		super();
 		this.status = status;
 		this.message = message;
 		this.data = data;

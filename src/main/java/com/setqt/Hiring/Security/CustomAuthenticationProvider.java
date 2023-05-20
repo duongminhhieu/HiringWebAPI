@@ -61,7 +61,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			return new UsernamePasswordAuthenticationToken(username, passDB, grand);
 		}
 		else throw new BadCredentialsException("Password incorrect");
-		
+
 	}
 
 	@Override

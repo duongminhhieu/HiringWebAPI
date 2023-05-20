@@ -2,19 +2,17 @@ package com.setqt.Hiring.Controller;
 
 import java.util.List;
 
+import com.setqt.Hiring.Model.Candidate;
+import com.setqt.Hiring.Service.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Model.ResponseObject;
-import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Service.CompanyService;
 import com.setqt.Hiring.Service.EmployerService;
 
@@ -22,39 +20,82 @@ import com.setqt.Hiring.Service.EmployerService;
 @RequestMapping("/company")
 public class HomeController {
 
-	@Autowired
-	private CompanyService comService;
-	@Autowired
-	private EmployerService employerService;
-	@Autowired
-	private JwtTokenHelper jwtHelper;
+    @Autowired
+    private CompanyService comService;
+    @Autowired
+    private EmployerService employerService;
+    @Autowired
+    private CandidateService candidateService;
+//    @Autowired
+//    private JwtTokenHelper jwtHelper;
 
-	@GetMapping("/getAll")
-	public ResponseEntity<ResponseObject> test() {
-		List<Company> result = comService.findAll();
-		if (result.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ResponseObject("failed", "not found data", null));
+    @GetMapping("/getAll")
+    public ResponseEntity<ResponseObject> test() {
+        try {
+            System.out.println(1);
+            List<Company> result = comService.findAll();
+            System.out.println(result.size());
+            if (result.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
-	}
-	@GetMapping("/test")
-	public ResponseEntity<ResponseObject> tests() {
-		List<Employer> result = employerService.findAll();
-		if (result.isEmpty())
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(new ResponseObject("failed", "not found data", null));
-		
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	@GetMapping("/add")
-	public ResponseEntity<ResponseObject> addCompany(@RequestHeader(value = "Authorization") String jwt) {
-		jwt = jwt.substring(7, jwt.length());
+        return null;
+    }
 
-		String user = jwtHelper.getUsernameFromToken(jwt);
-		System.out.println(user);
+    @GetMapping("/getCompany")
+    public ResponseEntity<List<Company>> getCompany() {
+        try {
+            List<Company> companies = this.comService.findAll();
+            System.out.println(companies.size());
+            System.out.println("job postirng: " + companies.get(0).getJobPostingList().size());
+            return new ResponseEntity<>(companies, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", null));
-	}
+    }
+
+    @GetMapping("/getEmployer")
+    public ResponseEntity<List<Employer>> getEmployer() {
+        try {
+            List<Employer> employers = this.employerService.findAll();
+
+            return new ResponseEntity<>(employers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    @GetMapping("/getCandidate/{id}")
+    public Candidate getCandidate(@PathVariable Long id){
+        Candidate d = candidateService.findById(id);
+        return d;
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<ResponseObject> tests() {
+        List<Employer> result = employerService.findAll();
+        if (result.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject("failed", "not found data", null));
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+    }
+
+//    @GetMapping("/add")
+//    public ResponseEntity<ResponseObject> addCompany(@RequestHeader(value = "Authorization") String jwt) {
+//        jwt = jwt.substring(7, jwt.length());
+//
+//        String user = jwtHelper.getUsernameFromToken(jwt);
+//        System.out.println(user);
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", null));
+//    }
 }

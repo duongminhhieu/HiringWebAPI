@@ -44,8 +44,8 @@ public class AuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-	
-	
+
+
 	@Autowired
 	com.setqt.Hiring.Security.JwtTokenHelper jWTTokenHelper;
 	@PostMapping("/login")
@@ -55,15 +55,15 @@ public class AuthenticationController {
 		try {
 		final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 				authentRequest.getUsername(), authentRequest.getPassword()));
-		
+
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
-		
+
 //		System.out.println("sdsd===="+jwt);
-		return  ResponseEntity.status(HttpStatus.OK).body( 
+		return  ResponseEntity.status(HttpStatus.OK).body(
 					new com.setqt.Hiring.Model.ResponseObject("ok","successfully authentication",jwt));
-		
+
 		}
 		catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -75,7 +75,7 @@ public class AuthenticationController {
 	@PostMapping("/signin")
 		public ResponseEntity<String> authenticateUser(@RequestBody AuthenRequest loginDto){
 //	    	String passEn = passEncoder.encode(loginDto.getPassword());
-	   
+
 	    	Authentication authentication  = authenticationManager.authenticate(
 	    			new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
 
@@ -107,7 +107,7 @@ public class AuthenticationController {
 
 //	@PostMapping(value="/auth2", consumes={"application/json"})
 //	public ResponseEntity<?> createAccount() {
-//		
+//
 //		User u = new User("odxxxk","fgh");
 //		UService.create(u);
 //		return ResponseEntity.ok(HttpStatus.OK);

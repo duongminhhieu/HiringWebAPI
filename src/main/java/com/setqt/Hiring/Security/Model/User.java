@@ -3,22 +3,14 @@ package com.setqt.Hiring.Security.Model;
 import java.io.Serializable;
 import java.util.HashSet;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.setqt.Hiring.Model.Candidate;
+import com.setqt.Hiring.Model.Employer;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
 import org.hibernate.mapping.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.SequenceGenerators;
-import jakarta.persistence.Table;
 
 import java.util.*;
 
@@ -26,11 +18,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.Role;
 
 @Entity
+@Data
+@ToString
 @Table(name = "userInfo")
 public class User implements Serializable {
 
-	
-	
 	@Id
 	@Column(name = "userId")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "sequence_User")
@@ -40,11 +32,20 @@ public class User implements Serializable {
 	private String password;
 	private Boolean isEnable;
 	private static final long serialVersionUID = -297553281792804226L;
-	
+
+	@OneToOne(mappedBy = "user")
+	@JsonManagedReference
+	private Candidate candidate;
+
+	@OneToOne(mappedBy = "user")
+	@JsonManagedReference
+	private Employer employer;
+
 //	@JsonManagedReference
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "User_Role", joinColumns = { @JoinColumn(name = "user_Id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_Id") })
+	@JsonManagedReference
 //	private Collection<Role> roles = new Collection ;
 	private java.util.Set<Role> roles = new HashSet<>();
 	
@@ -77,6 +78,7 @@ public class User implements Serializable {
 		this.roles = null;
 	}
 
+	@JsonBackReference
 	public Long getId() {
 		return id;
 	}

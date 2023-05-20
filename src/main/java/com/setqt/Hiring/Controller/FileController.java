@@ -1,9 +1,13 @@
 package com.setqt.Hiring.Controller;
 
 
+import com.setqt.Hiring.Model.Company;
+import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Model.ResponseObject;
-import com.setqt.Hiring.Service.FirebaseDocumentFileService;
-import com.setqt.Hiring.Service.FirebaseImageService;
+import com.setqt.Hiring.Repository.CompanyRepository;
+import com.setqt.Hiring.Repository.EmployerRepository;
+import com.setqt.Hiring.Service.Firebase.FirebaseDocumentFileService;
+import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -11,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(path = "api/v1/FileUpload")
@@ -124,5 +130,6 @@ public class FileController {
             );
         }
     }
+
 
 }

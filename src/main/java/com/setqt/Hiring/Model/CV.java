@@ -17,8 +17,10 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.ToString;
 
 @Entity
+@ToString
 @Table(name="CurriculumVitae")
 public class CV implements Serializable{
 	@Id
@@ -44,6 +46,11 @@ public class CV implements Serializable{
 		this.fileCV = fileCV;
 		this.dateCreated = dateCreated;
 	}
+
+	public CV() {
+
+	}
+
 	public Long getId() {
 		return cv_id;
 	}

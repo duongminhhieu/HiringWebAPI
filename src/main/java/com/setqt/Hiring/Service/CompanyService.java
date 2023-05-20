@@ -17,12 +17,13 @@ public class CompanyService {
 
 	private final CompanyRepository repository;
 
+
 	public CompanyService(CompanyRepository repo) {
 		this.repository = repo;
 	}
 
-	public Optional<Company> findById(Long id) {
-		return Optional.ofNullable(repository.findById(id).orElse(null));
+	public Company findById(Long id) {
+		return this.repository.findById(id).orElse(null);
 	}
 
 	public void updateOne(long id, Company company) {

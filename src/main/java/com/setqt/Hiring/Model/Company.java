@@ -1,18 +1,17 @@
 package com.setqt.Hiring.Model;
 
 import java.io.Serializable;
+import java.util.List;
 
-import org.hibernate.annotations.GeneratorType;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
 
 
 @Entity
+@Data
 @Table(name = "Company")
 public class Company implements Serializable{
 	
@@ -23,6 +22,16 @@ public class Company implements Serializable{
 	private String taxCode;
 	private String address;
 	private String domain;
+
+
+	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<JobPosting> jobPostingList;
+
+	@OneToMany (mappedBy = "company", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private List<Employer> employers;
+
 	private static final long serialVersionUID = -297553281792804396L;
 	public Company(String name, Long id, String taxCode, String address, String domain) {
 		super();
@@ -35,35 +44,60 @@ public class Company implements Serializable{
 	public Company() {
 		
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getTaxCode() {
 		return taxCode;
 	}
+
 	public void setTaxCode(String taxCode) {
 		this.taxCode = taxCode;
 	}
+
 	public String getAddress() {
 		return address;
 	}
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
 	public String getDomain() {
 		return domain;
 	}
+
 	public void setDomain(String domain) {
 		this.domain = domain;
 	}
-	
+
+
+	public List<JobPosting> getJobPostingList() {
+		return jobPostingList;
+	}
+	public void setJobPostingList(List<JobPosting> jobPostingList) {
+		this.jobPostingList = jobPostingList;
+	}
+
+	public List<Employer> getEmployers() {
+		return employers;
+	}
+
+	public void setEmployers(List<Employer> employers) {
+		this.employers = employers;
+	}
 }

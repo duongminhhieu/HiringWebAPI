@@ -26,7 +26,7 @@ public class JwtTokenHelper {
 	private final String JWT_SECRET = "HiringappForSEDSHCMUS";
 	private String appName = "Hiring";
 
-	
+
 	private final long JWT_EXPIRATION = 604800000L;
 
 	public String generateToken2(CustomUserDetail user) {

@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 public class CustomEntryPoint implements AuthenticationEntryPoint {
-	
+
 	private String message;
 	private int status;
 	public CustomEntryPoint(String mgs, int status) {
@@ -46,8 +46,8 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 			org.springframework.security.core.AuthenticationException authException)
 			throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 
 }

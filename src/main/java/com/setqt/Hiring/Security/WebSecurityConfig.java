@@ -27,16 +27,16 @@ public class WebSecurityConfig {
 
 	@Autowired
 	public PasswordEncoder passwordEncoder;
- 
+
 	@Autowired
 	JwtFilter jwtFilter;
-	
+
 	@Bean
 	public AuthenticationEntryPoint authenticationEntryPoint() {
 //		return new LoginUrlAuthenticationEntryPoint("https://baomoi.com/");
-		return new CustomEntryPoint("Lỗi đăng nhập",401); 
+		return new CustomEntryPoint("Lỗi đăng nhập",401);
 	}
-//	
+//
 
 	@Bean
 	AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
