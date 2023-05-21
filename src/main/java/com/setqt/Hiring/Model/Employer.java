@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.User;
 
 import jakarta.persistence.CascadeType;
@@ -23,19 +24,18 @@ import lombok.ToString;
 @Table(name="employer")
 @ToString
 public class Employer implements Serializable{
-	 public Employer() {
-		// TODO Auto-generated constructor stub
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonBackReference
 	@JoinColumn(name = "user_id",referencedColumnName = "userId")
+	@JsonBackReference
 	private User user;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="company_id", referencedColumnName = "id")
 	@JsonBackReference
 	private Company company;
@@ -43,38 +43,16 @@ public class Employer implements Serializable{
 
 	private String phone;
 	private String email;
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
+
+	public Employer(User user, Company company, String phone, String email) {
 		this.user = user;
+		this.company = company;
+		this.phone = phone;
+		this.email = email;
 	}
 
-	@JsonIgnore
-	public Company getCompany() {
-		return company;
-	}
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public Employer(User user, Company company, String phone, String email) {
-		super();
-		this.user = user;
-		this.company = company;
-		this.phone = phone;
-		this.email = email;
+	public Employer() {
+
 	}
 
 	public Long getId() {
@@ -83,5 +61,45 @@ public class Employer implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Long getCompanyId() {
+		return company.getId();
+	}
+
+	public Long getUserId(){
+		return user.getId();
+	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

@@ -3,6 +3,7 @@ package com.setqt.Hiring.Model;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -85,18 +86,22 @@ public class Company implements Serializable{
 		this.domain = domain;
 	}
 
-
+	@JsonBackReference
 	public List<JobPosting> getJobPostingList() {
 		return jobPostingList;
 	}
+
+	@JsonBackReference
 	public void setJobPostingList(List<JobPosting> jobPostingList) {
 		this.jobPostingList = jobPostingList;
 	}
 
+	@JsonBackReference
 	public List<Employer> getEmployers() {
 		return employers;
 	}
 
+	@JsonBackReference
 	public void setEmployers(List<Employer> employers) {
 		this.employers = employers;
 	}

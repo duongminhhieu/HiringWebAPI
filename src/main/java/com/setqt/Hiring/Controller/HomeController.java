@@ -3,10 +3,9 @@ package com.setqt.Hiring.Controller;
 import java.util.List;
 
 import com.setqt.Hiring.Model.Candidate;
-import com.setqt.Hiring.Service.CandidateService;
+import com.setqt.Hiring.Service.Candidate.CandidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,10 +72,9 @@ public class HomeController {
         }
 
     }
-    @GetMapping("/getCandidate/{id}")
-    public Candidate getCandidate(@PathVariable Long id){
-        Candidate d = candidateService.findById(id);
-        return d;
+    @GetMapping("/getCandidate")
+    public List<Candidate> getCandidate(){
+        return this.candidateService.findAll();
     }
 
     @GetMapping("/test")

@@ -78,7 +78,6 @@ public class User implements Serializable {
 		this.roles = null;
 	}
 
-	@JsonBackReference
 	public Long getId() {
 		return id;
 	}
