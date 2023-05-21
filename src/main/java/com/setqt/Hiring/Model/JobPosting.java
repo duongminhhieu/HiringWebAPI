@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.ToString;
 
 @Entity
-@Data
+//@Data
 @ToString
 @Table(name="JobPosting")
 public class JobPosting implements Serializable {
