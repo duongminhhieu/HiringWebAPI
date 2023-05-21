@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Service.Candidate.CandidateService;
+import com.setqt.Hiring.Service.Company.CompanyService;
+import com.setqt.Hiring.Service.Employer.EmployerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Model.ResponseObject;
-import com.setqt.Hiring.Service.CompanyService;
-import com.setqt.Hiring.Service.EmployerService;
+
 
 @RestController
 @RequestMapping("/company")
@@ -73,12 +74,12 @@ public class HomeController {
 
     }
     @GetMapping("/getCandidate")
-    public List<Candidate> getCandidate(){
+    public List<Candidate> getCandidate() throws Exception {
         return this.candidateService.findAll();
     }
 
     @GetMapping("/test")
-    public ResponseEntity<ResponseObject> tests() {
+    public ResponseEntity<ResponseObject> tests() throws Exception {
         List<Employer> result = employerService.findAll();
         if (result.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
