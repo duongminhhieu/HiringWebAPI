@@ -49,8 +49,10 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
 		try {
-			return http.csrf().disable().cors().disable().and().headers().frameOptions().disable().and()
-
+			return 
+// 				http.csrf().disable().cors().disable().and().headers().frameOptions().disable().and()
+ http.cors().disable() // Tắt CORS
+            .csrf().disable() // Tắt CSRF
 					.authorizeHttpRequests(auth -> {
 
 
