@@ -5,13 +5,13 @@ import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Repository.CandidateRepository;
 import com.setqt.Hiring.Repository.CompanyRepository;
-import com.setqt.Hiring.Service.GeneralService;
+import com.setqt.Hiring.Service.Generic.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CandidateService extends GeneralService<Candidate> implements ICandidate {
+public class CandidateService extends GenericService<Candidate> implements ICandidate {
     private final CandidateRepository candidateRepository;
     @Autowired
     public CandidateService(CandidateRepository candidateRepository) {
