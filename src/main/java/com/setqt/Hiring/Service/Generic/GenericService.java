@@ -1,16 +1,15 @@
 package com.setqt.Hiring.Service.Generic;
 
-import com.setqt.Hiring.Repository.Generic.GenericRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+
 public class GenericService<T> implements IGenericService<T> {
 
-    protected GenericRepository<T> genericRepository;
+    private final JpaRepository<T,Long> genericRepository;
 
-    @Autowired
-    public GenericService(GenericRepository<T> genericRepository) {
+    public GenericService(JpaRepository<T, Long> genericRepository) {
         this.genericRepository = genericRepository;
     }
 
@@ -36,6 +35,15 @@ public class GenericService<T> implements IGenericService<T> {
     public void delete(Long id) throws Exception {
         try {
             genericRepository.deleteById(id);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    @Override
+    public T findById(Long id) throws Exception {
+        try {
+            return (T) genericRepository.findById(id);
         } catch (Exception e) {
             throw e;
         }
