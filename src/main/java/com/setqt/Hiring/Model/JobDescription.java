@@ -18,6 +18,7 @@ public class JobDescription implements Serializable {
 	private Long id;
 
 	@OneToOne(mappedBy = "jobDescription")
+	@JsonBackReference(value="job_descript")
 	private JobPosting jobPosting;
 
 	private String description;
@@ -127,7 +128,7 @@ public class JobDescription implements Serializable {
 		this.id = id;
 	}
 
-	@JsonBackReference
+//	@JsonBackReference
 	public JobPosting getJobPosting() {
 		return jobPosting;
 	}

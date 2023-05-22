@@ -22,22 +22,25 @@ public class JobPosting implements Serializable {
 	@GeneratedValue(strategy =  GenerationType.AUTO)
 	private Long id;
 	
+	
+	
 	@ManyToOne
 	@JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference(value="job_company")
 	private Company company;
 	
 	
 	@ManyToMany(mappedBy="job")
-	@JsonManagedReference
+	@JsonManagedReference(value="job_cv")
 	private Set<CV> listCV = new HashSet<>();
 
 	@OneToOne
 	@JoinColumn(name = "job_description_id")
-	@JsonManagedReference
+	@JsonManagedReference(value="job_descript")
 	private JobDescription jobDescription;
 
 	@OneToMany(mappedBy = "jobPosting")
+	@JsonManagedReference(value="job_report")
 	private List<Report> reports;
 
 	private String title;
@@ -114,6 +117,22 @@ public class JobPosting implements Serializable {
 	}
 
 	public void setView(int view) {
+		this.view = view;
+	}
+	public JobPosting() {
+	
+	}
+	public JobPosting(Long id, Company company, Set<CV> listCV, JobDescription jobDescription, List<Report> reports,
+			String title, Date postDate, Date dueDate, int view) {
+		super();
+		this.id = id;
+		this.company = company;
+		this.listCV = listCV;
+		this.jobDescription = jobDescription;
+		this.reports = reports;
+		this.title = title;
+		this.postDate = postDate;
+		this.dueDate = dueDate;
 		this.view = view;
 	}
 

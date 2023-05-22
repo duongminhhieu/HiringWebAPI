@@ -26,7 +26,7 @@ public class Company implements Serializable{
 
 
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference(value="job_company")
 	private List<JobPosting> jobPostingList;
 
 	@OneToMany (mappedBy = "company", cascade = CascadeType.ALL)

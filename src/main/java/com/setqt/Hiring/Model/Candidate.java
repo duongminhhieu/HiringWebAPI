@@ -21,11 +21,11 @@ public class Candidate implements Serializable{
 	private Long id;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
-	@JsonBackReference
+	@JsonBackReference(value="candidate_user")
 	private User user;
 
 	@OneToMany(mappedBy = "candidate")
-	@JsonManagedReference
+	@JsonManagedReference(value="report_candidate")
 	private List<Report> reports;
 
 

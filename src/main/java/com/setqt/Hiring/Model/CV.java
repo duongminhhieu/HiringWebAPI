@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -36,6 +39,7 @@ public class CV implements Serializable{
 	        joinColumns = @JoinColumn(name = "cv_id"),
 	        inverseJoinColumns = @JoinColumn(name = "job_id")
 	    )
+	@JsonBackReference(value="job_cv")
 	private Set<JobPosting> job = new HashSet<>();
 	public CV(Long id, Candidate candidate, Set<JobPosting>  job, String introLetter, String fileCV, Date dateCreated) {
 		super();

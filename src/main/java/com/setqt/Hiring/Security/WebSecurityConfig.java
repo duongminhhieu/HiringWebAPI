@@ -58,6 +58,7 @@ public class WebSecurityConfig {
 //						auth.requestMatchers("/getAll" ).hasRole("ADMIN");
 
 						auth.requestMatchers("/company/**").permitAll();
+						auth.requestMatchers("/job/**").permitAll();
 
 						auth.requestMatchers("/auth/**" ).permitAll();
 						auth.requestMatchers("/api/v1/FileUpload/**").permitAll();
