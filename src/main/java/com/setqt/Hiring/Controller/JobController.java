@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.JobPosting;
 import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Repository.JobPostingRepository;
@@ -49,14 +50,14 @@ public class JobController {
 	public ResponseEntity<ResponseObject> addJob(@RequestBody JobPosting job) {
 		try {
 			System.out.println("ssss---");
-			System.out.println(job);
-			JobPosting result;
-			result = jobService.save(job);
-
-			if (result==null)
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(new ResponseObject("failed", "cannot add", null));
-			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "posted job", result));
+			System.out.println(job.toString());
+			JobPosting result = null;
+//			result = jobService.save(job);
+//
+//			if (result==null)
+//				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(new ResponseObject("failed", "cannot add", null));
+//			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "posted job", result));
 		} catch (Exception e) {
 			
 			// TODO Auto-generated catch block
@@ -66,8 +67,21 @@ public class JobController {
 
 	}
 
-	@GetMapping("/test")
-	public String test() {
-		return "okk";
-	}
+	 @GetMapping("/getAll")
+	    public ResponseEntity<ResponseObject> test() {
+	        try {
+	            System.out.println(1);
+	            List<JobPosting> result = jobService.findAll();
+	            System.out.println(result.size());
+	            if (result.isEmpty())
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                        .body(new ResponseObject("failed", "not found data", null));
+	            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+
+	        return null;
+	    }
 }

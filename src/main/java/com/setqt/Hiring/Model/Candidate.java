@@ -21,7 +21,7 @@ public class Candidate implements Serializable{
 	private Long id;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
-	@JsonBackReference(value="candidate_user")
+	@JsonBackReference(value="user_candidate")
 	private User user;
 
 	@OneToMany(mappedBy = "candidate")

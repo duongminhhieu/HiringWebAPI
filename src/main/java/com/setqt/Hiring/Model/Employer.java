@@ -29,15 +29,15 @@ public class Employer implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-
+	private static final long serialVersionUID = -297553781792804396L;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id",referencedColumnName = "userId")
-	@JsonBackReference
+	@JsonBackReference(value="user_employer")
 	private User user;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="company_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonBackReference(value="company_employer")
 	private Company company;
 
 

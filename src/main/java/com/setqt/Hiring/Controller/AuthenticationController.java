@@ -18,11 +18,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.setqt.Hiring.DTO.CandidateDTO;
+import com.setqt.Hiring.DTO.EmployeeDTO;
+import com.setqt.Hiring.Model.Candidate;
+import com.setqt.Hiring.Model.Company;
+import com.setqt.Hiring.Model.Employer;
+import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Security.Model.Role;
 import com.setqt.Hiring.Security.Model.RoleRepository;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.UserService;
+import com.setqt.Hiring.Service.Candidate.CandidateService;
+import com.setqt.Hiring.Service.Company.CompanyService;
+import com.setqt.Hiring.Service.Employer.EmployerService;
 
 import ch.qos.logback.classic.Logger;
 import client.AuthenRequest;
@@ -36,7 +44,10 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserService UService;
-
+	@Autowired
+	private CompanyService comService;
+	@Autowired
+	private EmployerService emService;
 	@Autowired
 	private PasswordEncoder passEncoder;
 	Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
@@ -44,7 +55,8 @@ public class AuthenticationController {
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
-
+	@Autowired
+	private CandidateService candidateService;
 
 	@Autowired
 	com.setqt.Hiring.Security.JwtTokenHelper jWTTokenHelper;
@@ -60,13 +72,16 @@ public class AuthenticationController {
 
 		String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
 
-//		System.out.println("sdsd===="+jwt);
+
 		return  ResponseEntity.status(HttpStatus.OK).body(
-					new com.setqt.Hiring.Model.ResponseObject("ok","successfully authentication",jwt));
+					new com.setqt.Hiring.Model.ResponseObject("ok","Đăng nhập không thành công",
+							jwt)  );
 
 		}
 		catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.OK).body(
+					new com.setqt.Hiring.Model.ResponseObject("failed","Đăng nhập thành công",
+							"")  );
         }
 
 
@@ -83,16 +98,60 @@ public class AuthenticationController {
 	        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
 	    }
 
-	@PostMapping(value = "/signup", consumes = { "application/json" })
-	public ResponseEntity<?> createAccount(@RequestBody User user) {
+	@PostMapping(value = "/signup/candidate", consumes = { "application/json" })
+	public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateDTO user) {
 
-		logger.info(user.getUsername());
-		logger.info("-------");
+//		logger.info(user.getUsername());
+//		logger.info("-------");
+		if(user.getEmail().equals("")||user.getPassword().equals(""))
+			return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công", ""));
+		
 		Role initRole = roleRepo.findRoleByName("ADMIN");
-		User newUser = new User(user.getUsername(), user.getPassword(), true, initRole);
+		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
+		Candidate candidate = new Candidate();
+		candidate.setEmail(user.getEmail());
+		candidate.setUser(newUser);
+		candidate.setFullName(user.getFullname());
 		UService.create(newUser);
+		try {
+			candidateService.save(candidate);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		return ResponseEntity.ok(HttpStatus.OK);
+		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
+		   
+	}
+	@PostMapping(value = "/signup/employer", consumes = { "application/json" })
+	public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeDTO user) {
+		
+//		logger.info(user.getUsername());
+//		logger.info("-------");
+		Role initRole = roleRepo.findRoleByName("ADMIN");
+		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
+		
+		Employer em = new Employer();
+		
+		Company com = new Company();
+		com.setAddress(user.getAddress());
+		com.setName(user.getFullname());
+		em.setEmail(user.getEmail());
+		em.setUser(newUser);
+		em.setPhone(user.getPhone());
+		em.setCompany(com);
+		
+		try {
+//			comService.save(com);
+//			emService.save(em);
+			UService.create(newUser);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
+		
 	}
 
 //	@PostMapping(value = "/login", consumes = { "application/json" })

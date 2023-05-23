@@ -7,17 +7,21 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.annotation.Generated;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
+
 @Entity
 //@Data
 @ToString
 @Table(name="JobPosting")
 public class JobPosting implements Serializable {
+	private static final long serialVersionUID = -297553221792804396L;
+
 	@Id
 	@GeneratedValue(strategy =  GenerationType.AUTO)
 	private Long id;
@@ -26,12 +30,16 @@ public class JobPosting implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
+//	@JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
+
 	@JsonBackReference(value="job_company")
 	private Company company;
 	
 	
 	@ManyToMany(mappedBy="job")
-	@JsonManagedReference(value="job_cv")
+	
+//	@JsonManagedReference(value="job_cv")
+	@JsonIgnore
 	private Set<CV> listCV = new HashSet<>();
 
 	@OneToOne
@@ -58,6 +66,9 @@ public class JobPosting implements Serializable {
 
 	public Company getCompany() {
 		return company;
+	}
+	public Long getCompanyID() {
+		return company.getId();
 	}
 
 	public void setCompany(Company company) {
@@ -134,6 +145,13 @@ public class JobPosting implements Serializable {
 		this.postDate = postDate;
 		this.dueDate = dueDate;
 		this.view = view;
+	}
+
+	@Override
+	public String toString() {
+		return "JobPosting [id=" + id  
+				 + ", title=" + title + ", postDate=" + postDate + ", dueDate="
+				+ dueDate + ", view=" + view + "]";
 	}
 
 

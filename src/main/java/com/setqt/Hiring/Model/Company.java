@@ -16,6 +16,7 @@ import lombok.ToString;
 @Table(name = "Company")
 public class Company implements Serializable{
 	
+	private static final long serialVersionUID = -297553281792804396L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -30,10 +31,10 @@ public class Company implements Serializable{
 	private List<JobPosting> jobPostingList;
 
 	@OneToMany (mappedBy = "company", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference(value="company_employer")
 	private List<Employer> employers;
-
-	private static final long serialVersionUID = -297553281792804396L;
+ 
+	
 	public Company(String name, Long id, String taxCode, String address, String domain) {
 		super();
 		this.name = name;

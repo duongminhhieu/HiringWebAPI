@@ -20,6 +20,7 @@ public class JobDescription implements Serializable {
 	@OneToOne(mappedBy = "jobDescription")
 	@JsonBackReference(value="job_descript")
 	private JobPosting jobPosting;
+	private static final long serialVersionUID = -297553111792804396L;
 
 	private String description;
 	private String benefits;

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Employer;
 import jakarta.persistence.*;
@@ -34,18 +35,20 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -297553281792804226L;
 
 	@OneToOne(mappedBy = "user")
-	@JsonManagedReference
+	@JsonManagedReference(value="user_candidate")
 	private Candidate candidate;
 
 	@OneToOne(mappedBy = "user")
-	@JsonManagedReference
+	@JsonManagedReference(value="user_employer")
 	private Employer employer;
 
 //	@JsonManagedReference
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "User_Role", joinColumns = { @JoinColumn(name = "user_Id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_Id") })
-	@JsonManagedReference
+//	@JsonManagedReference(value="user-roles")
+	 @JsonIgnore
+	
 //	private Collection<Role> roles = new Collection ;
 	private java.util.Set<Role> roles = new HashSet<>();
 	
