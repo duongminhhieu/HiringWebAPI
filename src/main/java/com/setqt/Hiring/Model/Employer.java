@@ -35,9 +35,9 @@ public class Employer implements Serializable{
 	@JsonBackReference(value="user_employer")
 	private User user;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="company_id", referencedColumnName = "id")
-	@JsonBackReference(value="company_employer")
+	@JsonManagedReference(value="company_employer")
 	private Company company;
 
 

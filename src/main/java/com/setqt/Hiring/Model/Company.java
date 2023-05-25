@@ -30,9 +30,9 @@ public class Company implements Serializable{
 	@JsonManagedReference(value="job_company")
 	private List<JobPosting> jobPostingList;
 
-	@OneToMany (mappedBy = "company", cascade = CascadeType.ALL)
-	@JsonManagedReference(value="company_employer")
-	private List<Employer> employers;
+	@OneToOne (cascade = CascadeType.ALL)
+	@JsonBackReference(value="company_employer")
+	private Employer employer;
  
 	
 	public Company(String name, Long id, String taxCode, String address, String domain) {
@@ -98,12 +98,12 @@ public class Company implements Serializable{
 	}
 
 	@JsonBackReference
-	public List<Employer> getEmployers() {
-		return employers;
+	public Employer getEmployer() {
+		return employer;
 	}
 
 	@JsonBackReference
-	public void setEmployers(List<Employer> employers) {
-		this.employers = employers;
+	public void setEmployer(Employer employer) {
+		this.employer = employer;
 	}
 }

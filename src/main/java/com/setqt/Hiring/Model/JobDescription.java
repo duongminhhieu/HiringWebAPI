@@ -45,6 +45,18 @@ public class JobDescription implements Serializable {
 		this.address_work = address_work;
 	}
 
+	public JobDescription(String description, String benefits, String requirement, String gender, String experience, String salary, int number_candidates, String working_form, String address_work) {
+		this.description = description;
+		this.benefits = benefits;
+		this.requirement = requirement;
+		this.gender = gender;
+		this.experience = experience;
+		this.salary = salary;
+		this.number_candidates = number_candidates;
+		this.working_form = working_form;
+		this.address_work = address_work;
+	}
+
 	public JobDescription() {
 
 	}

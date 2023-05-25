@@ -11,10 +11,7 @@ import com.setqt.Hiring.Service.Generic.GenericService;
 @Service
 public class JobPostingService extends GenericService<JobPosting> implements IJobPosting{
 
-	@Autowired
-	public JobPostingService(JobPostingRepository genericRepository) {
+	public JobPostingService(JpaRepository<JobPosting, Long> genericRepository) {
 		super(genericRepository);
-		// TODO Auto-generated constructor stub
 	}
-
 }

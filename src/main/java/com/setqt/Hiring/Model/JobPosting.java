@@ -147,6 +147,7 @@ public class JobPosting implements Serializable {
 		this.view = view;
 	}
 
+
 	@Override
 	public String toString() {
 		return "JobPosting [id=" + id  
