@@ -28,7 +28,7 @@ public class JobPosting implements Serializable {
 	
 	
 	
-	@ManyToOne
+	@ManyToOne( cascade=CascadeType.ALL)
 	@JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
 //	@JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
 
@@ -42,7 +42,7 @@ public class JobPosting implements Serializable {
 	@JsonIgnore
 	private Set<CV> listCV = new HashSet<>();
 
-	@OneToOne
+	@OneToOne( cascade=CascadeType.ALL)
 	@JoinColumn(name = "job_description_id")
 	@JsonManagedReference(value="job_descript")
 	private JobDescription jobDescription;

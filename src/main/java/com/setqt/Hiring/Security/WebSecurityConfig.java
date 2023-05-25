@@ -59,7 +59,7 @@ public class WebSecurityConfig {
 
 						auth.requestMatchers("/company/**").permitAll();
 						auth.requestMatchers("/job/**").permitAll();
-						auth.requestMatchers("/employer/**").permitAll();
+//						auth.requestMatchers("/employer/**").permitAll();
 
 						auth.requestMatchers("/auth/**" ).permitAll();
 						auth.requestMatchers("/api/v1/FileUpload/**").permitAll();

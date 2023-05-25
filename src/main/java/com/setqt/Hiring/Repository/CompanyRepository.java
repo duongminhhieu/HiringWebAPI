@@ -14,4 +14,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 			+"WHERE Company.id = ?1", nativeQuery = true)
 	void updateById(Long id,Company com);
 
+//	void getCompanyFromUserID(Long id,Company com);
+	
+	
+	
 }

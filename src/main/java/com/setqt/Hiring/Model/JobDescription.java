@@ -17,7 +17,7 @@ public class JobDescription implements Serializable {
 	@GeneratedValue(strategy =  GenerationType.AUTO)
 	private Long id;
 
-	@OneToOne(mappedBy = "jobDescription")
+	@OneToOne(mappedBy = "jobDescription",cascade=CascadeType.ALL)
 	@JsonBackReference(value="job_descript")
 	private JobPosting jobPosting;
 	private static final long serialVersionUID = -297553111792804396L;

@@ -47,6 +47,14 @@ public class UserService {
 				}
 				return result;
 	}
+	public User findOneByUsername(String username){
+		List<User> result=repository.findByUsername(username);
+		if (result==null) {
+			result =  Collections.emptyList();
+			return null;
+		}
+		return result.get(0);
+	}
 	public List<User> findAll() {
 		return repository.findAll().stream().toList();
 	}

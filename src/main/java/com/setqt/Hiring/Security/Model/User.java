@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.Role;
 
 @Entity
-@Data
+//@Data
 @ToString
 @Table(name = "userInfo")
 public class User implements Serializable {
@@ -122,6 +122,12 @@ public class User implements Serializable {
 //	}
 	public void setRoles(Role roles) {
 		this.roles.add(roles);
+	}
+	public Employer getEmployer() {
+		return employer;
+	}
+	public void setEmployer(Employer employer) {
+		this.employer = employer;
 	}
 //	public void setRoles(Collection<Role> roles) {
 //		this.roles = roles;

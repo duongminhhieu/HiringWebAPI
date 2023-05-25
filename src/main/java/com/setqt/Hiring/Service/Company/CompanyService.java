@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.setqt.Hiring.Service.Generic.GenericService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CompanyService extends GenericService<Company> implements ICompany {
+	
+	@Autowired
 	public CompanyService(JpaRepository<Company, Long> genericRepository) {
 		super(genericRepository);
 	}
