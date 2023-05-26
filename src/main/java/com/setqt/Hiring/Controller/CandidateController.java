@@ -2,16 +2,16 @@ package com.setqt.Hiring.Controller;
 
 import com.setqt.Hiring.DTO.CandidateAuthedDTO;
 import com.setqt.Hiring.DTO.CandidateDTO;
+import com.setqt.Hiring.DTO.RatingDTO;
 import com.setqt.Hiring.DTO.ReportDTO;
-import com.setqt.Hiring.Model.Candidate;
-import com.setqt.Hiring.Model.JobPosting;
-import com.setqt.Hiring.Model.Report;
-import com.setqt.Hiring.Model.ResponseObject;
+import com.setqt.Hiring.Model.*;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.Candidate.CandidateService;
+import com.setqt.Hiring.Service.Company.CompanyService;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
 import com.setqt.Hiring.Service.JobPosting.JobPostingService;
+import com.setqt.Hiring.Service.RatingCompany.RatingCompanyService;
 import com.setqt.Hiring.Service.Report.ReportService;
 import com.setqt.Hiring.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -42,6 +43,11 @@ public class CandidateController {
     private FirebaseImageService firebaseImageService;
     @Autowired
     CandidateService candidateService;
+    @Autowired
+    CompanyService companyService;
+
+    @Autowired
+    RatingCompanyService ratingCompanyService;
 
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject> getAllCandidate(@RequestHeader(value = "Authorization") String jwt) {
@@ -125,6 +131,49 @@ public class CandidateController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("failed", "add Report failed", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "add Report successfully", result));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @PostMapping("/rating/{idCompany}")
+    public ResponseEntity<ResponseObject> addReport(@PathVariable String idCompany,
+                                                    @RequestBody RatingDTO ratingDTO,
+                                                    @RequestHeader(value = "Authorization") String jwt) {
+        try {
+
+            jwt = jwt.substring(7, jwt.length());
+
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+
+            Optional<Company> company = companyService.findById(Long.parseLong(idCompany));
+
+            List<RatingCompany> ratingCompanyList =  ratingCompanyService.findAll();
+
+            // check exists rating
+            for(RatingCompany a : ratingCompanyList){
+                if(Objects.equals(a.getCandidate().getId(), candidate.getId()) && Objects.equals(a.getCompany().getId(), company.get().getId())){
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(new ResponseObject("failed", "candidate has been rating", null));
+                }
+            }
+
+
+            RatingCompany ratingCompany = new RatingCompany(ratingDTO.getRate(), ratingDTO.getContent(), company.get(), candidate);
+            RatingCompany result = ratingCompanyService.save(ratingCompany);
+            // update rating
+            company.get().updateRating();
+            companyService.save(company.get());
+
+            if (result == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "add Rating failed", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "add Rating successfully", result));
 
         } catch (Exception e) {
             e.printStackTrace();

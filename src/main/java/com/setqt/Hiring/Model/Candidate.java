@@ -28,6 +28,9 @@ public class Candidate implements Serializable{
 	@JsonManagedReference(value="report_candidate")
 	private List<Report> reports;
 
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="rating_company")
+	private List<RatingCompany> ratingCompanies;
 
 	private String fullName;
 	
@@ -57,6 +60,14 @@ public class Candidate implements Serializable{
 
 	public Candidate() {
 
+	}
+
+	public List<RatingCompany> getRatingCompanies() {
+		return ratingCompanies;
+	}
+
+	public void setRatingCompanies(List<RatingCompany> ratingCompanies) {
+		this.ratingCompanies = ratingCompanies;
 	}
 
 	public Long getId() {

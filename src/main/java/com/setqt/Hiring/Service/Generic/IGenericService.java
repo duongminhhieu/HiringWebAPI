@@ -10,4 +10,5 @@ public interface IGenericService <T>{
     void delete(Long id) throws Exception;
     //T findById(Long id) throws Exception;
     Optional<T> findById(Long id) throws Exception;
+
 }

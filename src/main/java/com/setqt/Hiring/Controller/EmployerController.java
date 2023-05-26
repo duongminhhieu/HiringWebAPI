@@ -34,11 +34,8 @@ public class EmployerController {
     UserService uService;
     @Autowired
     JobPostingService jobService;
-
     @Autowired
     JobDescriptionService JDesciptService;
-
-    
     @Autowired
     JwtTokenHelper jwtHelper;
    
