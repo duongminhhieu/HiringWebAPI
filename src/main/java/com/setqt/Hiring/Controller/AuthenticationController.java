@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.setqt.Hiring.DTO.CandidateDTO;
+import com.setqt.Hiring.DTO.CandidateAuthedDTO;
 import com.setqt.Hiring.DTO.EmployeeDTO;
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Company;
@@ -74,13 +74,13 @@ public class AuthenticationController {
 
 
 		return  ResponseEntity.status(HttpStatus.OK).body(
-					new com.setqt.Hiring.Model.ResponseObject("ok","Đăng nhập không thành công",
+					new com.setqt.Hiring.Model.ResponseObject("ok","Đăng nhập thành công",
 							jwt)  );
 
 		}
 		catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.OK).body(
-					new com.setqt.Hiring.Model.ResponseObject("failed","Đăng nhập thành công",
+					new com.setqt.Hiring.Model.ResponseObject("failed","Đăng nhập không thành công",
 							"")  );
         }
 
@@ -99,7 +99,7 @@ public class AuthenticationController {
 	    }
 
 	@PostMapping(value = "/signup/candidate", consumes = { "application/json" })
-	public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateDTO user) {
+	public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateAuthedDTO user) {
 
 //		logger.info(user.getUsername());
 //		logger.info("-------");
@@ -112,6 +112,7 @@ public class AuthenticationController {
 		candidate.setEmail(user.getEmail());
 		candidate.setUser(newUser);
 		candidate.setFullName(user.getFullname());
+		candidate.setAvatar("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
 		UService.create(newUser);
 		try {
 			candidateService.save(candidate);

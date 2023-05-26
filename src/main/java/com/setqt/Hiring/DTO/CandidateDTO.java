@@ -1,32 +1,81 @@
 package com.setqt.Hiring.DTO;
 
-public class CandidateDTO {
+import java.io.Serializable;
+import java.util.Date;
+
+public class CandidateDTO implements Serializable {
+
+	private String fullName;
+	private String gender;
+	private String phone;
+	private String address;
+	private Date dob;
+	private String[] skill;
+	private String experience;
+
+	public CandidateDTO(String fullName, String gender, String phone, String address, Date dob, String[] skills, String experience)
+	{
+		this.fullName = fullName;
+		this.gender = gender;
+		this.phone = phone;
+		this.address = address;
+		this.dob = dob;
+		this.skill = skills;
+		this.experience = experience;
+	}
+
 	 public String getFullname() {
-		return fullname;
+		return fullName;
 	}
 	public void setFullname(String fullname) {
-		this.fullname = fullname;
+		this.fullName = fullname;
 	}
-	public String getEmail() {
-		return email;
+
+	public String getGender() {
+		return gender;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
-	public String getPassword() {
-		return password;
+
+	public String getPhone() {
+		return phone;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	public CandidateDTO(String fullname, String email, String password) {
-		super();
-		this.fullname = fullname;
-		this.email = email;
-		this.password = password;
+
+	public String getAddress() {
+		return address;
 	}
-	private String fullname;
-	 private String email;
-	 private String password;
-//	 private String ;
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+	public String[] getSkill() {
+		return skill;
+	}
+
+	public void setSkill(String[] skill) {
+		this.skill = skill;
+	}
+
+	public String getExperience() {
+		return experience;
+	}
+
+	public void setExperience(String experience) {
+		this.experience = experience;
+	}
 }

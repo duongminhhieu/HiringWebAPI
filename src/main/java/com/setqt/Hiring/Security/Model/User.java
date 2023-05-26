@@ -129,7 +129,16 @@ public class User implements Serializable {
 	public void setEmployer(Employer employer) {
 		this.employer = employer;
 	}
-//	public void setRoles(Collection<Role> roles) {
+
+	public Candidate getCandidate() {
+		return candidate;
+	}
+
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+
+	//	public void setRoles(Collection<Role> roles) {
 //		this.roles = roles;
 //	}
 

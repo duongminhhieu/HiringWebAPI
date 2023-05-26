@@ -34,7 +34,7 @@ public class FileController {
             firebaseImageService = new FirebaseImageService();
 
             // save file to Firebase
-            String fileName = firebaseImageService.save(file);
+            String fileName = firebaseImageService.save(file, "/test/abc");
 
             String imageUrl = firebaseImageService.getFileUrl(fileName);
 
@@ -54,7 +54,7 @@ public class FileController {
 
             firebaseDocumentFileService = new FirebaseDocumentFileService();
             // save file to Firebase
-            String fileName = firebaseDocumentFileService.save(file);
+            String fileName = firebaseDocumentFileService.save(file, "/test/abc");
 
             String imageUrl = firebaseDocumentFileService.getFileUrl(fileName);
 
@@ -102,7 +102,7 @@ public class FileController {
         try {
             firebaseImageService = new FirebaseImageService();
 
-            String imageUrl = firebaseImageService.update(name, file);
+            String imageUrl = firebaseImageService.update(file, name);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "update file image successfully", imageUrl)
@@ -119,7 +119,7 @@ public class FileController {
         try {
             firebaseDocumentFileService = new FirebaseDocumentFileService();
 
-            String imageUrl = firebaseDocumentFileService.update(name, file);
+            String imageUrl = firebaseDocumentFileService.update(file, name);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "update file document successfully", imageUrl)
