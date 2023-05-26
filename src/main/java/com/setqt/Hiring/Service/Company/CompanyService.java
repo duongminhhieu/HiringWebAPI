@@ -23,4 +23,9 @@ public class CompanyService extends GenericService<Company> implements ICompany 
 	public CompanyService(JpaRepository<Company, Long> genericRepository) {
 		super(genericRepository);
 	}
+	
+	public List<Company> findTop6ByRating() {
+		return ((CompanyRepository) genericRepository).findTop6ByRating();
+		
+	}
 }

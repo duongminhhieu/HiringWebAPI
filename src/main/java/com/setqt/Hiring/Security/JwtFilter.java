@@ -75,6 +75,12 @@ public class JwtFilter extends OncePerRequestFilter {
 			}
 		} catch (Exception ex) {
 			logger.error("failed on set user authentication", ex);
+//				throw(ex);
+//			 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//		        response.setContentType("application/json");
+//		        response.getWriter().write("Lỗi xác thực JWT không hợp lệ");
+//		        response.getWriter().flush();
+//		        return;
 		}
 
 

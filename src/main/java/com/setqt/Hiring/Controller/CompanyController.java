@@ -36,7 +36,7 @@ public class CompanyController {
         try {
            
             List<Company> result = comService.findAll();
-            System.out.println(result.size());
+      
             if (result.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("failed", "not found data", null));
@@ -53,7 +53,7 @@ public class CompanyController {
     public ResponseEntity<ResponseObject> getTopSix() {
     	try {
     		
-    		List<Company> result = comService.findAll();
+    		List<Company> result = comService.findTop6ByRating();
     		System.out.println(result.size());
     		if (result.isEmpty())
     			return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -68,10 +68,10 @@ public class CompanyController {
     }
     
 
-    @GetMapping("/getCompany/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getCompany(@PathVariable Long id) {
     	  try {
-              System.out.println(1);
+//              System.out.println(1);
               Optional<Company> result = comService.findById(id);
            
               if (result.isEmpty())

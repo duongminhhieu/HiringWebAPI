@@ -15,7 +15,7 @@ import lombok.ToString;
 @Data
 @Table(name = "Company")
 public class Company implements Serializable{
-	
+
 	private static final long serialVersionUID = -297553281792804396L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,17 +24,22 @@ public class Company implements Serializable{
 	private String taxCode;
 	private String address;
 	private String domain;
+	private Double rate;
 
 
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="job_company")
 	private List<JobPosting> jobPostingList;
 
+	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="rating_company")
+	private List<RatingCompany> ratingCompanies;
+
 	@OneToOne (cascade = CascadeType.ALL)
 	@JsonBackReference(value="company_employer")
 	private Employer employer;
- 
-	
+
+
 	public Company(String name, Long id, String taxCode, String address, String domain) {
 		super();
 		this.name = name;
@@ -44,7 +49,15 @@ public class Company implements Serializable{
 		this.domain = domain;
 	}
 	public Company() {
-		
+
+	}
+
+	public void updateRating(){
+		double t = 0 ;
+		for(RatingCompany a : this.ratingCompanies){
+			t += a.getRate();
+		}
+		this.rate = t/ this.ratingCompanies.size();
 	}
 
 	public Long getId() {
@@ -105,5 +118,13 @@ public class Company implements Serializable{
 	@JsonBackReference
 	public void setEmployer(Employer employer) {
 		this.employer = employer;
+	}
+
+	public Double getRate() {
+		return rate;
+	}
+
+	public void setRate(Double rate) {
+		this.rate = rate;
 	}
 }

@@ -34,6 +34,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 @RestController
 @RequestMapping("/employer")
 public class EmployerController {
+
 	@Autowired
 	EmployerService employerService;
 	@Autowired
@@ -80,8 +81,7 @@ public class EmployerController {
 
 			jobService.save(jobPosting);
 
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(new ResponseObject("ok", "Thêm việc thành công ", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thêm việc thành công ", null));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -106,7 +106,7 @@ public class EmployerController {
 			if (cv.isEmpty())
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", null));
-			
+
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("ok", "Tìm tất cả cv thành công !", cv));
 		} catch (Exception ex) {
@@ -115,5 +115,4 @@ public class EmployerController {
 		}
 
 	}
-
 }

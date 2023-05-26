@@ -61,7 +61,8 @@ public class WebSecurityConfig {
 						auth.requestMatchers("/job/**").permitAll();
 						//auth.requestMatchers("/candidate/**").permitAll();
 //						auth.requestMatchers("/employer/**").permitAll();
-
+						auth.requestMatchers("employer/**").hasRole("EMPLOYER");
+						auth.requestMatchers("candidate/**").hasRole("CANDIDATE");
 						auth.requestMatchers("/auth/**" ).permitAll();
 						auth.requestMatchers("/api/v1/FileUpload/**").permitAll();
 						auth.anyRequest().authenticated();

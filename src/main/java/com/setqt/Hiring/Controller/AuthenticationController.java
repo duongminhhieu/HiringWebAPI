@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.setqt.Hiring.DTO.CandidateAuthedDTO;
-import com.setqt.Hiring.DTO.EmployeeDTO;
+import com.setqt.Hiring.DTO.EmployeeAuthedDTO;
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.Employer;
@@ -60,25 +60,25 @@ public class AuthenticationController {
 
 	@Autowired
 	com.setqt.Hiring.Security.JwtTokenHelper jWTTokenHelper;
+
 	@PostMapping("/login")
 	public ResponseEntity<?> login2(@RequestBody AuthenRequest authentRequest)
 			throws InvalidKeySpecException, NoSuchAlgorithmException {
 
 		try {
-		final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				authentRequest.getUsername(), authentRequest.getPassword()));
+			final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+					authentRequest.getUsername(), authentRequest.getPassword()));
 
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
+			String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
 
 
-		return  ResponseEntity.status(HttpStatus.OK).body(
+			return  ResponseEntity.status(HttpStatus.OK).body(
 					new com.setqt.Hiring.Model.ResponseObject("ok","Đăng nhập thành công",
 							jwt)  );
 
-		}
-		catch (BadCredentialsException ex) {
+		} catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.OK).body(
 					new com.setqt.Hiring.Model.ResponseObject("failed","Đăng nhập không thành công",
 							"")  );
@@ -88,15 +88,15 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/signin")
-		public ResponseEntity<String> authenticateUser(@RequestBody AuthenRequest loginDto){
+	public ResponseEntity<String> authenticateUser(@RequestBody AuthenRequest loginDto){
 //	    	String passEn = passEncoder.encode(loginDto.getPassword());
 
-	    	Authentication authentication  = authenticationManager.authenticate(
-	    			new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
+		Authentication authentication  = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
 
-	        SecurityContextHolder.getContext().setAuthentication(authentication);
-	        return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
-	    }
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
+	}
 
 	@PostMapping(value = "/signup/candidate", consumes = { "application/json" })
 	public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateAuthedDTO user) {
@@ -105,8 +105,8 @@ public class AuthenticationController {
 //		logger.info("-------");
 		if(user.getEmail().equals("")||user.getPassword().equals(""))
 			return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công", ""));
-		
-		Role initRole = roleRepo.findRoleByName("ADMIN");
+
+		Role initRole = roleRepo.findRoleByName("CANDIDATE");
 		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
 		Candidate candidate = new Candidate();
 		candidate.setEmail(user.getEmail());
@@ -122,26 +122,34 @@ public class AuthenticationController {
 		}
 
 		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
-		   
+
 	}
+
 	@PostMapping(value = "/signup/employer", consumes = { "application/json" })
-	public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeDTO user) {
-		
+	public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeAuthedDTO user) {
+
 //		logger.info(user.getUsername());
 //		logger.info("-------");
-		Role initRole = roleRepo.findRoleByName("ADMIN");
+		Role initRole = roleRepo.findRoleByName("EMPLOYER");
 		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
-		
+
 		Employer em = new Employer();
-		
 		Company com = new Company();
-		com.setAddress(user.getAddress());
-		com.setName(user.getFullname());
+
+
 		em.setEmail(user.getEmail());
 		em.setUser(newUser);
 		em.setPhone(user.getPhone());
+
+		System.out.println(user.getAddress());
+		com.setAddress(user.getAddress());
+		com.setRate((double) 0);
+		com.setName(user.getName());
+		com.setDomain(user.getDomain());
+		com.setTaxCode(null);
+		com.setEmployer(em);
 		em.setCompany(com);
-		
+
 		try {
 			UService.create(newUser);
 			comService.save(com);
@@ -150,9 +158,9 @@ public class AuthenticationController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
-		
+
 	}
 
 //	@PostMapping(value = "/login", consumes = { "application/json" })
