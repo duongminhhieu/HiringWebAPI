@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IJobPosting extends IGenericService<JobPosting> {
-
+	public List<JobPosting> findJobPostingWithDescription(String title,String add) ;
 }

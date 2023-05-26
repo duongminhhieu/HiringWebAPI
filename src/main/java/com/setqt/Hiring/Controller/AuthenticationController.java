@@ -143,9 +143,9 @@ public class AuthenticationController {
 		em.setCompany(com);
 		
 		try {
-//			comService.save(com);
-//			emService.save(em);
 			UService.create(newUser);
+			comService.save(com);
+			emService.save(em);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

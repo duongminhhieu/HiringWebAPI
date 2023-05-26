@@ -26,13 +26,14 @@ public class JobController {
 	@Autowired
 	JobPostingService jobService;
 
-	@PostMapping("/search")
-	public ResponseEntity<ResponseObject> searchJob(@RequestParam(name = "text", defaultValue = "ALL") String job) {
+	@GetMapping("/search")
+	public ResponseEntity<ResponseObject> searchJob(@RequestParam(name = "text", defaultValue = "%") String job
+			,@RequestParam(name = "address", defaultValue = "%") String add) {
 		try {
 
 			System.out.println(job);
 			List<JobPosting> result;
-			result = jobService.findAll();
+			result = jobService.findJobPostingWithDescription(job, add);
 
 			if (result.isEmpty())
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)

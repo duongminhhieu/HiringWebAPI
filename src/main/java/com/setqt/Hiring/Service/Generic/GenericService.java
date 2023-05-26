@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class GenericService<T> implements IGenericService<T> {
 
-    private final JpaRepository<T,Long> genericRepository;
+    protected final JpaRepository<T,Long> genericRepository;
 
     public GenericService(JpaRepository<T, Long> genericRepository) {
         this.genericRepository = genericRepository;
