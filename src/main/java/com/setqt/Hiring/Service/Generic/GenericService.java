@@ -3,6 +3,7 @@ package com.setqt.Hiring.Service.Generic;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class GenericService<T> implements IGenericService<T> {
@@ -41,9 +42,9 @@ public class GenericService<T> implements IGenericService<T> {
     }
 
     @Override
-    public T findById(Long id) throws Exception {
+    public Optional<T> findById(Long id) throws Exception {
         try {
-            return (T) genericRepository.findById(id);
+            return (Optional<T>) genericRepository.findById(id);
         } catch (Exception e) {
             throw e;
         }

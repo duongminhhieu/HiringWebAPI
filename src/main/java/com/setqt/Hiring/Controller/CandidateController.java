@@ -2,12 +2,17 @@ package com.setqt.Hiring.Controller;
 
 import com.setqt.Hiring.DTO.CandidateAuthedDTO;
 import com.setqt.Hiring.DTO.CandidateDTO;
+import com.setqt.Hiring.DTO.ReportDTO;
 import com.setqt.Hiring.Model.Candidate;
+import com.setqt.Hiring.Model.JobPosting;
+import com.setqt.Hiring.Model.Report;
 import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.Candidate.CandidateService;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
+import com.setqt.Hiring.Service.JobPosting.JobPostingService;
+import com.setqt.Hiring.Service.Report.ReportService;
 import com.setqt.Hiring.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/candidate")
@@ -26,6 +33,10 @@ public class CandidateController {
     JwtTokenHelper jwtHelper;
 
     @Autowired
+    JobPostingService jobPostingService;
+    @Autowired
+    ReportService reportService;
+    @Autowired
     UserService uService;
     @Autowired
     private FirebaseImageService firebaseImageService;
@@ -33,7 +44,7 @@ public class CandidateController {
     CandidateService candidateService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<ResponseObject> getAllCandidate() {
+    public ResponseEntity<ResponseObject> getAllCandidate(@RequestHeader(value = "Authorization") String jwt) {
         try {
             List<Candidate> result = candidateService.findAll();
             System.out.println(result.size());
@@ -92,4 +103,32 @@ public class CandidateController {
         return null;
     }
 
+    @PostMapping("/addReport/{idPosting}")
+    public ResponseEntity<ResponseObject> addReport(@PathVariable String idPosting,
+                                                    @RequestBody ReportDTO reportDTO,
+                                                    @RequestHeader(value = "Authorization") String jwt) {
+        try {
+
+            jwt = jwt.substring(7, jwt.length());
+
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+
+            Optional<JobPosting> jobPosting = jobPostingService.findById(Long.parseLong(idPosting));
+            Report report = new Report(reportDTO.getContent(), jobPosting.get(), candidate);
+
+            Report result = reportService.save(report);
+
+            if (result == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "add Report failed", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "add Report successfully", result));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

@@ -24,7 +24,7 @@ public class Candidate implements Serializable{
 	@JsonBackReference(value="user_candidate")
 	private User user;
 
-	@OneToMany(mappedBy = "candidate")
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="report_candidate")
 	private List<Report> reports;
 
@@ -36,6 +36,7 @@ public class Candidate implements Serializable{
 	private String phone;
 	private String address;
 	private Date dob;
+	@Column(columnDefinition="TEXT")
 	private String avatar;
 	private String[] skill;
 	private String experience;

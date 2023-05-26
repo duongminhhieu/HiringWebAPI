@@ -9,9 +9,10 @@ import com.setqt.Hiring.Repository.JobPostingRepository;
 import com.setqt.Hiring.Service.Generic.GenericService;
 
 @Service
-public class JobPostingService extends GenericService<JobPosting> implements IJobPosting{
+public class JobPostingService extends GenericService<JobPosting> implements IJobPosting {
 
 	public JobPostingService(JpaRepository<JobPosting, Long> genericRepository) {
 		super(genericRepository);
 	}
+
 }

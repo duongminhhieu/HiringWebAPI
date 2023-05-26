@@ -2,12 +2,12 @@ package com.setqt.Hiring.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+
+import java.util.Optional;
 
 @Entity
 @Data
