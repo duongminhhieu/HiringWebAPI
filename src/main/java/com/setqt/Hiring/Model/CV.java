@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import com.setqt.Hiring.DTO.CandidateDTO;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -62,6 +63,13 @@ public class CV implements Serializable {
         return candidate;
     }
 
+    public Long getIdCandidate(){
+        return this.candidate.getId();
+    }
+    public CandidateDTO getInfoCandidate(){
+        CandidateDTO candidateDTO = new CandidateDTO(this.candidate.getFullName(), this.candidate.getGender(),this.candidate.getPhone(), this.candidate.getAddress(), this.candidate.getDob(), this.candidate.getSkill(), this.candidate.getExperience());
+        return candidateDTO;
+    }
     public void setCandidate(Candidate candidate) {
         this.candidate = candidate;
     }
