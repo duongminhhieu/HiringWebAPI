@@ -33,6 +33,10 @@ public class Candidate implements Serializable{
 	private List<RatingCompany> ratingCompanies;
 
 	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="cv")
+	private List<CV> cvList;
+
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="saved_job_posting")
 	private List<SavedJobPosting> savedJobPostingList;
 
@@ -64,6 +68,14 @@ public class Candidate implements Serializable{
 
 	public Candidate() {
 
+	}
+
+	public List<SavedJobPosting> getSavedJobPostingList() {
+		return savedJobPostingList;
+	}
+
+	public void setSavedJobPostingList(List<SavedJobPosting> savedJobPostingList) {
+		this.savedJobPostingList = savedJobPostingList;
 	}
 
 	public List<RatingCompany> getRatingCompanies() {

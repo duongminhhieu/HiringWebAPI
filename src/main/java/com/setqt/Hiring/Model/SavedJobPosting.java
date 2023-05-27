@@ -25,12 +25,25 @@ public class SavedJobPosting {
     public SavedJobPosting() {
     }
 
+    public SavedJobPosting(Candidate candidate, JobPosting jobPosting) {
+        this.candidate = candidate;
+        this.jobPosting = jobPosting;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdJobPosting(){
+        return this.jobPosting.getId();
+    }
+
+    public String getTitle(){
+        return this.jobPosting.getTitle();
     }
 
     public Candidate getCandidate() {

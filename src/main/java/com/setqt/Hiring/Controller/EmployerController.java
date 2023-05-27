@@ -102,7 +102,7 @@ public class EmployerController {
 			}
 
 			JobPosting getJob = jobPosting.get();
-			Set<CV> cv = getJob.getListCV();
+			List<CV> cv = getJob.getListCV();
 			if (cv.isEmpty())
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", null));

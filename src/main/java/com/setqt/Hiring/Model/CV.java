@@ -9,94 +9,102 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.ToString;
 
 @Entity
 @ToString
-@Table(name="CurriculumVitae")
-public class CV implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long cv_id;
-	
-	@OneToOne
-	@JoinColumn(name="candidate_id")
-	private Candidate candidate;
-	@ManyToMany(cascade ={ CascadeType.PERSIST, CascadeType.MERGE },fetch = FetchType.LAZY)
-	@JoinTable(
-	        name = "job_cv",
-	        joinColumns = @JoinColumn(name = "cv_id"),
-	        inverseJoinColumns = @JoinColumn(name = "job_id")
-	    )
-//	@JsonBackReference(value="job_cv")
-	@JsonIgnore
-	private Set<JobPosting> job = new HashSet<>();
-	public CV(Long id, Candidate candidate, Set<JobPosting>  job, String introLetter, String fileCV, Date dateCreated) {
-		super();
-		this.cv_id = id;
-		this.candidate = candidate;
-		this.job = job;
-		this.introLetter = introLetter;
-		this.fileCV = fileCV;
-		this.dateCreated = dateCreated;
-	}
+@Table(name = "CurriculumVitae")
+public class CV implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public CV() {
+    @ManyToOne
+    @JoinColumn(name = "candidate_id", referencedColumnName = "id")
+    @JsonBackReference(value="cv")
+    private Candidate candidate;
 
-	}
+    @ManyToOne
+    @JoinColumn(name = "job_posting_id", referencedColumnName = "id")
+    @JsonBackReference(value="job_posting")
+    private JobPosting jobPosting;
 
-	public Long getId() {
-		return cv_id;
-	}
-	public void setId(Long id) {
-		this.cv_id = id;
-	}
-	public Candidate getCandidate() {
-		return candidate;
-	}
-	public void setCandidate(Candidate candidate) {
-		this.candidate = candidate;
-	}
-//	@JsonBackReference(value="job_cv")
-	public Set<JobPosting>  getJob() {
-		return job;
-	}
-	public void setJob(Set<JobPosting>  job) {
-		this.job = job;
-	}
-	public String getIntroLetter() {
-		return introLetter;
-	}
-	public void setIntroLetter(String introLetter) {
-		this.introLetter = introLetter;
-	}
-	public String getFileCV() {
-		return fileCV;
-	}
-	public void setFileCV(String fileCV) {
-		this.fileCV = fileCV;
-	}
-	public Date getDateCreated() {
-		return dateCreated;
-	}
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-	private String introLetter;
-	private String fileCV;
-	private Date dateCreated;
-	
-	
+    private String name;
+    @Column(columnDefinition="TEXT")
+    private String introLetter;
+    @Column(columnDefinition="TEXT")
+    private String fileCV;
+    private Date dateCreated;
+
+
+    public CV() {
+
+    }
+
+    public CV(Candidate candidate, JobPosting jobPosting, String introLetter, String fileCV, Date dateCreated) {
+        this.candidate = candidate;
+        this.jobPosting = jobPosting;
+        this.introLetter = introLetter;
+        this.fileCV = fileCV;
+        this.dateCreated = dateCreated;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Candidate getCandidate() {
+        return candidate;
+    }
+
+    public void setCandidate(Candidate candidate) {
+        this.candidate = candidate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    //	@JsonBackReference(value="job_cv")
+    public JobPosting getJobPosting() {
+        return jobPosting;
+    }
+
+    public void setJobPosting(JobPosting jobPosting) {
+        this.jobPosting = jobPosting;
+    }
+
+    public String getIntroLetter() {
+        return introLetter;
+    }
+
+    public void setIntroLetter(String introLetter) {
+        this.introLetter = introLetter;
+    }
+
+    public String getFileCV() {
+        return fileCV;
+    }
+
+    public void setFileCV(String fileCV) {
+        this.fileCV = fileCV;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
 }
