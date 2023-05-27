@@ -32,6 +32,10 @@ public class Candidate implements Serializable{
 	@JsonManagedReference(value="rating_company")
 	private List<RatingCompany> ratingCompanies;
 
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="saved_job_posting")
+	private List<SavedJobPosting> savedJobPostingList;
+
 	private String fullName;
 	
 	private String email;

@@ -140,6 +140,7 @@ public class AuthenticationController {
 		em.setEmail(user.getEmail());
 		em.setUser(newUser);
 		em.setPhone(user.getPhone());
+		em.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
 
 		System.out.println(user.getAddress());
 		com.setAddress(user.getAddress());

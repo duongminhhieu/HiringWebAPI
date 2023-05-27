@@ -37,6 +37,15 @@ public class RatingCompany {
 
     }
 
+
+    public Long getCompanyId(){
+        return this.company.getId();
+    }
+
+    public String getNameCompany(){
+        return this.company.getName();
+    }
+
     public Candidate getCandidate() {
         return candidate;
     }

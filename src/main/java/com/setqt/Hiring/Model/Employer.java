@@ -7,17 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.User;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.ToString;
 
 @Entity
@@ -43,16 +33,27 @@ public class Employer implements Serializable{
 
 	private String phone;
 	private String email;
+	@Column(columnDefinition="TEXT")
+	private String logo;
 
-	public Employer(User user, Company company, String phone, String email) {
+	public Employer(User user, Company company, String phone, String email, String logo) {
 		this.user = user;
 		this.company = company;
 		this.phone = phone;
 		this.email = email;
+		this.logo = logo;
 	}
 
 	public Employer() {
 
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	public Long getId() {

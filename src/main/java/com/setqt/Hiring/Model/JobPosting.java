@@ -51,6 +51,10 @@ public class JobPosting implements Serializable {
 	@JsonManagedReference(value="job_report")
 	private List<Report> reports;
 
+	@OneToMany(mappedBy = "jobPosting")
+	@JsonManagedReference(value="saved_job_posting")
+	private List<SavedJobPosting> savedJobPostingList;
+
 	private String title;
 	private Date postDate;
 	private Date dueDate;

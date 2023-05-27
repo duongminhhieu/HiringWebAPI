@@ -22,14 +22,20 @@ public class JobDescription implements Serializable {
 	private JobPosting jobPosting;
 	private static final long serialVersionUID = -297553111792804396L;
 
+	@Column(columnDefinition="TEXT")
 	private String description;
+	@Column(columnDefinition="TEXT")
 	private String benefits;
+	@Column(columnDefinition="TEXT")
 	private String requirement;
 	private String gender;
+	@Column(columnDefinition="TEXT")
 	private String experience;
 	private String salary;
 	private int number_candidates;
+	@Column(columnDefinition="TEXT")
 	private String working_form;
+	@Column(columnDefinition="TEXT")
 	private String address_work;
 
 	public JobDescription(JobPosting jobPosting, String description, String benefits, String requirement, String gender, String experience, String salary, int number_candidates, String working_form, String address_work) {

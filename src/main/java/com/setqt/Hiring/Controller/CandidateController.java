@@ -65,6 +65,26 @@ public class CandidateController {
         return null;
     }
 
+    @GetMapping("/myInfo")
+    public ResponseEntity<ResponseObject> getMyInfo(@RequestHeader(value = "Authorization") String jwt) {
+        try {
+            jwt = jwt.substring(7, jwt.length());
+
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+            if (candidate == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", candidate));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @PutMapping(value = "/updateInfoCandidate", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseObject> addCandidate(@RequestPart("candidate") CandidateDTO candidateDTO,
                                                        @RequestPart("file") MultipartFile file,
