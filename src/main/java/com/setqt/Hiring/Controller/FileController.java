@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(path = "api/v1/FileUpload")
-@CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "*")
 public class FileController {
 
     @Autowired
