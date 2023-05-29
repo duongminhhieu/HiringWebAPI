@@ -26,6 +26,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/candidate")
+@CrossOrigin(origins = "*")
 public class CandidateController {
     @Autowired
     JwtTokenHelper jwtHelper;
