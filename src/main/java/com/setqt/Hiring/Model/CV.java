@@ -63,12 +63,29 @@ public class CV implements Serializable {
         return candidate;
     }
 
-    public Long getIdCandidate(){
-        return this.candidate.getId();
-    }
-    public CandidateDTO getInfoCandidate(){
-        CandidateDTO candidateDTO = new CandidateDTO(this.candidate.getFullName(), this.candidate.getGender(),this.candidate.getPhone(), this.candidate.getAddress(), this.candidate.getDob(), this.candidate.getSkill(), this.candidate.getExperience());
-        return candidateDTO;
+//    public Long getIdCandidate(){
+//        return this.candidate.getId();
+//    }
+
+    public Candidate getInfoCandidate(){
+
+        Candidate candidate1 = new Candidate();
+        candidate1.setAvatar(this.candidate.getAvatar());
+        candidate1.setDob(this.candidate.getDob());
+        candidate1.setSkill(this.candidate.getSkill());
+        candidate1.setExperience(this.candidate.getExperience());
+        candidate1.setAddress(this.candidate.getAddress());
+        candidate1.setGender(this.candidate.getGender());
+        candidate1.setPhone(this.candidate.getPhone());
+        candidate1.setEmail(this.candidate.getEmail());
+        candidate1.setFullName(this.candidate.getFullName());
+        candidate1.setId(this.candidate.getId());
+        candidate1.setUser(null);
+        candidate1.setRatingCompanies(null);
+        candidate1.setSavedJobPostingList(null);
+        candidate1.setReports(null);
+
+        return candidate1;
     }
     public void setCandidate(Candidate candidate) {
         this.candidate = candidate;

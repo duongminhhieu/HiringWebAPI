@@ -73,6 +73,7 @@ public class EmployerController {
 			jobPosting.setDueDate(jobPostingDTO.getDueDate());
 			jobPosting.setPostDate(jobPostingDTO.getPostDate());
 			jobPosting.setView(0);
+			jobPosting.setStatus("approved");
 
 			Company com = em.getCompany();
 			System.out.println(com.getName());

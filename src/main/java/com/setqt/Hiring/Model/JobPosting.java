@@ -54,6 +54,7 @@ public class JobPosting implements Serializable {
     private Date postDate;
     private Date dueDate;
     private int view;
+    private String status;
 
     public Long getId() {
         return id;
@@ -75,6 +76,13 @@ public class JobPosting implements Serializable {
         this.company = company;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public JobDescription getJobDescription() {
         return jobDescription;
