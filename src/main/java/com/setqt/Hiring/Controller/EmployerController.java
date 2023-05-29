@@ -33,6 +33,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 
 @RestController
 @RequestMapping("/employer")
+@CrossOrigin(origins = "*")
 public class EmployerController {
 
 	@Autowired
