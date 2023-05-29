@@ -37,6 +37,7 @@ import client.AuthenRequest;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
 	@Autowired
