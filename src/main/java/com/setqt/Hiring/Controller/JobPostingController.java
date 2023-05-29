@@ -15,6 +15,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 
 @RestController
 @RequestMapping("/job")
+@CrossOrigin(origins = "*")
 public class JobPostingController {
 
 	@Autowired
