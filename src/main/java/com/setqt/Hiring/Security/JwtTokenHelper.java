@@ -1,18 +1,13 @@
 package com.setqt.Hiring.Security;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
-import org.springframework.security.config.web.server.ServerHttpSecurity.OAuth2ResourceServerSpec.JwtSpec;
+import com.setqt.Hiring.Security.Model.CustomUserDetail;
 import org.springframework.stereotype.Component;
 
 
-import com.setqt.Hiring.Security.Model.CustomUserDetail;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;

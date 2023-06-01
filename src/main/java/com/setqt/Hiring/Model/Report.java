@@ -7,8 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.Optional;
-
 @Entity
 @Data
 @ToString

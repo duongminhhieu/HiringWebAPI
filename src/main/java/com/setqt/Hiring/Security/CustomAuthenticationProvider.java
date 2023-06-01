@@ -2,11 +2,10 @@ package com.setqt.Hiring.Security;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
+import com.setqt.Hiring.Security.Model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,13 +15,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import com.setqt.Hiring.Controller.AuthenticationController;
-import com.setqt.Hiring.Security.Model.CustomUserDetail;
-import com.setqt.Hiring.Security.Model.Role;
 import com.setqt.Hiring.Security.Model.User;
-import com.setqt.Hiring.Security.Model.UserRepository;
 import com.setqt.Hiring.Service.UserService;
 
 import ch.qos.logback.classic.Logger;

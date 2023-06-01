@@ -2,8 +2,6 @@ package com.setqt.Hiring.Model;
 
 import java.io.Serializable;
 
-import com.setqt.Hiring.Security.Model.User;
-
 
 public class CandidatePK implements Serializable{
 	private Long user;

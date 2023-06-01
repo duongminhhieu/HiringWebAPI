@@ -3,20 +3,15 @@ package com.setqt.Hiring.Security.Model;
 import java.io.Serializable;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Employer;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.ToString;
-import org.hibernate.mapping.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.setqt.Hiring.Security.Model.Role;
 
 @Entity
 //@Data
