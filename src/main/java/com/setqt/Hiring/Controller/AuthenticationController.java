@@ -6,11 +6,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import com.setqt.Hiring.DTO.EmployeeAuthedDTO;
 import com.setqt.Hiring.Model.*;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Service.EmailService.EmailService;
+import com.setqt.Hiring.Threads.EmailThreads;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -138,7 +140,7 @@ public class AuthenticationController {
 //		logger.info(user.getUsername());
 //		logger.info("-------");
         Role initRole = roleRepo.findRoleByName("EMPLOYER");
-        User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
+        User newUser = new User(user.getEmail(), user.getPassword(), false, initRole);
 
         Employer em = new Employer();
         Company com = new Company();
@@ -148,7 +150,6 @@ public class AuthenticationController {
         em.setUser(newUser);
         em.setPhone(user.getPhone());
         em.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
-
         System.out.println(user.getAddress());
         com.setAddress(user.getAddress());
         com.setRate((double) 0);
@@ -163,19 +164,16 @@ public class AuthenticationController {
             comService.save(com);
             emService.save(em);
 
-            //send verify email
-            String html = FileUtils.readFileToString(new File("src/main/java/com/setqt/Hiring/Utils/verifyEmailTemplate.html"), StandardCharsets.UTF_8);
-
-            html = html.replace("${user.name}", com.getName());
-            html = html.replace("${app_url}", Objects.requireNonNull(environment.getProperty("app_url")));
-            html = html.replace("${user.email}", em.getEmail());
-            html = html.replace("${hashEmail}", passEncoder.encode(em.getEmail()));
-
-            emailService.sendHtmlEmail("jobhiringweb@gmail.com", em.getEmail(), "Xác nhận đăng ký tài khoản doanh nghiệp Jore", html);
+            // gui mail
+            EmailThreads emailThreads = new EmailThreads(com, em, environment, passEncoder, emailService);
+            Thread thread = new Thread(emailThreads);
+            thread.start();
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Đăng không thành công", ""));
+
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
@@ -184,16 +182,25 @@ public class AuthenticationController {
 
 
     @GetMapping("/verify")
-    public ResponseEntity<ResponseObject> verifyEmail(@RequestParam(name = "email", defaultValue = "%") String email
+    public ResponseEntity<ResponseObject> verifyEmail(@RequestParam(name = "id", defaultValue = "%") String id
             , @RequestParam(name = "token", defaultValue = "%") String token) {
         try {
 
-			boolean check = passEncoder.matches(email, token);
+			boolean check = passEncoder.matches(id, token);
 
             if (!check)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("failed", "verify failed", null));
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xác thực thành công", null));
+            {
+
+                Optional<User> u = UService.findById(Long.parseLong(id));
+
+                u.get().setEnable(true);
+                UService.save(u.get());
+
+                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xác thực thành công", null));
+
+            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

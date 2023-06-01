@@ -59,6 +59,9 @@ public class UserService {
 		return repository.save(user);
 	}
 
+	public User save(User user){
+		return repository.save(user);
+	}
 	public void deleteById(long id) {
 		repository.deleteById(id);
 	}
