@@ -3,22 +3,18 @@ package com.setqt.Hiring.Security.Model;
 import java.io.Serializable;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Model.Employer;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.ToString;
-import org.hibernate.mapping.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.setqt.Hiring.Security.Model.Role;
 
 @Entity
-@Data
+//@Data
 @ToString
 @Table(name = "userInfo")
 public class User implements Serializable {
@@ -34,18 +30,20 @@ public class User implements Serializable {
 	private static final long serialVersionUID = -297553281792804226L;
 
 	@OneToOne(mappedBy = "user")
-	@JsonManagedReference
+	@JsonManagedReference(value="user_candidate")
 	private Candidate candidate;
 
 	@OneToOne(mappedBy = "user")
-	@JsonManagedReference
+	@JsonManagedReference(value="user_employer")
 	private Employer employer;
 
 //	@JsonManagedReference
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "User_Role", joinColumns = { @JoinColumn(name = "user_Id") }, inverseJoinColumns = {
 			@JoinColumn(name = "role_Id") })
-	@JsonManagedReference
+//	@JsonManagedReference(value="user-roles")
+	 @JsonIgnore
+	
 //	private Collection<Role> roles = new Collection ;
 	private java.util.Set<Role> roles = new HashSet<>();
 	
@@ -120,7 +118,22 @@ public class User implements Serializable {
 	public void setRoles(Role roles) {
 		this.roles.add(roles);
 	}
-//	public void setRoles(Collection<Role> roles) {
+	public Employer getEmployer() {
+		return employer;
+	}
+	public void setEmployer(Employer employer) {
+		this.employer = employer;
+	}
+
+	public Candidate getCandidate() {
+		return candidate;
+	}
+
+	public void setCandidate(Candidate candidate) {
+		this.candidate = candidate;
+	}
+
+	//	public void setRoles(Collection<Role> roles) {
 //		this.roles = roles;
 //	}
 

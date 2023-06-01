@@ -1,9 +1,9 @@
 package com.setqt.Hiring.Config;
 
+import com.setqt.Hiring.Utils.Properties;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.setqt.Hiring.Utils.Properties;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.setqt.Hiring.Security.Model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.setqt.Hiring.Security.Model.User;
 
 import jakarta.persistence.*;
-import lombok.ToString;
 
 @Entity
 //@IdClass(CandidatePK.class)
@@ -21,13 +20,24 @@ public class Candidate implements Serializable{
 	private Long id;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", referencedColumnName = "userId")
-	@JsonBackReference
+	@JsonBackReference(value="user_candidate")
 	private User user;
 
-	@OneToMany(mappedBy = "candidate")
-	@JsonManagedReference
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="report_candidate")
 	private List<Report> reports;
 
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="rating_company")
+	private List<RatingCompany> ratingCompanies;
+
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="cv")
+	private List<CV> cvList;
+
+	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+	@JsonManagedReference(value="saved_job_posting")
+	private List<SavedJobPosting> savedJobPostingList;
 
 	private String fullName;
 	
@@ -36,6 +46,7 @@ public class Candidate implements Serializable{
 	private String phone;
 	private String address;
 	private Date dob;
+	@Column(columnDefinition="TEXT")
 	private String avatar;
 	private String[] skill;
 	private String experience;
@@ -56,6 +67,22 @@ public class Candidate implements Serializable{
 
 	public Candidate() {
 
+	}
+
+	public List<SavedJobPosting> getSavedJobPostingList() {
+		return savedJobPostingList;
+	}
+
+	public void setSavedJobPostingList(List<SavedJobPosting> savedJobPostingList) {
+		this.savedJobPostingList = savedJobPostingList;
+	}
+
+	public List<RatingCompany> getRatingCompanies() {
+		return ratingCompanies;
+	}
+
+	public void setRatingCompanies(List<RatingCompany> ratingCompanies) {
+		this.ratingCompanies = ratingCompanies;
 	}
 
 	public Long getId() {

@@ -1,7 +1,7 @@
 package com.setqt.Hiring.Repository;
 
-import org.springframework.stereotype.Repository;
 import com.setqt.Hiring.Model.Candidate;
+import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 @Repository

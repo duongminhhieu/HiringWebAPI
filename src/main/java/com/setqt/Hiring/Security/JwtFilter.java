@@ -1,22 +1,16 @@
 package com.setqt.Hiring.Security;
 
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.util.Optional;
 
 
+import com.setqt.Hiring.Security.Model.UserDetailServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import com.setqt.Hiring.Security.Model.UserDetailServiceImp;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -75,6 +69,12 @@ public class JwtFilter extends OncePerRequestFilter {
 			}
 		} catch (Exception ex) {
 			logger.error("failed on set user authentication", ex);
+//				throw(ex);
+//			 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//		        response.setContentType("application/json");
+//		        response.getWriter().write("Lỗi xác thực JWT không hợp lệ");
+//		        response.getWriter().flush();
+//		        return;
 		}
 
 

@@ -1,21 +1,14 @@
 package com.setqt.Hiring.Service;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.projection.CollectionAwareProjectionFactory;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Security.Model.UserRepository;
-
-import jakarta.persistence.EntityNotFoundException;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 
 @Service
@@ -46,6 +39,14 @@ public class UserService {
 					return result;
 				}
 				return result;
+	}
+	public User findOneByUsername(String username){
+		List<User> result=repository.findByUsername(username);
+		if (result==null) {
+			result =  Collections.emptyList();
+			return null;
+		}
+		return result.get(0);
 	}
 	public List<User> findAll() {
 		return repository.findAll().stream().toList();

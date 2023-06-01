@@ -13,13 +13,13 @@ public interface IStorageService {
 
     String getFileUrl(String name);
 
-    String save(MultipartFile file) throws IOException;
+    String save(MultipartFile file, String pathName) throws IOException;
 
     String save(BufferedImage bufferedImage, String originalFileName) throws IOException;
 
     void delete(String name) throws IOException;
 
-    String update(String name, MultipartFile file) throws IOException;
+    String update(MultipartFile file, String pathName) throws IOException;
 
     default String getExtension(String originalFileName) {
         return StringUtils.getFilenameExtension(originalFileName);

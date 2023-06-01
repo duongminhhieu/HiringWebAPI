@@ -1,22 +1,24 @@
 package com.setqt.Hiring.Controller;
 
 
-import com.setqt.Hiring.Model.Company;
-import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Model.ResponseObject;
-import com.setqt.Hiring.Repository.CompanyRepository;
-import com.setqt.Hiring.Repository.EmployerRepository;
+import com.setqt.Hiring.Service.EmailService.EmailService;
 import com.setqt.Hiring.Service.Firebase.FirebaseDocumentFileService;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
+import jakarta.mail.MessagingException;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @Controller
 @RequestMapping(path = "api/v1/FileUpload")
@@ -28,13 +30,14 @@ public class FileController {
     @Autowired
     private FirebaseDocumentFileService firebaseDocumentFileService;
 
+
     @PostMapping("/fileImage")
     public ResponseEntity<ResponseObject> uploadImageFile(@RequestParam("file") MultipartFile file) {
         try {
             firebaseImageService = new FirebaseImageService();
 
             // save file to Firebase
-            String fileName = firebaseImageService.save(file);
+            String fileName = firebaseImageService.save(file, "/test/abc");
 
             String imageUrl = firebaseImageService.getFileUrl(fileName);
 
@@ -54,7 +57,7 @@ public class FileController {
 
             firebaseDocumentFileService = new FirebaseDocumentFileService();
             // save file to Firebase
-            String fileName = firebaseDocumentFileService.save(file);
+            String fileName = firebaseDocumentFileService.save(file, "/test/abc");
 
             String imageUrl = firebaseDocumentFileService.getFileUrl(fileName);
 
@@ -102,7 +105,7 @@ public class FileController {
         try {
             firebaseImageService = new FirebaseImageService();
 
-            String imageUrl = firebaseImageService.update(name, file);
+            String imageUrl = firebaseImageService.update(file, name);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "update file image successfully", imageUrl)
@@ -119,7 +122,7 @@ public class FileController {
         try {
             firebaseDocumentFileService = new FirebaseDocumentFileService();
 
-            String imageUrl = firebaseDocumentFileService.update(name, file);
+            String imageUrl = firebaseDocumentFileService.update(file, name);
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "update file document successfully", imageUrl)
@@ -130,6 +133,5 @@ public class FileController {
             );
         }
     }
-
 
 }

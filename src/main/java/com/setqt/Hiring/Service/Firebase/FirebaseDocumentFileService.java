@@ -38,7 +38,7 @@ public class FirebaseDocumentFileService implements IStorageService{
     }
 
     @Override
-    public String save(MultipartFile file) throws IOException {
+    public String save(MultipartFile file, String pathName) throws IOException {
         if (file.isEmpty()) {
             throw new RuntimeException("Failed to store empty file.");
         }
@@ -54,11 +54,11 @@ public class FirebaseDocumentFileService implements IStorageService{
 
         Bucket bucket = StorageClient.getInstance().bucket();
 
-        String name = generateFileName(file.getOriginalFilename());
+        //String name = generateFileName(file.getOriginalFilename());
 
-        bucket.create( "cvs_candidates/" + name, file.getBytes(), file.getContentType());
+        bucket.create( "cvs_candidates/" + pathName, file.getBytes(), file.getContentType());
 
-        return name;
+        return pathName;
     }
 
     @Override
@@ -92,9 +92,9 @@ public class FirebaseDocumentFileService implements IStorageService{
     }
 
     @Override
-    public String update(String name, MultipartFile file) throws IOException {
-        delete(name);
-        return getFileUrl(save(file));
+    public String update(MultipartFile file, String pathName) throws IOException {
+        delete(pathName);
+        return getFileUrl(save(file, pathName));
     }
 
     @Data

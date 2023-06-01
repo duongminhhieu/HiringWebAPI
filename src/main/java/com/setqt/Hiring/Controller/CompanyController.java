@@ -1,6 +1,7 @@
 package com.setqt.Hiring.Controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.setqt.Hiring.Model.Candidate;
 import com.setqt.Hiring.Service.Candidate.CandidateService;
@@ -18,8 +19,8 @@ import com.setqt.Hiring.Model.ResponseObject;
 
 @RestController
 @RequestMapping("/company")
-@CrossOrigin(origins="*")
-public class HomeController {
+@CrossOrigin(origins = "*")
+public class CompanyController {
 
     @Autowired
     private CompanyService comService;
@@ -33,8 +34,26 @@ public class HomeController {
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject> test() {
         try {
-            System.out.println(1);
+
             List<Company> result = comService.findAll();
+
+            if (result.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @GetMapping("/getTop")
+    public ResponseEntity<ResponseObject> getTopSix() {
+        try {
+
+            List<Company> result = comService.findTop6ByRating();
             System.out.println(result.size());
             if (result.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -48,17 +67,23 @@ public class HomeController {
         return null;
     }
 
-    @GetMapping("/getCompany")
-    public ResponseEntity<List<Company>> getCompany() {
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> getCompany(@PathVariable Long id) {
         try {
-            List<Company> companies = this.comService.findAll();
-            System.out.println(companies.size());
-            System.out.println("job postirng: " + companies.get(0).getJobPostingList().size());
-            return new ResponseEntity<>(companies, HttpStatus.OK);
+//              System.out.println(1);
+            Optional<Company> result = comService.findById(id);
+
+            if (result.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result.get()));
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return null;
 
     }
 
@@ -74,6 +99,7 @@ public class HomeController {
         }
 
     }
+
     @GetMapping("/getCandidate")
     public List<Candidate> getCandidate() throws Exception {
         return this.candidateService.findAll();
@@ -88,14 +114,4 @@ public class HomeController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
     }
-
-//    @GetMapping("/add")
-//    public ResponseEntity<ResponseObject> addCompany(@RequestHeader(value = "Authorization") String jwt) {
-//        jwt = jwt.substring(7, jwt.length());
-//
-//        String user = jwtHelper.getUsernameFromToken(jwt);
-//        System.out.println(user);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", null));
-//    }
 }

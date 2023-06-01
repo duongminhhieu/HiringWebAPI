@@ -2,22 +2,11 @@ package com.setqt.Hiring.Model;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.setqt.Hiring.Security.Model.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.ToString;
 
 @Entity
@@ -29,30 +18,41 @@ public class Employer implements Serializable{
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-
+	private static final long serialVersionUID = -297553781792804396L;
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id",referencedColumnName = "userId")
-	@JsonBackReference
+	@JsonBackReference(value="user_employer")
 	private User user;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="company_id", referencedColumnName = "id")
-	@JsonBackReference
+	@JsonManagedReference(value="company_employer")
 	private Company company;
 
 
 	private String phone;
 	private String email;
+	@Column(columnDefinition="TEXT")
+	private String logo;
 
-	public Employer(User user, Company company, String phone, String email) {
+	public Employer(User user, Company company, String phone, String email, String logo) {
 		this.user = user;
 		this.company = company;
 		this.phone = phone;
 		this.email = email;
+		this.logo = logo;
 	}
 
 	public Employer() {
 
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
 	public Long getId() {

@@ -2,7 +2,7 @@ package com.setqt.Hiring.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -21,12 +21,12 @@ public class Report {
 
     @ManyToOne
     @JoinColumn(name = "id_job_posting")
-    @JsonBackReference
+    @JsonBackReference(value="job_report")
     private JobPosting jobPosting;
 
     @ManyToOne
     @JoinColumn(name = "id_cd")
-    @JsonBackReference
+    @JsonBackReference(value="report_candidate")
     private Candidate candidate;
 
     public Report(String content, JobPosting jobPosting, Candidate candidate) {

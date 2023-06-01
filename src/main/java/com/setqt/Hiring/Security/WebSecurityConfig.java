@@ -4,17 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -60,7 +56,11 @@ public class WebSecurityConfig {
 //						auth.requestMatchers("/getAll" ).hasRole("ADMIN");
 
 						auth.requestMatchers("/company/**").permitAll();
-
+						auth.requestMatchers("/job/**").permitAll();
+						//auth.requestMatchers("/candidate/**").permitAll();
+//						auth.requestMatchers("/employer/**").permitAll();
+						auth.requestMatchers("employer/**").hasRole("EMPLOYER");
+						auth.requestMatchers("candidate/**").hasRole("CANDIDATE");
 						auth.requestMatchers("/auth/**" ).permitAll();
 						auth.requestMatchers("/api/v1/FileUpload/**").permitAll();
 						auth.anyRequest().authenticated();

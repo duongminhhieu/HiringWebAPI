@@ -17,21 +17,41 @@ public class JobDescription implements Serializable {
 	@GeneratedValue(strategy =  GenerationType.AUTO)
 	private Long id;
 
-	@OneToOne(mappedBy = "jobDescription")
+	@OneToOne(mappedBy = "jobDescription",cascade=CascadeType.ALL)
+	@JsonBackReference(value="job_descript")
 	private JobPosting jobPosting;
+	private static final long serialVersionUID = -297553111792804396L;
 
+	@Column(columnDefinition="TEXT")
 	private String description;
+	@Column(columnDefinition="TEXT")
 	private String benefits;
+	@Column(columnDefinition="TEXT")
 	private String requirement;
 	private String gender;
+	@Column(columnDefinition="TEXT")
 	private String experience;
 	private String salary;
 	private int number_candidates;
+	@Column(columnDefinition="TEXT")
 	private String working_form;
+	@Column(columnDefinition="TEXT")
 	private String address_work;
 
 	public JobDescription(JobPosting jobPosting, String description, String benefits, String requirement, String gender, String experience, String salary, int number_candidates, String working_form, String address_work) {
 		this.jobPosting = jobPosting;
+		this.description = description;
+		this.benefits = benefits;
+		this.requirement = requirement;
+		this.gender = gender;
+		this.experience = experience;
+		this.salary = salary;
+		this.number_candidates = number_candidates;
+		this.working_form = working_form;
+		this.address_work = address_work;
+	}
+
+	public JobDescription(String description, String benefits, String requirement, String gender, String experience, String salary, int number_candidates, String working_form, String address_work) {
 		this.description = description;
 		this.benefits = benefits;
 		this.requirement = requirement;
@@ -127,7 +147,7 @@ public class JobDescription implements Serializable {
 		this.id = id;
 	}
 
-	@JsonBackReference
+//	@JsonBackReference
 	public JobPosting getJobPosting() {
 		return jobPosting;
 	}
