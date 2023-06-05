@@ -1,9 +1,7 @@
 package com.setqt.Hiring.Security.Model;
 
-import java.util.Collection;
 import java.util.HashSet;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;

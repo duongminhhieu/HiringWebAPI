@@ -4,12 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.setqt.Hiring.Security.Model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.setqt.Hiring.Security.Model.User;
 
 import jakarta.persistence.*;
-import lombok.ToString;
 
 @Entity
 //@IdClass(CandidatePK.class)

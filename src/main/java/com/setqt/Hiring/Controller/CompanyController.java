@@ -34,9 +34,9 @@ public class CompanyController {
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject> test() {
         try {
-           
+
             List<Company> result = comService.findAll();
-      
+
             if (result.isEmpty())
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("failed", "not found data", null));
@@ -48,42 +48,42 @@ public class CompanyController {
 
         return null;
     }
-  
+
     @GetMapping("/getTop")
     public ResponseEntity<ResponseObject> getTopSix() {
-    	try {
-    		
-    		List<Company> result = comService.findTop6ByRating();
-    		System.out.println(result.size());
-    		if (result.isEmpty())
-    			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    					.body(new ResponseObject("failed", "not found data", null));
-    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
-    		
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
-    	
-    	return null;
+        try {
+
+            List<Company> result = comService.findTop6ByRating();
+            System.out.println(result.size());
+            if (result.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
-    
+
 
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getCompany(@PathVariable Long id) {
-    	  try {
+        try {
 //              System.out.println(1);
-              Optional<Company> result = comService.findById(id);
-           
-              if (result.isEmpty())
-                  return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                          .body(new ResponseObject("failed", "not found data", null));
-              return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result.get()));
+            Optional<Company> result = comService.findById(id);
 
-          } catch (Exception e) {
-              e.printStackTrace();
-          }
+            if (result.isEmpty())
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result.get()));
 
-          return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
 
     }
 
@@ -99,6 +99,7 @@ public class CompanyController {
         }
 
     }
+
     @GetMapping("/getCandidate")
     public List<Candidate> getCandidate() throws Exception {
         return this.candidateService.findAll();
@@ -113,14 +114,4 @@ public class CompanyController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
     }
-
-//    @GetMapping("/add")
-//    public ResponseEntity<ResponseObject> addCompany(@RequestHeader(value = "Authorization") String jwt) {
-//        jwt = jwt.substring(7, jwt.length());
-//
-//        String user = jwtHelper.getUsernameFromToken(jwt);
-//        System.out.println(user);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", null));
-//    }
 }

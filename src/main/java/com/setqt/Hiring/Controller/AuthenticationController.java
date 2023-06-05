@@ -1,9 +1,19 @@
 package com.setqt.Hiring.Controller;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+import java.util.Objects;
 
+import com.setqt.Hiring.DTO.EmployeeAuthedDTO;
+import com.setqt.Hiring.Model.*;
+import com.setqt.Hiring.Security.JwtTokenHelper;
+import com.setqt.Hiring.Service.EmailService.EmailService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,19 +22,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+//
+//import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
+
 
 import com.setqt.Hiring.DTO.CandidateAuthedDTO;
-import com.setqt.Hiring.DTO.EmployeeAuthedDTO;
-import com.setqt.Hiring.Model.Candidate;
-import com.setqt.Hiring.Model.Company;
-import com.setqt.Hiring.Model.Employer;
-import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Security.Model.Role;
 import com.setqt.Hiring.Security.Model.RoleRepository;
 import com.setqt.Hiring.Security.Model.User;
@@ -41,157 +50,162 @@ import client.AuthenRequest;
 @CrossOrigin(origins = "*")
 public class AuthenticationController {
 
-	@Autowired
-	private RoleRepository roleRepo;
+    @Autowired
+    private RoleRepository roleRepo;
 
-	@Autowired
-	private UserService UService;
-	@Autowired
-	private CompanyService comService;
-	@Autowired
-	private EmployerService emService;
-	@Autowired
-	private PasswordEncoder passEncoder;
-	Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
+    @Autowired
+    private UserService UService;
+    @Autowired
+    private CompanyService comService;
+    @Autowired
+    private EmployerService emService;
+    @Autowired
+    private PasswordEncoder passEncoder;
+    Logger logger = (Logger) org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-	@Autowired
-	private CandidateService candidateService;
+    @Autowired
+    private CandidateService candidateService;
 
-	@Autowired
-	com.setqt.Hiring.Security.JwtTokenHelper jWTTokenHelper;
+    @Autowired
+    JwtTokenHelper jWTTokenHelper;
 
-	@PostMapping("/login")
-	public ResponseEntity<?> login2(@RequestBody AuthenRequest authentRequest)
-			throws InvalidKeySpecException, NoSuchAlgorithmException {
-
-		try {
-			final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					authentRequest.getUsername(), authentRequest.getPassword()));
-
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-
-			String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
+    @Autowired
+    private Environment environment;
+    @Autowired
+    private EmailService emailService;
 
 
-			return  ResponseEntity.status(HttpStatus.OK).body(
-					new com.setqt.Hiring.Model.ResponseObject("ok","Đăng nhập thành công",
-							jwt)  );
+    @PostMapping("/login")
+    public ResponseEntity<?> login2(@RequestBody AuthenRequest authentRequest)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
 
-		} catch (BadCredentialsException ex) {
+        try {
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authentRequest.getUsername(), authentRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
+
+
             return ResponseEntity.status(HttpStatus.OK).body(
-					new com.setqt.Hiring.Model.ResponseObject("failed","Đăng nhập không thành công",
-							"")  );
+                    new ResponseObject("ok", "Đăng nhập thành công",
+                            jwt));
+
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("failed", "Đăng nhập không thành công",
+                            ""));
         }
 
 
-	}
+    }
 
-	@PostMapping("/signin")
-	public ResponseEntity<String> authenticateUser(@RequestBody AuthenRequest loginDto){
-//	    	String passEn = passEncoder.encode(loginDto.getPassword());
-
-		Authentication authentication  = authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword()));
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return new ResponseEntity<>("User signed-in successfully!.", HttpStatus.OK);
-	}
-
-	@PostMapping(value = "/signup/candidate", consumes = { "application/json" })
-	public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateAuthedDTO user) {
+  
+    @PostMapping(value = "/signup/candidate", consumes = {"application/json"})
+    public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateAuthedDTO user) {
 
 //		logger.info(user.getUsername());
 //		logger.info("-------");
-		if(user.getEmail().equals("")||user.getPassword().equals(""))
-			return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công", ""));
+    	System.out.println("ok"+user.getEmail());
+        if (user.getEmail().equals("") || user.getPassword().equals(""))
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công", ""));
 
-		Role initRole = roleRepo.findRoleByName("CANDIDATE");
-		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
-		Candidate candidate = new Candidate();
-		candidate.setEmail(user.getEmail());
-		candidate.setUser(newUser);
-		candidate.setFullName(user.getFullname());
-		candidate.setAvatar("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
-		UService.create(newUser);
-		try {
-			candidateService.save(candidate);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        Role initRole = roleRepo.findRoleByName("CANDIDATE");
+        User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
+        Candidate candidate = new Candidate();
+        candidate.setEmail(user.getEmail());
+        candidate.setUser(newUser);
+        candidate.setFullName(user.getFullname());
+        candidate.setAvatar("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
+        UService.create(newUser);
+        try {
+            candidateService.save(candidate);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
 
-	}
+    }
 
-	@PostMapping(value = "/signup/employer", consumes = { "application/json" })
-	public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeAuthedDTO user) {
+//    @GetMapping(value = "/signup/employer")
+    @PostMapping(value = "/signup/employer", consumes = {"application/json"})
+    public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeAuthedDTO user) {
+//    	public ResponseEntity<ResponseObject> createAccountHier() {
 
 //		logger.info(user.getUsername());
 //		logger.info("-------");
-		Role initRole = roleRepo.findRoleByName("EMPLOYER");
-		User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
+    	System.out.println("------++");
+        Role initRole = roleRepo.findRoleByName("EMPLOYER");
+        User newUser = new User(user.getEmail(), user.getPassword(), true, initRole);
 
-		Employer em = new Employer();
-		Company com = new Company();
+        Employer em = new Employer();
+        Company com = new Company();
 
 
-		em.setEmail(user.getEmail());
-		em.setUser(newUser);
-		em.setPhone(user.getPhone());
-		em.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
+        em.setEmail(user.getEmail());
+        em.setUser(newUser);
+        em.setPhone(user.getPhone());
+        em.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
 
-		System.out.println(user.getAddress());
-		com.setAddress(user.getAddress());
-		com.setRate((double) 0);
-		com.setName(user.getName());
-		com.setDomain(user.getDomain());
-		com.setTaxCode(null);
-		com.setEmployer(em);
-		em.setCompany(com);
+        System.out.println(user.getAddress());
+        com.setAddress(user.getAddress());
+        com.setRate((double) 0);
+        com.setName(user.getName());
+        com.setDomain(user.getDomain());
+        com.setTaxCode(null);
+        com.setEmployer(em);
+        em.setCompany(com);
 
-		try {
-			UService.create(newUser);
-			comService.save(com);
-			emService.save(em);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        try {
+            UService.create(newUser);
+            comService.save(com);
+            emService.save(em);
 
-		return  ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
+            //send verify email
+            String html = FileUtils.readFileToString(new File("src/main/java/com/setqt/Hiring/Utils/verifyEmailTemplate.html"), StandardCharsets.UTF_8);
 
-	}
+            html = html.replace("${user.name}", com.getName());
+            html = html.replace("${app_url}", Objects.requireNonNull(environment.getProperty("app_url")));
+            html = html.replace("${user.email}", em.getEmail());
+            html = html.replace("${hashEmail}", passEncoder.encode(em.getEmail()));
 
-//	@PostMapping(value = "/login", consumes = { "application/json" })
-//	public ResponseEntity<?> login(@RequestBody User user) {
-//
-//		Role initRole = roleRepo.findRoleByName("ADMIN");
-//		User newUser = new User(user.getUsername(), user.getPassword(), true, initRole);
-//		UService.create(newUser);
-//
-//		return ResponseEntity.ok(HttpStatus.OK);
-//	}
+            emailService.sendHtmlEmail("jobhiringweb@gmail.com", em.getEmail(), "Xác nhận đăng ký tài khoản doanh nghiệp Jore", html);
 
-//	@PostMapping(value="/auth2", consumes={"application/json"})
-//	public ResponseEntity<?> createAccount() {
-//
-//		User u = new User("odxxxk","fgh");
-//		UService.create(u);
-//		return ResponseEntity.ok(HttpStatus.OK);
-//	}
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-	@GetMapping("/s")
-	public String test() {
-//		System.out.println(user.getUsername());
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
 
-		logger.info("-------");
+    }
 
-		return "Asd";
-//		return ResponseEntity.ok(HttpStatus.OK);
-	}
+
+    @GetMapping("/verify")
+    public ResponseEntity<ResponseObject> verifyEmail(@RequestParam(name = "email", defaultValue = "%") String email
+            , @RequestParam(name = "token", defaultValue = "%") String token) {
+        try {
+
+			boolean check = passEncoder.matches(email, token);
+
+            if (!check)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseObject("failed", "verify failed", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xác thực thành công", null));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject("failed", "not verify email", null));
+        }
+
+    }
+
 
 }

@@ -2,16 +2,11 @@ package com.setqt.Hiring.Model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.annotation.Generated;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.ToString;
 
 

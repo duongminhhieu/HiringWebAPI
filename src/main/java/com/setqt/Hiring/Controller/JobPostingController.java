@@ -3,7 +3,6 @@ package com.setqt.Hiring.Controller;
 import java.util.List;
 import java.util.Optional;
 
-import com.setqt.Hiring.Model.JobDescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

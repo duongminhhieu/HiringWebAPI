@@ -1,7 +1,7 @@
 package com.setqt.Hiring.Service.Report;
 
-import com.setqt.Hiring.Model.Report;
 import com.setqt.Hiring.Service.Generic.GenericService;
+import com.setqt.Hiring.Model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 

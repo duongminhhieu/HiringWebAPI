@@ -1,6 +1,9 @@
 package com.setqt.Hiring.Controller;
 
-import com.setqt.Hiring.DTO.*;
+import com.setqt.Hiring.DTO.CandidateDTO;
+import com.setqt.Hiring.DTO.RatingDTO;
+import com.setqt.Hiring.DTO.ReportDTO;
+import com.setqt.Hiring.DTO.SubmitCVDTO;
 import com.setqt.Hiring.Model.*;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
@@ -15,9 +18,7 @@ import com.setqt.Hiring.Service.Report.ReportService;
 import com.setqt.Hiring.Service.SavedJobPosting.SavedJobPostingService;
 import com.setqt.Hiring.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
