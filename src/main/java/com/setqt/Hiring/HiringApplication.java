@@ -14,8 +14,8 @@ public class HiringApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("https://localhost:3000");
-				registry.addMapping("/**").allowedHeaders("https://localhost:3000");
+				registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+				registry.addMapping("/**").allowedHeaders("http://localhost:3000");
 			}
 		};
 	}
