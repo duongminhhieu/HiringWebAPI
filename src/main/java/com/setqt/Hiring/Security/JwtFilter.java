@@ -1,9 +1,14 @@
 package com.setqt.Hiring.Security;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.setqt.Hiring.Security.Model.UserDetailServiceImp;
+
+import io.jsonwebtoken.ExpiredJwtException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,13 +22,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
-
-
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
-
 
 	@Autowired
 	private JwtTokenHelper tokenProvider;
@@ -31,9 +31,9 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailServiceImp customUserDetailsService;
 
-
 	@Autowired
 	UserDetailServiceImp userDetailimp;
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -41,57 +41,55 @@ public class JwtFilter extends OncePerRequestFilter {
 			// Lấy jwt từ request
 			String jwt = getJwtFromRequest(request);
 
-			if (jwt!= null) {
+			if (jwt == null) {
+				filterChain.doFilter(request, response);
+				return;
+			}
 //				System.out.println("-----"+jwt);
-			if ( tokenProvider.validateToken(jwt)) {
-				// Lấy user từ chuỗi jwt
-				String userId = tokenProvider.getUsernameFromToken(jwt);
+				if (tokenProvider.validateToken(jwt)) {
+					// Lấy user từ chuỗi jwt
+					String userId = tokenProvider.getUsernameFromToken(jwt);
+					UserDetails userDetails = userDetailimp.loadUserByUsername(userId);
 
-				// Lấy thông tin người dùng từ id
-
-//				UserDetails userDetails = (UserDetails) customUserDetailsService.findByUsername(userId);
-//				UserDetails userDetails = (UserDetails) customUserDetailsService.findUserbyUNAME(userId);
-				UserDetails userDetails= userDetailimp.loadUserByUsername(userId);
-//				UserDetails userDetails = (UserDetails) customUserDetailsService.findUserbyId(userId);
-
-				if (userDetails != null) {
-					// Nếu người dùng hợp lệ, set thông tin cho Seturity Context
-					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-							//**********///
-							userDetails, null, userDetails.getAuthorities());
+					if (userDetails != null) {
+						UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+								// **********///
+								userDetails, null, userDetails.getAuthorities());
 //					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+						authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-					SecurityContextHolder.getContext().setAuthentication(authentication);
+						SecurityContextHolder.getContext().setAuthentication(authentication);
+					}
 				}
-			}
 
-			}
+				filterChain.doFilter(request, response);
 		} catch (Exception ex) {
 			logger.error("failed on set user authentication", ex);
-//				throw(ex);
-//			 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//		        response.setContentType("application/json");
-//		        response.getWriter().write("Lỗi xác thực JWT không hợp lệ");
-//		        response.getWriter().flush();
+
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setContentType("application/json;charset=UTF-8");
+
+		        Map<String, Object> error = new HashMap<>();
+		        error.put("status", "failed");
+		        error.put("message",ex.getMessage());
+
+		        ObjectMapper mapper = new ObjectMapper();
+		        mapper.writeValue(response.getOutputStream(), error);
 //		        return;
-		}
+		} 
+			
 
-
-
-		filterChain.doFilter(request, response);
 	}
 
 	private String getJwtFromRequest(HttpServletRequest request) {
 		String bearerToken = ((jakarta.servlet.http.HttpServletRequest) request).getHeader("Authorization");
 		System.out.println(bearerToken);
 		// Kiểm tra xem header Authorization có chứa thông tin jwt không
-		if (bearerToken!=null && bearerToken.startsWith("Bearer ")) {
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
 
 			return bearerToken.substring(7);
 		}
 		return null;
 	}
-
 
 }

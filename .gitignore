@@ -15,7 +15,7 @@ target/
 .sts4-cache
 
 */.properties
-
+/application.properties
 # Compiled class file
 *.class
 
