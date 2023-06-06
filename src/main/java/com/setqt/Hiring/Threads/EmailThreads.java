@@ -22,6 +22,8 @@ public class EmailThreads implements Runnable{
     private PasswordEncoder passEncoder;
     private EmailService emailService;
 
+    public final String CONFIRM_STRING = "X%C3%A1c%20nh%E1%BA%ADn%20%C4%91%C4%83ng%20k%C3%BD%20t%C3%A0i%20kho%E1%BA%A3n%20doanh%20nghi%E1%BB%87p%20Jore";
+
     public EmailThreads(Company com, Employer em, Environment environment, PasswordEncoder passEncoder, EmailService emailService) {
         this.com = com;
         this.em = em;
@@ -45,7 +47,7 @@ public class EmailThreads implements Runnable{
         html = html.replace("${hashId}", passEncoder.encode(em.getUserId().toString()));
 
         try {
-            emailService.sendHtmlEmail("jobhiringweb@gmail.com", em.getEmail(), "Xác nhận đăng ký tài khoản doanh nghiệp Jore", html);
+            emailService.sendHtmlEmail("jobhiringweb@gmail.com", em.getEmail(), CONFIRM_STRING, html);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
