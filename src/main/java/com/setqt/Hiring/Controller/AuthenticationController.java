@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -110,8 +111,11 @@ public class AuthenticationController {
     @PostMapping(value = "/signup/candidate", consumes = {"application/json"})
     public ResponseEntity<ResponseObject> createAccountCDD(@RequestBody CandidateAuthedDTO user) {
 
-//		logger.info(user.getUsername());
-//		logger.info("-------");
+
+    	List<User> userExist = UService.findByUsername(user.getEmail());
+    	if (userExist.size()!=0) {
+    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công, đã tồn tại tài email này", ""));
+    	}
     	System.out.println("ok"+user.getEmail());
         if (user.getEmail().equals("") || user.getPassword().equals(""))
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công", ""));
@@ -142,7 +146,10 @@ public class AuthenticationController {
 
 //		logger.info(user.getUsername());
 //		logger.info("-------");
-    	System.out.println("------++");
+    	List<User> userExist = UService.findByUsername(user.getEmail());
+    	if (userExist.size()!=0) {
+    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công, đã tồn tại tài email này", ""));
+    	}
         Role initRole = roleRepo.findRoleByName("EMPLOYER");
         User newUser = new User(user.getEmail(), user.getPassword(), false, initRole);
 
