@@ -14,7 +14,7 @@ target/
 .springBeans
 .sts4-cache
 
-**/application.properties
+*/.properties
 
 # Compiled class file
 *.class
