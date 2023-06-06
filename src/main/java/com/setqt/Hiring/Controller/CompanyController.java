@@ -44,9 +44,10 @@ public class CompanyController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject("failed", "server failed", null));
         }
 
-        return null;
     }
 
     @GetMapping("/getTop")
@@ -62,9 +63,10 @@ public class CompanyController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject("failed", "server failed", null));
         }
 
-        return null;
     }
 
 
@@ -81,37 +83,11 @@ public class CompanyController {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        return null;
-
-    }
-
-    @GetMapping("/getEmployer")
-    public ResponseEntity<List<Employer>> getEmployer() {
-        try {
-            List<Employer> employers = this.employerService.findAll();
-
-            return new ResponseEntity<>(employers, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
-    @GetMapping("/getCandidate")
-    public List<Candidate> getCandidate() throws Exception {
-        return this.candidateService.findAll();
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<ResponseObject> tests() throws Exception {
-        List<Employer> result = employerService.findAll();
-        if (result.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject("failed", "not found data", null));
+                    .body(new ResponseObject("failed", "server failed", null));
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
     }
+
+
 }

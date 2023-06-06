@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.setqt.Hiring.DTO.JobPostingDTO;
+import com.setqt.Hiring.Model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.setqt.Hiring.Model.CV;
-import com.setqt.Hiring.Model.Company;
-import com.setqt.Hiring.Model.Employer;
-import com.setqt.Hiring.Model.JobDescription;
-import com.setqt.Hiring.Model.JobPosting;
-import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.UserService;
@@ -115,5 +110,26 @@ public class EmployerController {
 					.body(new ResponseObject("failed", "Lỗi server !!!!", null));
 		}
 
+	}
+
+	@GetMapping("/myInfo")
+	public ResponseEntity<ResponseObject> getMyInfo(@RequestHeader(value = "Authorization") String jwt) {
+		try {
+			jwt = jwt.substring(7, jwt.length());
+
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+			User user = (User) uService.findOneByUsername(username);
+			Employer employer = user.getEmployer();
+			if (employer == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new ResponseObject("failed", "not found data", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", employer));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ResponseObject("failed", "not found data", null));
+		}
 	}
 }

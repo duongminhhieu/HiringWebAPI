@@ -87,8 +87,9 @@ public class CandidateController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseObject("failed", "not found data", null));
         }
-        return null;
     }
 
     @PutMapping(value = "/updateInfoCandidate", consumes = {"multipart/form-data"})
@@ -127,7 +128,7 @@ public class CandidateController {
             if (result == null)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseObject("failed", "update info candidate failed", null));
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Cập nhật thành công", result));
 
         } catch (Exception e) {
             e.printStackTrace();
