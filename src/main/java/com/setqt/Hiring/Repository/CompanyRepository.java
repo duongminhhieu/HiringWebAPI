@@ -17,7 +17,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 	void updateById(Long id,Company com);
 
 	
-	@Query("SELECT c FROM Company c ORDER BY c.rate DESC")
+	@Query("SELECT c FROM Company c ORDER BY c.rate DESC LIMIT 6")
     List<Company> findTop6ByRating();
 	
 	
