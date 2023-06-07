@@ -30,7 +30,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 
 @RestController
 @RequestMapping(path = "/notification")
-@CrossOrigin(value = "*")
+@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
 public class NotificationController {
 	
 	

@@ -48,7 +48,9 @@ public class WebSecurityConfig {
 			return 
 // 				http.csrf().disable().cors().disable().and().headers().frameOptions().disable().and()
 // http// Tắt CORS
- http.cors().disable() // Tắt CORS
+ http
+// .cors().disable() // Tắt CORS
+ .cors().and()// Tắt CORS
             .csrf().disable() // Tắt CSRF
 					.authorizeHttpRequests(auth -> {
 

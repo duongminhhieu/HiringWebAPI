@@ -50,7 +50,7 @@ import client.AuthenRequest;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
 public class AuthenticationController {
 
     @Autowired
