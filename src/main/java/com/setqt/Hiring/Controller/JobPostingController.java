@@ -14,7 +14,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 
 @RestController
 @RequestMapping("/job")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
 public class JobPostingController {
 
 	@Autowired

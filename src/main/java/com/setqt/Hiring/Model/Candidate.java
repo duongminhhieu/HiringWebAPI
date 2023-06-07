@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import com.setqt.Hiring.Security.Model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -13,6 +15,7 @@ import jakarta.persistence.*;
 @Entity
 //@IdClass(CandidatePK.class)
 @Table(name = "Candidate")
+@CrossOrigin(origins = "*")
 public class Candidate implements Serializable{
 
 	@Id

@@ -15,4 +15,5 @@ public class EmployerService extends GenericService<Employer> implements IEmploy
 	public EmployerService(JpaRepository<Employer, Long> genericRepository) {
 		super(genericRepository);
 	}
+
 }

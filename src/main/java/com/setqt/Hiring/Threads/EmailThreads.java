@@ -22,7 +22,8 @@ public class EmailThreads implements Runnable{
     private PasswordEncoder passEncoder;
     private EmailService emailService;
 
-    public final String CONFIRM_STRING = "Xác nhận đăng ký tài khoản doanh nghiệp Jore";
+//    public final String CONFIRM_STRING = "Xác nhận đăng ký tài khoản doanh nghiệp Jore";
+    public final String CONFIRM_STRING = "X\u00E1c nh\u1EADn \u0111\u0103ng k\u00FD t\u00E0i kho\u1EA3n doanh nghi\u1EC7p Jore";
 
     public EmailThreads(Company com, Employer em, Environment environment, PasswordEncoder passEncoder, EmailService emailService) {
         this.com = com;

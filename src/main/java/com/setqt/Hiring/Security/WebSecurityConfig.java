@@ -47,7 +47,10 @@ public class WebSecurityConfig {
 		try {
 			return 
 // 				http.csrf().disable().cors().disable().and().headers().frameOptions().disable().and()
- http.cors().disable() // Tắt CORS
+// http// Tắt CORS
+ http
+// .cors().disable() // Tắt CORS
+ .cors().and()// Tắt CORS
             .csrf().disable() // Tắt CSRF
 					.authorizeHttpRequests(auth -> {
 
@@ -58,7 +61,7 @@ public class WebSecurityConfig {
 						auth.requestMatchers("/company/**").permitAll();
 						auth.requestMatchers("/job/**").permitAll();
 						//auth.requestMatchers("/candidate/**").permitAll();
-//						auth.requestMatchers("/employer/**").permitAll();
+						auth.requestMatchers("/notification/**").permitAll();
 						auth.requestMatchers("employer/**").hasRole("EMPLOYER");
 						auth.requestMatchers("candidate/**").hasRole("CANDIDATE");
 						auth.requestMatchers("/auth/**" ).permitAll();

@@ -19,7 +19,7 @@ import com.setqt.Hiring.Model.ResponseObject;
 
 @RestController
 @RequestMapping("/company")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
 public class CompanyController {
 
     @Autowired
