@@ -31,7 +31,7 @@ public class JobPostingController {
 
 			if (result.isEmpty())
 				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(new ResponseObject("failed", "not found data", null));
+						.body(new ResponseObject("failed", "not found data", result));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
