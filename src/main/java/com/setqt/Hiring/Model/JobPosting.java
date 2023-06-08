@@ -63,8 +63,25 @@ public class JobPosting implements Serializable {
         return company;
     }
 
-    public Long getCompanyID() {
-        return company.getId();
+    public Company getCompanyInfo() {
+
+        Company companyResponse = new Company();
+
+        companyResponse.setId(company.getId());
+        companyResponse.setLogo(company.getLogo());
+        companyResponse.setTaxCode(company.getTaxCode());
+        companyResponse.setCompanySize(company.getCompanySize());
+        companyResponse.setWorkTime(company.getWorkTime());
+        companyResponse.setDescription(company.getDescription());
+        companyResponse.setDomain(company.getDomain());
+        companyResponse.setName(company.getName());
+        companyResponse.setEmployer(null);
+        companyResponse.setJobPostingList(null);
+        companyResponse.setRate(company.getRate());
+        companyResponse.setRatingCompanies(null);
+        companyResponse.setAddress(company.getAddress());
+
+        return companyResponse;
     }
 
     public void setCompany(Company company) {

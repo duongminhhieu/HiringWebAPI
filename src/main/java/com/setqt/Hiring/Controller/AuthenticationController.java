@@ -229,6 +229,7 @@ public class AuthenticationController {
         com.setName(user.getName());
         com.setDomain(user.getDomain());
         com.setTaxCode(null);
+        com.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
         com.setEmployer(em);
         em.setCompany(com);
 

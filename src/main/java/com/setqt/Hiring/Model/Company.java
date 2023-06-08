@@ -22,6 +22,10 @@ public class Company implements Serializable{
 	private String taxCode;
 	private String address;
 	private String domain;
+	private String logo;
+	private String companySize;
+	private String 	workTime;
+	private String description;
 	private Double rate;
 
 
@@ -56,6 +60,38 @@ public class Company implements Serializable{
 			t += a.getRate();
 		}
 		this.rate = t/ this.ratingCompanies.size();
+	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+	public String getCompanySize() {
+		return companySize;
+	}
+
+	public void setCompanySize(String companySize) {
+		this.companySize = companySize;
+	}
+
+	public String getWorkTime() {
+		return workTime;
+	}
+
+	public void setWorkTime(String workTime) {
+		this.workTime = workTime;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public Long getId() {
