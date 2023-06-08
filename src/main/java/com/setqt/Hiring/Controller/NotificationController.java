@@ -11,6 +11,7 @@ import javax.print.attribute.standard.Media;
 
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,32 +31,32 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 
 @RestController
 @RequestMapping(path = "/notification")
-@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
+//@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
+@CrossOrigin(origins = "*")
 public class NotificationController {
-	
-	
+
 	@Autowired
 	UserService uService;
 
 	@Autowired
 	JwtTokenHelper jwtHelper;
-	public Map<String,SseEmitter> listEmitter= new HashMap<String, SseEmitter>();
-	
-	@GetMapping(value="/subscribe",consumes = org.springframework.http.MediaType.ALL_VALUE)
+	public Map<String, SseEmitter> listEmitter = new HashMap<String, SseEmitter>();
+
+	@GetMapping(value = "/subscribe", consumes = org.springframework.http.MediaType.ALL_VALUE)
 	public SseEmitter init(@RequestParam String id) {
 
-		String username = jwtHelper.getUsernameFromToken(id);
-		System.out.println(username);
-//		User user = (User) uService.findOneByUsername(username);
+		String username = id;
+		if (id == "")
+			return null;
+		System.out.println("client den");
 		SseEmitter emit = new SseEmitter();
 		initSub(emit);
 		listEmitter.put(username, emit);
-		emit.onCompletion(()->listEmitter.remove(emit));
-		emit.onTimeout(()->listEmitter.remove(emit));
-//		emit.onError(()->listEmitter.remove(emit));
+		emit.onCompletion(() -> listEmitter.remove(emit));
+		emit.onTimeout(() -> listEmitter.remove(emit));
 		return emit;
 	}
-	
+
 	private void initSub(SseEmitter emit) {
 		try {
 			emit.send(SseEmitter.event().name("INIT"));
@@ -64,20 +65,26 @@ public class NotificationController {
 			e.printStackTrace();
 		}
 	}
+
 	@PostMapping("/dispatchEvent")
-	public void dispatch(@RequestParam String title,@RequestParam String text,String username) {
-		String format= new JSONObject().put("title",title).put("text", text).toString();
-		
-		SseEmitter emit = listEmitter.get(username);
-		
-		if (emit!=null) {
-			try {
-				emit.send(SseEmitter.event().name("lastestNews").data(format));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				
-				listEmitter.remove(username);
+	public void dispatch(@RequestParam String title, @RequestParam String text, String username) {
+		String format = new JSONObject().put("title", title).put("text", text).toString();
+
+		SseEmitter emitter;
+		for (Map.Entry<String, SseEmitter> entry : listEmitter.entrySet()) {
+			if (entry.getKey().contains(username)) {
+				emitter = listEmitter.get(entry.getKey());
+
+				if (emitter != null) {
+					try {
+						emitter.send(SseEmitter.event().name("lastestNews").data(format));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						listEmitter.remove(username);
+					}
+				}
 			}
 		}
 	}
+
 }
