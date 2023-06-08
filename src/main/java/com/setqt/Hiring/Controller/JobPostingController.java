@@ -30,7 +30,7 @@ public class JobPostingController {
 			result = jobService.findJobPostingWithDescription(job, add);
 
 			if (result.isEmpty())
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("failed", "not found data", result));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 		} catch (Exception e) {
