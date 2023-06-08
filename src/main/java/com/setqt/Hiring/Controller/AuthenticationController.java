@@ -4,9 +4,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import com.setqt.Hiring.DTO.EmployeeAuthedDTO;
 import com.setqt.Hiring.Model.*;
@@ -55,7 +53,6 @@ public class AuthenticationController {
 
     @Autowired
     private RoleRepository roleRepo;
-
     @Autowired
     private UserService UService;
     @Autowired
@@ -81,8 +78,8 @@ public class AuthenticationController {
     private EmailService emailService;
 
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login2(@RequestBody AuthenRequest authentRequest)
+    @PostMapping("/loginCandidate")
+    public ResponseEntity<?> loginCandidate(@RequestBody AuthenRequest authentRequest)
             throws InvalidKeySpecException, NoSuchAlgorithmException {
 
         try {
@@ -90,9 +87,26 @@ public class AuthenticationController {
                     authentRequest.getUsername(), authentRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
 
+            User user = (User) UService.findOneByUsername(authentRequest.getUsername());
+            Set<Role> roles = new HashSet<>();
+            roles = (Set<Role>) user.getRoles();
+            boolean check = false;
+            Iterator<Role> iterator = roles.iterator();
+            while (iterator.hasNext()) {
+                Role role = iterator.next();
+                if(Objects.equals(role.getNameRole(), "CANDIDATE")){
+                    check = true;
+                    break;
+                }
+            }
+
+            if(!check){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("failed", "Đăng nhập không thành công",
+                                ""));
+            }
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Đăng nhập thành công",
@@ -104,6 +118,54 @@ public class AuthenticationController {
                             ""));
         }
 
+    }
+
+    @PostMapping("/loginEmployer")
+    public ResponseEntity<?> loginEmployer(@RequestBody AuthenRequest authentRequest)
+            throws InvalidKeySpecException, NoSuchAlgorithmException {
+
+        try {
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authentRequest.getUsername(), authentRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = jWTTokenHelper.generateToken(authentRequest.getUsername());
+
+            User user = (User) UService.findOneByUsername(authentRequest.getUsername());
+            Set<Role> roles = new HashSet<>();
+            roles = (Set<Role>) user.getRoles();
+            boolean check = false;
+            Iterator<Role> iterator = roles.iterator();
+            while (iterator.hasNext()) {
+                Role role = iterator.next();
+                if(Objects.equals(role.getNameRole(), "EMPLOYER")){
+                    check = true;
+                    break;
+                }
+            }
+
+            if(!check){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("failed", "Đăng nhập không thành công",
+                                ""));
+            }
+
+//            if(!user.isEnable()){
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("failed", "Bạn chưa xác thực tài khoản!",
+//                                ""));
+//            }
+
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("ok", "Đăng nhập thành công",
+                            jwt));
+
+        } catch (BadCredentialsException ex) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("failed", "Đăng nhập không thành công",
+                            ""));
+        }
 
     }
 
