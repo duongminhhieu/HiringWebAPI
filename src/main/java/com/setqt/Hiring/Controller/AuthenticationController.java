@@ -151,11 +151,11 @@ public class AuthenticationController {
                                 ""));
             }
 
-            if(!user.isEnable()){
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("failed", "Bạn chưa xác thực tài khoản!",
-                                ""));
-            }
+//            if(!user.isEnable()){
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("failed", "Bạn chưa xác thực tài khoản!",
+//                                ""));
+//            }
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Đăng nhập thành công",
