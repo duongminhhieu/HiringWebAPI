@@ -22,7 +22,8 @@ public class JobPosting implements Serializable {
     private Long id;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "company_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference(value = "job_company")
     private Company company;
