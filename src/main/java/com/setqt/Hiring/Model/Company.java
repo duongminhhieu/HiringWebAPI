@@ -18,13 +18,18 @@ public class Company implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@Column(columnDefinition="TEXT")
 	private String name;
 	private String taxCode;
+	@Column(columnDefinition="TEXT")
 	private String address;
 	private String domain;
+	@Column(columnDefinition="TEXT")
 	private String logo;
 	private String companySize;
+	@Column(columnDefinition="TEXT")
 	private String 	workTime;
+	@Column(columnDefinition="TEXT")
 	private String description;
 	private Double rate;
 
