@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/employer")
-@CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
+@CrossOrigin(origins = "*", allowedHeaders = { "Content-Type", "Authorization" })
 public class EmployerController {
 
 	@Autowired
@@ -45,7 +45,7 @@ public class EmployerController {
 
 	@PostMapping("/addJobPosting")
 	public ResponseEntity<ResponseObject> addPosting(@RequestBody JobPostingDTO jobPostingDTO,
-													 @RequestHeader(value = "Authorization") String jwt) {
+			@RequestHeader(value = "Authorization") String jwt) {
 
 		jwt = jwt.substring(7, jwt.length());
 
@@ -80,6 +80,47 @@ public class EmployerController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(new ResponseObject("failed", "Thêm việc không thành công !!!!", null));
+
+		}
+
+	}
+
+	@PostMapping("/setJob/{id}")
+	public ResponseEntity<ResponseObject> changeJob(@RequestHeader(value = "Authorization") String jwt,
+			@PathVariable("id") Long id, @RequestParam(name = "action", defaultValue = "hide") String action) {
+
+		jwt = jwt.substring(7, jwt.length());
+
+		String username = jwtHelper.getUsernameFromToken(jwt);
+		User user = (User) uService.findOneByUsername(username);
+
+		try {
+
+			Optional<JobPosting> jobForAction = jobService.findById(id);
+			if (jobForAction.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Không tìm thấy công việc này.", null));
+			}
+			JobPosting job = jobForAction.get();
+			if (action.equals("hide")) {
+				job.setStatus("hide");
+				jobService.save(job);
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Ẩn thành công ", job));
+			} else if (action.equals("approved")) {
+				job.setStatus("approved");
+				jobService.save(job);
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Mở lại thành công ", job));
+			} else if (action.equals("delete")) {
+				jobService.delete(id);
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xóa thành công ", job));
+
+			}
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Không đúng param", null));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseObject("failed", "Lỗi server!!!!", null));
 
 		}
 
@@ -131,10 +172,9 @@ public class EmployerController {
 		}
 	}
 
-	@PutMapping(value = "/updateInfoEmployer", consumes = {"multipart/form-data"})
+	@PutMapping(value = "/updateInfoEmployer", consumes = { "multipart/form-data" })
 	public ResponseEntity<ResponseObject> addEmployer(@RequestPart("employer") EmployerDTO employerDTO,
-													  @RequestPart("file") MultipartFile file,
-													  @RequestHeader(value = "Authorization") String jwt) {
+			@RequestPart("file") MultipartFile file, @RequestHeader(value = "Authorization") String jwt) {
 		try {
 			System.out.println(employerDTO.toString());
 			jwt = jwt.substring(7, jwt.length());
@@ -148,7 +188,8 @@ public class EmployerController {
 			// xu li file
 			firebaseImageService = new FirebaseImageService();
 			// save file to Firebase
-			String fileName = firebaseImageService.save(file, "avatars_employers/" + employer.getId() + "_" + employer.getEmail());
+			String fileName = firebaseImageService.save(file,
+					"avatars_employers/" + employer.getId() + "_" + employer.getEmail());
 			String imageUrl = firebaseImageService.getFileUrl(fileName);
 
 			System.out.println((imageUrl));
