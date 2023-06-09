@@ -99,7 +99,7 @@ public class EmployerController {
 			List<CV> cv = getJob.getListCV();
 			if (cv.isEmpty())
 				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", null));
+						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", cv));
 
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("ok", "Tìm tất cả cv thành công !", cv));
