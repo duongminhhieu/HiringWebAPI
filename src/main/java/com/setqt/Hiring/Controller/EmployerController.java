@@ -112,7 +112,7 @@ public class EmployerController {
 				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Mở lại thành công ", job));
 			} else if (action.equals("delete")) {
 				jobService.delete(id);
-				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xóa thành công ", job));
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Xóa thành công ", null));
 
 			}
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Không đúng param", null));

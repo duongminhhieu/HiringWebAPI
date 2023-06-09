@@ -23,7 +23,7 @@ public class JobPosting implements Serializable {
 
 
 //    @ManyToOne(cascade = CascadeType.ALL)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference(value = "job_company")
     private Company company;
