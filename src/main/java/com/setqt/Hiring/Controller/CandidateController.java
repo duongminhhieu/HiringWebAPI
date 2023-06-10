@@ -267,7 +267,8 @@ public class CandidateController {
         }
     }
 
-    @PostMapping(value = "/submitCV/{idPosting}", consumes = {"multipart/form-data"})
+//    , consumes = {"multipart/form-data"}
+    @PostMapping(value = "/submitCV/{idPosting}")
     public ResponseEntity<ResponseObject> submitCV(@PathVariable String idPosting,
                                                    @RequestPart("info") SubmitCVDTO submitCVDTO,
                                                    @RequestPart("file") MultipartFile file,
