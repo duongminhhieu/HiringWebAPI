@@ -269,8 +269,8 @@ public class CandidateController {
 
     @PostMapping(value = "/submitCV/{idPosting}", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseObject> submitCV(@PathVariable String idPosting,
-                                                   @RequestPart("info") SubmitCVDTO submitCVDTO,
                                                    @RequestPart("file") MultipartFile file,
+                                                   @RequestPart("info") SubmitCVDTO submitCVDTO,
                                                    @RequestHeader(value = "Authorization") String jwt) {
         try {
 
@@ -312,7 +312,6 @@ public class CandidateController {
                     .body(new ResponseObject("failed", "submit for Job posting failed", null));
         }
     }
-
 
 
 }
