@@ -5,7 +5,6 @@ import com.setqt.Hiring.Model.Employer;
 import com.setqt.Hiring.Service.EmailService.EmailService;
 import jakarta.mail.MessagingException;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-public class EmailThreads implements Runnable{
+public class ConfirmEmailThreads implements Runnable{
 
     private Company com;
     private Employer em;
@@ -25,7 +24,7 @@ public class EmailThreads implements Runnable{
 //    public final String CONFIRM_STRING = "Xác nhận đăng ký tài khoản doanh nghiệp Jore";
 //    public final String CONFIRM_STRING = "X\u00E1c nh\u1EADn \u0111\u0103ng k\u00FD t\u00E0i kho\u1EA3n doanh nghi\u1EC7p Jore";
     public final String CONFIRM_STRING = "Confirm business account registration on Jore";
-    public EmailThreads(Company com, Employer em, Environment environment, PasswordEncoder passEncoder, EmailService emailService) {
+    public ConfirmEmailThreads(Company com, Employer em, Environment environment, PasswordEncoder passEncoder, EmailService emailService) {
         this.com = com;
         this.em = em;
         this.environment = environment;

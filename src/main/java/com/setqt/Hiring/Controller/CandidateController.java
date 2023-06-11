@@ -226,7 +226,7 @@ public class CandidateController {
             List<SavedJobPosting> savedJobPostingList = savedJobPostingService.findAll();
 
             for (SavedJobPosting savedJobPosting : savedJobPostingList) {
-                if (savedJobPosting.getIdJobPosting() == Long.parseLong(idPosting)
+                if (savedJobPosting.getJobPosting().getId() == Long.parseLong(idPosting)
                         && Objects.equals(savedJobPosting.getCandidate().getId(), candidate.getId())) {
                     return ResponseEntity.status(HttpStatus.OK)
                             .body(new ResponseObject("ok", "This job posting has been saved", null));

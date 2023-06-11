@@ -1,6 +1,7 @@
 package com.setqt.Hiring.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.setqt.Hiring.DTO.ResponseDTO.JobPostingResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -38,12 +39,10 @@ public class SavedJobPosting {
         this.id = id;
     }
 
-    public Long getIdJobPosting(){
-        return this.jobPosting.getId();
-    }
-
-    public String getTitle(){
-        return this.jobPosting.getTitle();
+    public JobPostingResponse getInfoJobPosting() {
+        return new JobPostingResponse(jobPosting.getId(), jobPosting.getTitle(), jobPosting.getPostDate(), jobPosting.getDueDate(), jobPosting.getJobDescription().getDescription(),
+                jobPosting.getJobDescription().getBenefits(), jobPosting.getJobDescription().getRequirement(), jobPosting.getJobDescription().getGender(), jobPosting.getJobDescription().getExperience(), jobPosting.getJobDescription().getSalary(),
+                jobPosting.getJobDescription().getNumber_candidates(), jobPosting.getJobDescription().getWorking_form(), jobPosting.getJobDescription().getAddress_work());
     }
 
     public Candidate getCandidate() {
