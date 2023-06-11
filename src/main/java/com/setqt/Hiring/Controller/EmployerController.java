@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.setqt.Hiring.Security.JwtTokenHelper;
@@ -40,7 +41,8 @@ public class EmployerController {
 	private FirebaseImageService firebaseImageService;
 	@Autowired
 	JobDescriptionService JDesciptService;
-
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@Autowired
 	JwtTokenHelper jwtHelper;
 
@@ -219,6 +221,38 @@ public class EmployerController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)
 					.body(new ResponseObject("failed", "Server bị lỗi !!", null));
+		}
+	}
+
+	@PostMapping("/changePassword")
+	public ResponseEntity<ResponseObject> changePassword(@RequestHeader(value = "Authorization") String jwt,
+														 @RequestParam("password") String password,
+														 @RequestParam("newPassword") String newPassword) {
+		try {
+
+			jwt = jwt.substring(7, jwt.length());
+
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+			User user = (User) uService.findOneByUsername(username);
+
+			boolean check = passwordEncoder.matches(password, user.getPassword());
+
+			if(!check){
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Mật khẩu cũ đã nhập không đúng !", null));
+			}
+
+			user.setPassword(passwordEncoder.encode(newPassword));
+			User result = uService.save(user);
+
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("ok", "Đổi mật khẩu thành công !", result));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+					.body(new ResponseObject("failed", "Lỗi server!...", null));
 		}
 	}
 }
