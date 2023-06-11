@@ -222,7 +222,7 @@ public class AuthenticationController {
         em.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
         System.out.println(user.getAddress());
         com.setAddress(user.getAddress());
-        com.setRate((double) 0);
+        com.setRate((double) 5);
         com.setName(user.getName());
         com.setDomain(user.getDomain());
         com.setTaxCode(null);
@@ -282,16 +282,15 @@ public class AuthenticationController {
     }
 
 //    @PostMapping("/forgotPassword")
-//    public ResponseEntity<ResponseObject> forgotPassword(@RequestParam("email") String email) {
+//    public ResponseEntity<ResponseObject> forgotPassword(@RequestParam("email") String email, @RequestParam("role") String role) {
 //        try {
 //
-//            jwt = jwt.substring(7, jwt.length());
+//            List<User> userExist = UService.findByUsername(email);
 //
-//            String username = jwtHelper.getUsernameFromToken(jwt);
-//            System.out.println(username);
-//            User user = (User) uService.findOneByUsername(username);
+//            if (userExist.size() == 0) {
+//                return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Tài khoản này không tồn tại", ""));
+//            }
 //
-//            boolean check = passwordEncoder.matches(password, user.getPassword());
 //
 //            if(!check){
 //                return ResponseEntity.status(HttpStatus.OK)

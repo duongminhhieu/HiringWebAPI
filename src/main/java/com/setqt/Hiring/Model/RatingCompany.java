@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Table(name = "RatingCompany")
@@ -14,6 +16,7 @@ public class RatingCompany {
 
     private Double rate;
     private String content;
+    private Date createdDate;
 
     @ManyToOne
     @JoinColumn(name="company_id", nullable = false, referencedColumnName = "id")
@@ -26,9 +29,10 @@ public class RatingCompany {
     private Candidate candidate;
 
 
-    public RatingCompany(Double rate, String content, Company company, Candidate candidate) {
+    public RatingCompany(Double rate, String content, Date createdDate, Company company, Candidate candidate) {
         this.rate = rate;
         this.content = content;
+        this.createdDate = createdDate;
         this.company = company;
         this.candidate = candidate;
     }
@@ -37,6 +41,13 @@ public class RatingCompany {
 
     }
 
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
     public Long getCompanyId(){
         return this.company.getId();

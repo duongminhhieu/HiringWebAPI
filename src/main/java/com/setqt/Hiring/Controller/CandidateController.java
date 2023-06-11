@@ -166,7 +166,7 @@ public class CandidateController {
     }
 
     @PostMapping("/rating/{idCompany}")
-    public ResponseEntity<ResponseObject> addReport(@PathVariable String idCompany, @RequestBody RatingDTO ratingDTO,
+    public ResponseEntity<ResponseObject> addRating(@PathVariable String idCompany, @RequestBody RatingDTO ratingDTO,
                                                     @RequestHeader(value = "Authorization") String jwt) {
         try {
 
@@ -190,8 +190,7 @@ public class CandidateController {
                 }
             }
 
-            RatingCompany ratingCompany = new RatingCompany(ratingDTO.getRate(), ratingDTO.getContent(), company.get(),
-                    candidate);
+            RatingCompany ratingCompany = new RatingCompany(ratingDTO.getRate(), ratingDTO.getContent(), new Date(), company.get(), candidate);
             RatingCompany result = ratingCompanyService.save(ratingCompany);
             // update rating
             company.get().updateRating();
