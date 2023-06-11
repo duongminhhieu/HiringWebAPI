@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.setqt.Hiring.DTO.ResponseDTO.CompanyResponse;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -64,25 +65,8 @@ public class JobPosting implements Serializable {
         return company;
     }
 
-    public Company getCompanyInfo() {
-
-        Company companyResponse = new Company();
-
-        companyResponse.setId(company.getId());
-        companyResponse.setLogo(company.getLogo());
-        companyResponse.setTaxCode(company.getTaxCode());
-        companyResponse.setCompanySize(company.getCompanySize());
-        companyResponse.setWorkTime(company.getWorkTime());
-        companyResponse.setDescription(company.getDescription());
-        companyResponse.setDomain(company.getDomain());
-        companyResponse.setName(company.getName());
-        companyResponse.setEmployer(null);
-        companyResponse.setJobPostingList(null);
-        companyResponse.setRate(company.getRate());
-        companyResponse.setRatingCompanies(null);
-        companyResponse.setAddress(company.getAddress());
-
-        return companyResponse;
+    public CompanyResponse getCompanyInfo() {
+        return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
     }
 
     public void setCompany(Company company) {

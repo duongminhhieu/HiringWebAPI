@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.setqt.Hiring.DTO.ResponseDTO.CandidateResponse;
+import com.setqt.Hiring.DTO.ResponseDTO.JobPostingResponse;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -18,18 +20,18 @@ public class CV implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
-    @JsonBackReference(value="cv")
+    @JsonBackReference(value = "cv")
     private Candidate candidate;
 
     @ManyToOne
     @JoinColumn(name = "job_posting_id", referencedColumnName = "id")
-    @JsonBackReference(value="job_posting")
+    @JsonBackReference(value = "job_posting")
     private JobPosting jobPosting;
 
     private String name;
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String introLetter;
-    @Column(columnDefinition="TEXT")
+    @Column(columnDefinition = "TEXT")
     private String fileCV;
     private Date dateCreated;
 
@@ -58,30 +60,10 @@ public class CV implements Serializable {
         return candidate;
     }
 
-//    public Long getIdCandidate(){
-//        return this.candidate.getId();
-//    }
-
-    public Candidate getInfoCandidate(){
-
-        Candidate candidate1 = new Candidate();
-        candidate1.setAvatar(this.candidate.getAvatar());
-        candidate1.setDob(this.candidate.getDob());
-        candidate1.setSkill(this.candidate.getSkill());
-        candidate1.setExperience(this.candidate.getExperience());
-        candidate1.setAddress(this.candidate.getAddress());
-        candidate1.setGender(this.candidate.getGender());
-        candidate1.setPhone(this.candidate.getPhone());
-        candidate1.setEmail(this.candidate.getEmail());
-        candidate1.setFullName(this.candidate.getFullName());
-        candidate1.setId(this.candidate.getId());
-        candidate1.setUser(null);
-        candidate1.setRatingCompanies(null);
-        candidate1.setSavedJobPostingList(null);
-        candidate1.setReports(null);
-
-        return candidate1;
+    public CandidateResponse getInfoCandidate() {
+        return new CandidateResponse(candidate.getId(), candidate.getFullName(), candidate.getGender(), candidate.getPhone(), candidate.getAddress(),candidate.getDob(), candidate.getSkill(), candidate.getExperience());
     }
+
     public void setCandidate(Candidate candidate) {
         this.candidate = candidate;
     }
@@ -101,6 +83,14 @@ public class CV implements Serializable {
 
     public void setJobPosting(JobPosting jobPosting) {
         this.jobPosting = jobPosting;
+    }
+
+
+    public JobPostingResponse getInfoJobPosting() {
+
+        return new JobPostingResponse(jobPosting.getId(), jobPosting.getTitle(), jobPosting.getPostDate(), jobPosting.getDueDate(), jobPosting.getJobDescription().getDescription(),
+                jobPosting.getJobDescription().getBenefits(), jobPosting.getJobDescription().getRequirement(), jobPosting.getJobDescription().getGender(), jobPosting.getJobDescription().getExperience(), jobPosting.getJobDescription().getSalary(),
+                jobPosting.getJobDescription().getNumber_candidates(), jobPosting.getJobDescription().getWorking_form(), jobPosting.getJobDescription().getAddress_work());
     }
 
     public String getIntroLetter() {

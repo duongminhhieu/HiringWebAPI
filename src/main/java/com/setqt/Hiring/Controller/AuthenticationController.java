@@ -201,13 +201,10 @@ public class AuthenticationController {
 
     }
 
-//    @GetMapping(value = "/signup/employer")
+
     @PostMapping(value = "/signup/employer", consumes = {"application/json"})
     public ResponseEntity<ResponseObject> createAccountHier(@RequestBody EmployeeAuthedDTO user) {
-//    	public ResponseEntity<ResponseObject> createAccountHier() {
 
-//		logger.info(user.getUsername());
-//		logger.info("-------");
     	List<User> userExist = UService.findByUsername(user.getEmail());
     	if (userExist.size()!=0) {
     		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng kí không thành công, đã tồn tại tài email này", ""));
@@ -284,5 +281,34 @@ public class AuthenticationController {
 
     }
 
+//    @PostMapping("/forgotPassword")
+//    public ResponseEntity<ResponseObject> forgotPassword(@RequestParam("email") String email) {
+//        try {
+//
+//            jwt = jwt.substring(7, jwt.length());
+//
+//            String username = jwtHelper.getUsernameFromToken(jwt);
+//            System.out.println(username);
+//            User user = (User) uService.findOneByUsername(username);
+//
+//            boolean check = passwordEncoder.matches(password, user.getPassword());
+//
+//            if(!check){
+//                return ResponseEntity.status(HttpStatus.OK)
+//                        .body(new ResponseObject("failed", "Mật khẩu cũ đã nhập không đúng !", null));
+//            }
+//
+//            user.setPassword(passwordEncoder.encode(newPassword));
+//            User result = uService.save(user);
+//
+//            return ResponseEntity.status(HttpStatus.OK)
+//                    .body(new ResponseObject("ok", "Đổi mật khẩu thành công !", result));
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+//                    .body(new ResponseObject("failed", "Lỗi server!...", null));
+//        }
+//    }
 
 }
