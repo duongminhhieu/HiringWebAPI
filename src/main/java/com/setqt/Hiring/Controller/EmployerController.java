@@ -214,13 +214,13 @@ public class EmployerController {
 			Employer result = employerService.save(employer);
 
 			if (result == null)
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("failed", "update info employer failed", null));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Cập nhật thành công", result));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("failed", "Server bị lỗi !!", null));
 		}
 	}
@@ -252,7 +252,7 @@ public class EmployerController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("failed", "Lỗi server!...", null));
 		}
 	}

@@ -38,13 +38,13 @@ public class CompanyController {
             List<Company> result = comService.findAll();
 
             if (result.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "not found data", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "server failed", null));
         }
 

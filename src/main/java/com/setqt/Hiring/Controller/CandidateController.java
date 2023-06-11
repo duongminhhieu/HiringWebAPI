@@ -126,14 +126,15 @@ public class CandidateController {
             Candidate result = candidateService.save(candidate);
 
             if (result == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "update info candidate failed", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Cập nhật thành công", result));
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi Server !....", null));
         }
-        return null;
     }
 
     @PostMapping("/addReport/{idPosting}")
@@ -154,15 +155,16 @@ public class CandidateController {
             Report result = reportService.save(report);
 
             if (result == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "add Report failed", null));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "add Report successfully", result));
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server ! ....", null));
         }
-        return null;
     }
 
     @PostMapping("/rating/{idCompany}")
@@ -185,7 +187,7 @@ public class CandidateController {
             for (RatingCompany a : ratingCompanyList) {
                 if (Objects.equals(a.getCandidate().getId(), candidate.getId())
                         && Objects.equals(a.getCompany().getId(), company.get().getId())) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    return ResponseEntity.status(HttpStatus.OK)
                             .body(new ResponseObject("failed", "candidate has been rating", null));
                 }
             }
@@ -197,15 +199,16 @@ public class CandidateController {
             companyService.save(company.get());
 
             if (result == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "add Rating failed", null));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "add Rating successfully", result));
 
         } catch (Exception e) {
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !....", null));
         }
-        return null;
     }
 
     @PostMapping("/saveJobPosting/{idPosting}")
@@ -235,15 +238,16 @@ public class CandidateController {
             SavedJobPosting result = savedJobPostingService.save(savedJobPosting);
 
             if (result == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "save Job posting failed", null));
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "save job posting successfully", result));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !....", null));
+
         }
-        return null;
     }
 
     @PostMapping("/deleteJobPosting/{idSaved}")
@@ -319,7 +323,7 @@ public class CandidateController {
 
             CV result = cvService.save(cv);
             if (result == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "submit for Job posting failed", null));
 
             }
@@ -328,7 +332,7 @@ public class CandidateController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "Lỗi server ....", null));
         }
     }
@@ -360,7 +364,7 @@ public class CandidateController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "Lỗi server!...", null));
         }
     }

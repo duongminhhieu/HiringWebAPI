@@ -195,6 +195,8 @@ public class AuthenticationController {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Lỗi server !....", ""));
+
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đăng kí thành công", ""));
@@ -243,7 +245,7 @@ public class AuthenticationController {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseObject("failed", "Đăng không thành công", ""));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Đăng không thành công", ""));
 
         }
 
@@ -260,7 +262,7 @@ public class AuthenticationController {
 			boolean check = passEncoder.matches(id, token);
 
             if (!check)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "verify failed", null));
             {
 
@@ -275,8 +277,8 @@ public class AuthenticationController {
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ResponseObject("failed", "not verify email", null));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !...", null));
         }
 
     }
