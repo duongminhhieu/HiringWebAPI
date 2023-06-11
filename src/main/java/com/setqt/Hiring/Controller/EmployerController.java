@@ -174,7 +174,6 @@ public class EmployerController {
 					.body(new ResponseObject("failed", "not found data", null));
 		}
 	}
-
 	@PutMapping(value = "/updateInfoEmployer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ResponseObject> addEmployer(@RequestPart("employer") EmployerDTO employerDTO,
 			@RequestPart("file") MultipartFile file, @RequestHeader(value = "Authorization") String jwt) {
