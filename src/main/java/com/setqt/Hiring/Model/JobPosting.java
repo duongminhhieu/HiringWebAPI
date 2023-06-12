@@ -23,6 +23,7 @@ public class JobPosting implements Serializable {
     private Long id;
 
 
+//    @Transient
 //    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false, referencedColumnName = "id")
@@ -30,6 +31,8 @@ public class JobPosting implements Serializable {
     private Company company;
 
 
+    
+   
     @OneToMany(mappedBy = "jobPosting")
     @JsonManagedReference(value = "job_posting")
     private List<CV> listCV;
@@ -39,10 +42,12 @@ public class JobPosting implements Serializable {
     @JsonManagedReference(value = "job_descript")
     private JobDescription jobDescription;
 
+   
     @OneToMany(mappedBy = "jobPosting")
     @JsonManagedReference(value = "job_report")
     private List<Report> reports;
 
+   
     @OneToMany(mappedBy = "jobPosting")
     @JsonManagedReference(value = "saved_job_posting")
     private List<SavedJobPosting> savedJobPostingList;
@@ -65,9 +70,9 @@ public class JobPosting implements Serializable {
         return company;
     }
 
-    public CompanyResponse getCompanyInfo() {
-        return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
-    }
+//    public CompanyResponse getCompanyInfo() {
+//        return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
+//    }
 
     public void setCompany(Company company) {
         this.company = company;
@@ -159,6 +164,15 @@ public class JobPosting implements Serializable {
         this.postDate = postDate;
         this.dueDate = dueDate;
         this.view = view;
+    }
+    public JobPosting(String status,Long id,  JobDescription jobDescription, String title, Date postDate, Date dueDate, int view) {
+    	this.status=status;
+    	this.id=id;
+    	this.jobDescription = jobDescription;
+    	this.title = title;
+    	this.postDate = postDate;
+    	this.dueDate = dueDate;
+    	this.view = view;
     }
 
     @Override

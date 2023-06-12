@@ -24,4 +24,7 @@ public class CompanyService extends GenericService<Company> implements ICompany 
 		return ((CompanyRepository) genericRepository).findTop6ByRating();
 		
 	}
+	public Company findCompanyByEmployerIdWithoutJobPosting(Long id) {
+		return ((CompanyRepository) genericRepository).findCompanyByEmployerIdWithoutJobPosting(id);
+	}
 }

@@ -4,67 +4,69 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 @Entity
 @Data
 @Table(name = "Company")
-public class Company implements Serializable{
+public class Company implements Serializable {
 
 	private static final long serialVersionUID = -297553281792804396L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String name;
 	private String taxCode;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String address;
 	private String domain;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String logo;
 	private String companySize;
-	@Column(columnDefinition="TEXT")
-	private String 	workTime;
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
+	private String workTime;
+	@Column(columnDefinition = "TEXT")
 	private String description;
 	private Double rate;
 
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	@JsonManagedReference(value="job_company")
+	@JsonManagedReference(value = "job_company")
 	private List<JobPosting> jobPostingList;
 
 	@OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-	@JsonManagedReference(value="rating_company")
+	@JsonManagedReference(value = "rating_company")
 	private List<RatingCompany> ratingCompanies;
 
-	@OneToOne (cascade = CascadeType.ALL)
-	@JsonBackReference(value="company_employer")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JsonBackReference(value = "company_employer")
 	private Employer employer;
-
-
+	
+	
 	public Company(String name, Long id, String taxCode, String address, String domain) {
 		super();
+		
 		this.name = name;
 		this.id = id;
 		this.taxCode = taxCode;
 		this.address = address;
 		this.domain = domain;
 	}
+
 	public Company() {
 
 	}
 
-	public void updateRating(){
-		double t = 0 ;
-		for(RatingCompany a : this.ratingCompanies){
+	public void updateRating() {
+		double t = 0;
+		for (RatingCompany a : this.ratingCompanies) {
 			t += a.getRate();
 		}
-		this.rate = t/ this.ratingCompanies.size();
+		this.rate = t / this.ratingCompanies.size();
 	}
 
 	public String getLogo() {

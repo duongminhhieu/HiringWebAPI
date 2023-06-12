@@ -62,7 +62,7 @@ public class CandidateController {
             List<Candidate> result = candidateService.findAll();
             System.out.println(result.size());
             if (result.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "not found data", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 
@@ -82,15 +82,55 @@ public class CandidateController {
             User user = (User) uService.findOneByUsername(username);
             Candidate candidate = user.getCandidate();
             if (candidate == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "not found data", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", candidate));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "not found data", null));
         }
+    }
+    @GetMapping("/myInfoNew")
+    public ResponseEntity<ResponseObject> getMyInfoNew(@RequestHeader(value = "Authorization") String jwt) {
+    	try {
+    		jwt = jwt.substring(7, jwt.length());
+    		
+    		String username = jwtHelper.getUsernameFromToken(jwt);
+    		
+//    		User user = (User) uService.findOneByUsername(username);
+    		Candidate candidate = candidateService.getInfo(username);
+    		if (candidate == null)
+    			return ResponseEntity.status(HttpStatus.OK)
+    					.body(new ResponseObject("failed", "not found data", null));
+    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", candidate));
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return ResponseEntity.status(HttpStatus.OK)
+    				.body(new ResponseObject("failed", "not found data", null));
+    	}
+    }
+    @GetMapping("/JobSummited")
+    public ResponseEntity<ResponseObject> getJobSummited(@RequestHeader(value = "Authorization") String jwt) {
+    	try {
+    		jwt = jwt.substring(7, jwt.length());
+    		
+    		String username = jwtHelper.getUsernameFromToken(jwt);
+    		
+
+    		List<CV> listcv= cvService.getCVByUsername(username);
+    		if (listcv.size() == 0)
+    			return ResponseEntity.status(HttpStatus.OK)
+    					.body(new ResponseObject("failed", "not found data", null));
+    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", listcv));
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return ResponseEntity.status(HttpStatus.OK)
+    				.body(new ResponseObject("failed", "not found data", null));
+    	}
     }
 
     @PutMapping(value = "/updateInfoCandidate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -248,6 +288,33 @@ public class CandidateController {
                     .body(new ResponseObject("failed", "Lỗi server !....", null));
 
         }
+    }
+    @GetMapping("/getJobSaved")
+    public ResponseEntity<ResponseObject> getJobPosting(
+    		@RequestHeader(value = "Authorization") String jwt) {
+    	try {
+    		
+    		jwt = jwt.substring(7, jwt.length());
+    		
+    		String username = jwtHelper.getUsernameFromToken(jwt);
+    		System.out.println(username);
+    		User user = (User) uService.findOneByUsername(username);
+    		Candidate candidate = user.getCandidate();
+    	
+    		List<SavedJobPosting> svJob= savedJobPostingService.getByCandidateID(candidate.getId());
+    		
+    		if (svJob.size()==0)
+    		return ResponseEntity.status(HttpStatus.OK)
+    				.body(new ResponseObject("ok", "Chưa lưu công việc nào", svJob));
+    		else 
+    			return ResponseEntity.status(HttpStatus.OK)
+        				.body(new ResponseObject("ok", "DS  công việc đã lưu", svJob));
+        	
+    	} catch (Exception e) {
+    		e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+    				.body(new ResponseObject("failed", "Lỗi server !....", null));
+    		
+    	}
     }
 
     @PostMapping("/deleteJobPosting/{idSaved}")

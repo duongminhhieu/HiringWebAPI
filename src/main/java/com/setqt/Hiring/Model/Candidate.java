@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.setqt.Hiring.Security.Model.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -34,10 +35,13 @@ public class Candidate implements Serializable{
 	@JsonManagedReference(value="rating_company")
 	private List<RatingCompany> ratingCompanies;
 
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="cv")
 	private List<CV> cvList;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
 	@JsonManagedReference(value="saved_job_posting")
 	private List<SavedJobPosting> savedJobPostingList;
@@ -53,7 +57,22 @@ public class Candidate implements Serializable{
 	private String avatar;
 	private String[] skill;
 	private String experience;
+	
 	public Candidate(User user, String fullName, String email, String gender, String phone, String address, Date dob,
+			String avatar, String[] skill, String experience) {
+		super();
+		this.user = user;
+		this.fullName = fullName;
+		this.email = email;
+		this.gender = gender;
+		this.phone = phone;
+		this.address = address;
+		this.dob = dob;
+		this.avatar = avatar;
+		this.skill = skill;
+		this.experience = experience;
+	}
+	public Candidate(String fullName, String email, String gender, String phone, String address, Date dob,
 			String avatar, String[] skill, String experience) {
 		super();
 		this.user = user;

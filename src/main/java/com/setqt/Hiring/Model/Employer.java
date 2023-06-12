@@ -43,6 +43,15 @@ public class Employer implements Serializable{
 		this.logo = logo;
 	}
 
+	public Employer(Long id,User u, String phone, String email, String logo) {
+//		this.company=com;
+		this.id=id;
+		this.user=u;
+		this.phone = phone;
+		this.email = email;
+		this.logo = logo;
+	}
+
 	public Employer() {
 
 	}
@@ -72,7 +81,10 @@ public class Employer implements Serializable{
 	}
 
 	public Long getCompanyId() {
+//		return company;
+		if (company!= null)
 		return company.getId();
+		else return null;
 	}
 
 	public Long getUserId(){

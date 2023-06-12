@@ -132,17 +132,18 @@ public class EmployerController {
 	@GetMapping("/getCV")
 	public ResponseEntity<ResponseObject> getCV(@RequestParam String id) {
 		try {
-
+			
+			
 			Optional<JobPosting> jobPosting = jobService.findById(Long.parseLong(id));
 			if (jobPosting.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("failed", "Không tìm thấy việc !!!!", null));
 			}
 
 			JobPosting getJob = jobPosting.get();
 			List<CV> cv = getJob.getListCV();
 			if (cv.isEmpty())
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", cv));
 
 			return ResponseEntity.status(HttpStatus.OK)
@@ -152,6 +153,36 @@ public class EmployerController {
 					.body(new ResponseObject("failed", "Lỗi server !!!!", null));
 		}
 
+	}
+	@GetMapping("/getMyJob")
+	public ResponseEntity<ResponseObject> getMyJob(@RequestHeader(value = "Authorization") String jwt) {
+		try {
+			 
+					jwt = jwt.substring(7, jwt.length());
+
+					String username = jwtHelper.getUsernameFromToken(jwt);
+//					User user = (User) uService.findOneByUsername(username);
+			
+			List<JobPosting> jobPosting = employerService.getAllJob(username);
+			if (jobPosting.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Không tìm thấy việc !!!!", null));
+			}
+			
+			
+//			List<CV> cv = getJob.getListCV();
+//			if (cv.isEmpty())
+//				return ResponseEntity.status(HttpStatus.OK)
+//						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", cv));
+			
+			return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("ok", "Tìm tất cả công việc thành công !", jobPosting));
+		} catch (Exception ex) {
+			System.out.println(ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseObject("failed", "Lỗi server !!!!", null));
+		}
+		
 	}
 
 	@GetMapping("/myInfo")
@@ -168,6 +199,28 @@ public class EmployerController {
 						.body(new ResponseObject("failed", "not found data", null));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", employer));
 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(new ResponseObject("failed", "not found data", null));
+		}
+	}
+	@GetMapping("/myInfoNew")
+	public ResponseEntity<ResponseObject> getMyInfoNew(@RequestHeader(value = "Authorization") String jwt) {
+		try {
+			jwt = jwt.substring(7, jwt.length());
+			
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+//			User user = (User) uService.findOneByUsername(username);
+			Employer employer = employerService.getInfo(username);
+			Company com = companyService.findCompanyByEmployerIdWithoutJobPosting(employer.getId());
+			employer.setCompany(com);
+			if (employer == null)
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(new ResponseObject("failed", "not found data", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", employer));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.NOT_FOUND)

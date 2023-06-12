@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.setqt.Hiring.DTO.ResponseDTO.CandidateResponse;
 import com.setqt.Hiring.DTO.ResponseDTO.JobPostingResponse;
 import jakarta.persistence.*;
@@ -18,6 +18,8 @@ public class CV implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "candidate_id", referencedColumnName = "id")
     @JsonBackReference(value = "cv")
@@ -35,6 +37,9 @@ public class CV implements Serializable {
     private String fileCV;
     private Date dateCreated;
 
+    
+    @Transient
+    private Company company;
 
     public CV() {
 
@@ -46,6 +51,14 @@ public class CV implements Serializable {
         this.introLetter = introLetter;
         this.fileCV = fileCV;
         this.dateCreated = dateCreated;
+    }
+    public CV(Candidate candidate, JobPosting jobPosting, String introLetter, String fileCV, Date dateCreated, Company com) {
+    	this.candidate = candidate;
+    	this.jobPosting = jobPosting;
+    	this.introLetter = introLetter;
+    	this.company=com;
+    	this.fileCV = fileCV;
+    	this.dateCreated = dateCreated;
     }
 
     public Long getId() {
@@ -60,9 +73,9 @@ public class CV implements Serializable {
         return candidate;
     }
 
-    public CandidateResponse getInfoCandidate() {
-        return new CandidateResponse(candidate.getId(), candidate.getFullName(), candidate.getGender(), candidate.getPhone(), candidate.getAddress(),candidate.getDob(), candidate.getSkill(), candidate.getExperience());
-    }
+//    public CandidateResponse getInfoCandidate() {
+////        return new CandidateResponse(candidate.getId(), candidate.getFullName(), candidate.getGender(), candidate.getPhone(), candidate.getAddress(),candidate.getDob(), candidate.getSkill(), candidate.getExperience());
+//    }
 
     public void setCandidate(Candidate candidate) {
         this.candidate = candidate;
@@ -76,10 +89,6 @@ public class CV implements Serializable {
         this.name = name;
     }
 
-    //	@JsonBackReference(value="job_cv")
-    public JobPosting getJobPosting() {
-        return jobPosting;
-    }
 
     public void setJobPosting(JobPosting jobPosting) {
         this.jobPosting = jobPosting;
@@ -116,5 +125,13 @@ public class CV implements Serializable {
     public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 
 }
