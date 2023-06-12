@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.print.attribute.standard.Media;
 
+import com.setqt.Hiring.WebSocket.NotificationWebSocketHandler;
 import org.cloudinary.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +42,9 @@ public class NotificationController {
 	@Autowired
 	JwtTokenHelper jwtHelper;
 	public Map<String, SseEmitter> listEmitter = new HashMap<String, SseEmitter>();
+
+	@Autowired
+	private NotificationWebSocketHandler notificationWebSocketHandler;
 
 	@GetMapping(value = "/subscribe", consumes = org.springframework.http.MediaType.ALL_VALUE)
 	public SseEmitter init(@RequestParam String id) {
@@ -85,6 +89,18 @@ public class NotificationController {
 				}
 			}
 		}
+	}
+
+	@GetMapping("/sendNotification")
+	public void sendNotification() {
+		String notification = "Thông báo từ backend Spring Boot";
+		try{
+			// Gửi thông báo tới tất cả các kết nối WebSocket
+			notificationWebSocketHandler.sendNotification(notification);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
 	}
 
 }
