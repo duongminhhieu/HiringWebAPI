@@ -3,6 +3,7 @@ package com.setqt.Hiring.Controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.setqt.Hiring.DTO.APIResponse.SearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class JobPostingController {
 		try {
 
 			System.out.println(job);
-			List<JobPosting> result;
-			result = jobService.findJobPostingWithDescription(job, add);
+			List<SearchResponse> result;
+			result = jobService.search(job, add);
 
 			if (result.isEmpty())
 				return ResponseEntity.status(HttpStatus.OK)
