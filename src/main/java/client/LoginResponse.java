@@ -1,5 +1,6 @@
 package client;
 
+
 public class LoginResponse {
 	private String token;
 	
