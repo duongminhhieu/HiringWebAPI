@@ -112,6 +112,11 @@ public class Company implements Serializable {
 	public String getName() {
 		return name;
 	}
+	
+	public Long getInfoIDEmployer() {
+		if (employer !=null) return employer.getId();
+		else return null;
+	}
 
 	public void setName(String name) {
 		this.name = name;
