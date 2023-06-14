@@ -12,8 +12,9 @@ public class SearchResponse {
     private String salary;
     private String addressWork;
     private String experience;
+    private String working_form;
 
-    public SearchResponse(Long id_JobPosting, String title, Date postDate, Long companyId, String companyName, String companyLogo, String salary, String addressWork, String experience) {
+    public SearchResponse(Long id_JobPosting, String title, Date postDate, Long companyId, String companyName, String companyLogo, String salary, String addressWork, String experience, String working_form) {
         this.id_JobPosting = id_JobPosting;
         this.title = title;
         this.postDate = postDate;
@@ -23,6 +24,15 @@ public class SearchResponse {
         this.salary = salary;
         this.addressWork = addressWork;
         this.experience = experience;
+        this.working_form = working_form;
+    }
+
+    public String getWorking_form() {
+        return working_form;
+    }
+
+    public void setWorking_form(String working_form) {
+        this.working_form = working_form;
     }
 
     public Long getId_JobPosting() {

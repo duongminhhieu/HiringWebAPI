@@ -23,7 +23,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     String sql = "SELECT new com.setqt.Hiring.DTO.APIResponse.SearchResponse(job_posting.id AS id_jobPosting, job_posting.title, " +
             "job_posting.postDate, company.id AS id_company, company.name, " +
             "company.logo, job_description.salary, job_description.address_work, " +
-            "job_description.experience) " +
+            "job_description.experience, job_description.working_form) " +
             "FROM JobPosting job_posting " +
             "JOIN Company company ON job_posting.company = company.id " +
             "JOIN JobDescription job_description ON job_description.id = job_posting.jobDescription " +
