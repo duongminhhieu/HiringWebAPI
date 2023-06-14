@@ -138,4 +138,22 @@ public class CV implements Serializable {
 		this.company = company;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public Long getIDCandidate() {
+		return candidate.getId();
+	}
+	public String getAvatarCandidate() {
+		return candidate.getAvatar();
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public JobPosting getJobPosting() {
+		return jobPosting;
+	}
+
 }

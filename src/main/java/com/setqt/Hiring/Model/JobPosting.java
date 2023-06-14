@@ -70,9 +70,9 @@ public class JobPosting implements Serializable {
         return company;
     }
 
-//    public CompanyResponse getCompanyInfo() {
-//        return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
-//    }
+    public CompanyResponse getCompanyInfo() {
+        return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
+    }
 
     public void setCompany(Company company) {
         this.company = company;
