@@ -71,6 +71,7 @@ public class JobPosting implements Serializable {
     }
 
     public CompanyResponse getCompanyInfo() {
+    	if (company==null) return null;
         return new CompanyResponse(company.getId(), company.getName(), company.getTaxCode(), company.getAddress(), company.getDomain(), company.getLogo(), company.getCompanySize(), company.getWorkTime(), company.getDescription(), company.getRate());
     }
 

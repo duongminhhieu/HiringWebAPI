@@ -68,13 +68,13 @@ public class JobPostingController {
 			Optional<JobPosting> jobPosting =  jobService.findById(Long.parseLong(idJobPosting));
 
 			if (jobPosting.get() == null)
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("failed", "not found data", null));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", jobPosting.get()));
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("failed", "not found data", null));
 		}
 
