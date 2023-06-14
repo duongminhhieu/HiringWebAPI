@@ -94,8 +94,8 @@ public class EmployerController {
 
 		jwt = jwt.substring(7, jwt.length());
 
-		String username = jwtHelper.getUsernameFromToken(jwt);
-		User user = (User) uService.findOneByUsername(username);
+//		String username = jwtHelper.getUsernameFromToken(jwt);
+//		User user = (User) uService.findOneByUsername(username);
 
 		try {
 

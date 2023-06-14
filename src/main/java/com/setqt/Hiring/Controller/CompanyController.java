@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.Employer;
+import com.setqt.Hiring.Model.JobPosting;
 import com.setqt.Hiring.Model.ResponseObject;
 
 
@@ -57,13 +58,13 @@ public class CompanyController {
             List<Company> result = comService.findTop6ByRating();
             System.out.println(result.size());
             if (result.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "not found data", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "server failed", null));
         }
 
@@ -77,16 +78,34 @@ public class CompanyController {
             Optional<Company> result = comService.findById(id);
 
             if (result.isEmpty())
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                return ResponseEntity.status(HttpStatus.OK)
                         .body(new ResponseObject("failed", "not found data", null));
             return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", result.get()));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "server failed", null));
         }
 
+    }
+    @GetMapping("/job/{id}")
+    public ResponseEntity<ResponseObject> getJobCompany(@PathVariable Long id) {
+    	try {
+//              System.out.println(1);
+    		
+    		List<JobPosting> result = employerService.getAllJobByID(id);    		
+    		if (result.size()==0)
+    			return ResponseEntity.status(HttpStatus.OK)
+    					.body(new ResponseObject("ok", "Chưa có công việc nào", result));
+    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Tất cả công việc của công ty", result));
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+    				.body(new ResponseObject("failed", "server failed", null));
+    	}
+    	
     }
 
 

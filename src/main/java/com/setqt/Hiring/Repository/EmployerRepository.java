@@ -24,6 +24,11 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
 	@Query("SELECT NEW com.setqt.Hiring.Model.JobPosting(jp.status,jp.id,jp.jobDescription,jp.title, jp.postDate,jp.dueDate, jp.view)"
 			+ " FROM JobPosting jp WHERE jp.company.employer.user.username = :username")
     List<JobPosting> findJobPostingsByUsername(@Param("username") String username);
+	
+	
+	@Query("SELECT NEW com.setqt.Hiring.Model.JobPosting(jp.status,jp.id,jp.jobDescription,jp.title, jp.postDate,jp.dueDate, jp.view)"
+			+ " FROM JobPosting jp JOIN Employer em ON jp.company.id = em.company.id WHERE em.id = :id")
+	List<JobPosting> findJobPostingsById(@Param("id") Long id);
 
 	
 	@Query("SELECT new com.setqt.Hiring.Model.Employer(e.id,e.user,e.phone, e.email, e.logo) FROM Employer e JOIN e.user u WHERE u.username = :username")

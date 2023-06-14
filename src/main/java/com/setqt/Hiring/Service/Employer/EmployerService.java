@@ -23,6 +23,10 @@ public class EmployerService extends GenericService<Employer> implements IEmploy
 		
 		return ((EmployerRepository) genericRepository).findJobPostingsByUsername(username);
 	}
+	public List<JobPosting> getAllJobByID(Long id){
+		
+		return ((EmployerRepository) genericRepository).findJobPostingsById(id);
+	}
 	public Employer getInfo(String username){
 		
 		return ((EmployerRepository) genericRepository).findEmployerByUsername(username);
