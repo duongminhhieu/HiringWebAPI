@@ -3,6 +3,8 @@ package com.setqt.Hiring.Model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.setqt.Hiring.DTO.ResponseDTO.CandidateResponse;
@@ -37,6 +39,8 @@ public class CV implements Serializable {
     private String fileCV;
     private Date dateCreated;
 
+//    @Column(columnDefinition = "TEXT DEFAULT 'consider'")
+    private String status;
     
     @Transient
     private Company company;

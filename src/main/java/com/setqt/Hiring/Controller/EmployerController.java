@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.setqt.Hiring.DTO.CandidateDTO;
 import com.setqt.Hiring.DTO.EmployerDTO;
 import com.setqt.Hiring.DTO.JobPostingDTO;
+import com.setqt.Hiring.DTO.APIResponse.AnalysisData;
 import com.setqt.Hiring.Model.*;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.UserService;
+import com.setqt.Hiring.Service.CV.CVService;
 import com.setqt.Hiring.Service.Company.CompanyService;
 import com.setqt.Hiring.Service.Employer.EmployerService;
 import com.setqt.Hiring.Service.JobDescription.JobDescriptionService;
@@ -37,6 +39,8 @@ public class EmployerController {
 	UserService uService;
 	@Autowired
 	JobPostingService jobService;
+	@Autowired
+	CVService cvService;
 	@Autowired
 	private FirebaseImageService firebaseImageService;
 	@Autowired
@@ -177,6 +181,28 @@ public class EmployerController {
 			
 			return ResponseEntity.status(HttpStatus.OK)
 					.body(new ResponseObject("ok", "Tìm tất cả công việc thành công !", jobPosting));
+		} catch (Exception ex) {
+			System.out.println(ex);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseObject("failed", "Lỗi server !!!!", null));
+		}
+		
+	}
+	@GetMapping("/analys")
+	public ResponseEntity<ResponseObject> analysis(@RequestHeader(value = "Authorization") String jwt) {
+		try {
+			
+			jwt = jwt.substring(7, jwt.length());
+			
+			String username = jwtHelper.getUsernameFromToken(jwt);		
+			Optional<AnalysisData> data = cvService.analysData(username);
+			if (data.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Không kết quả !!!!", null));
+			}
+			else return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("failed", "Dữ liệu phân tích !", data.get()));
+
 		} catch (Exception ex) {
 			System.out.println(ex);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

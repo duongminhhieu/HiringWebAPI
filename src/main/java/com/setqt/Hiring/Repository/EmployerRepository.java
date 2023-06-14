@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.setqt.Hiring.DTO.APIResponse.AnalysisData;
 import com.setqt.Hiring.Model.CV;
 import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.Employer;
@@ -33,4 +34,8 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
 	
 	@Query("SELECT new com.setqt.Hiring.Model.Employer(e.id,e.user,e.phone, e.email, e.logo) FROM Employer e JOIN e.user u WHERE u.username = :username")
 	Employer findEmployerByUsername(@Param("username") String username);
+	
+
+	
+	
 }
