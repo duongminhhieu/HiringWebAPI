@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -133,11 +134,18 @@ public class CandidateController {
     	}
     }
 
-    @PutMapping(value = "/updateInfoCandidate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseObject> addCandidate(@RequestPart("candidate") CandidateDTO candidateDTO,
-                                                       @RequestPart("file") MultipartFile file, @RequestHeader(value = "Authorization") String jwt) {
+    @PostMapping(value = "/updateInfoCandidate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseObject> updateCandidate(@RequestParam(value = "file", required = false) MultipartFile file,
+                                                          @RequestParam("fullName") String fullName,
+                                                          @RequestParam("gender") String gender,
+                                                          @RequestParam("phone") String phone,
+                                                          @RequestParam("address") String address,
+                                                          @RequestParam("dob") String dob,
+                                                          @RequestParam("skill") String[] skill,
+                                                          @RequestParam("experience") String experience,
+                                                          @RequestHeader(value = "Authorization") String jwt) {
         try {
-            System.out.println(candidateDTO.toString());
+            //System.out.println(candidateDTO.toString());
             jwt = jwt.substring(7, jwt.length());
 
             String username = jwtHelper.getUsernameFromToken(jwt);
@@ -145,23 +153,27 @@ public class CandidateController {
             User user = (User) uService.findOneByUsername(username);
             Candidate candidate = user.getCandidate();
 
-            // xu li file
-            firebaseImageService = new FirebaseImageService();
-            // save file to Firebase
-            String fileName = firebaseImageService.save(file,
-                    "avatars_candidate/" + candidate.getId() + "_" + candidate.getEmail());
-            String imageUrl = firebaseImageService.getFileUrl(fileName);
+            if(file != null){
+                // xu li file
+                firebaseImageService = new FirebaseImageService();
+                // save file to Firebase
+                String fileName = firebaseImageService.save(file,
+                        "avatars_candidate/" + candidate.getId() + "_" + candidate.getEmail());
+                String imageUrl = firebaseImageService.getFileUrl(fileName);
+                System.out.println((imageUrl));
+                candidate.setAvatar(imageUrl);
+            }
 
-            System.out.println((imageUrl));
 
-            candidate.setFullName(candidateDTO.getFullname());
-            candidate.setGender(candidateDTO.getGender());
-            candidate.setPhone(candidateDTO.getPhone());
-            candidate.setAddress(candidateDTO.getAddress());
-            candidate.setAvatar(imageUrl);
-            candidate.setExperience(candidateDTO.getExperience());
-            candidate.setSkill(candidateDTO.getSkill());
-            candidate.setDob(candidateDTO.getDob());
+            candidate.setFullName(fullName);
+            candidate.setGender(gender);
+            candidate.setPhone(phone);
+            candidate.setAddress(address);
+            candidate.setExperience(experience);
+            candidate.setSkill(skill);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = format.parse(dob);
+            candidate.setDob(date);
 
             Candidate result = candidateService.save(candidate);
 

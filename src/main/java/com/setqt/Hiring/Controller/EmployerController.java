@@ -294,11 +294,19 @@ public class EmployerController {
 		}
 	}
 
-	@PutMapping(value = "/updateInfoEmployer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResponseObject> addEmployer(@RequestPart("employer") EmployerDTO employerDTO,
-			@RequestPart("file") MultipartFile file, @RequestHeader(value = "Authorization") String jwt) {
+	@PostMapping(value = "/updateInfoEmployer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResponseObject> updateInfoEmployer(@RequestParam(value = "file", required = false) MultipartFile file,
+															 @RequestParam("name") String name,
+															 @RequestParam("phone") String phone,
+															 @RequestParam("taxCode") String taxCode,
+															 @RequestParam("address") String address,
+															 @RequestParam("domain") String domain,
+															 @RequestParam("companySize") String companySize,
+															 @RequestParam("workTime") String workTime,
+															 @RequestParam("description") String description,
+															 @RequestHeader(value = "Authorization") String jwt) {
 		try {
-			System.out.println(employerDTO.toString());
+			//System.out.println(employerDTO.toString());
 			jwt = jwt.substring(7, jwt.length());
 
 			String username = jwtHelper.getUsernameFromToken(jwt);
@@ -307,25 +315,27 @@ public class EmployerController {
 			Employer employer = user.getEmployer();
 			Company company = employer.getCompany();
 
-			// xu li file
-			firebaseImageService = new FirebaseImageService();
-			// save file to Firebase
-			String fileName = firebaseImageService.save(file,
-					"avatars_employers/" + employer.getId() + "_" + employer.getEmail());
-			String imageUrl = firebaseImageService.getFileUrl(fileName);
+			if( file != null){
+				// xu li file
+				firebaseImageService = new FirebaseImageService();
+				// save file to Firebase
+				String fileName = firebaseImageService.save(file,
+						"avatars_employers/" + employer.getId() + "_" + employer.getEmail());
+				String imageUrl = firebaseImageService.getFileUrl(fileName);
 
-			System.out.println((imageUrl));
+				System.out.println((imageUrl));
+				employer.setLogo(imageUrl);
+			}
 
-			employer.setPhone(employerDTO.getPhone());
-			employer.setLogo(imageUrl);
-			company.setAddress(employerDTO.getAddress());
-			company.setName(employerDTO.getName());
-			company.setDomain(employerDTO.getDomain());
-			company.setTaxCode(employerDTO.getTaxCode());
+			employer.setPhone(phone);
+			company.setAddress(address);
+			company.setName(name);
+			company.setDomain(domain);
+			company.setTaxCode(taxCode);
 			company.setLogo(employer.getLogo());
-			company.setCompanySize(employerDTO.getCompanySize());
-			company.setDescription(employerDTO.getDescription());
-			company.setWorkTime(employerDTO.getWorkTime());
+			company.setCompanySize(companySize);
+			company.setDescription(description);
+			company.setWorkTime(workTime);
 			company.setEmployer(employer);
 			employer.setCompany(company);
 
