@@ -37,6 +37,7 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 public class NotificationController {
 
 	@Autowired
+	
 	UserService uService;
 
 	@Autowired
