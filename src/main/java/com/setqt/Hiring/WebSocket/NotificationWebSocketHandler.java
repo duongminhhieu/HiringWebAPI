@@ -23,7 +23,7 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         // Xử lý tin nhắn từ frontend (nếu cần)
-         session.sendMessage(new TextMessage("Server response: " + message.getPayload()));
+         // session.sendMessage(new TextMessage("Server response: " + message.getPayload()));
     }
 
     public void sendNotification(String notification) {
