@@ -327,15 +327,15 @@ public class EmployerController {
 				employer.setLogo(imageUrl);
 			}
 
-			if(phone != null) employer.setPhone(phone);
-			if(address != null) company.setAddress(address);
-			if(name != null) company.setName(name);
-			if(domain != null) company.setDomain(domain);
-			if(taxCode != null) company.setTaxCode(taxCode);
+			if(phone != null && !phone.equals("null")) employer.setPhone(phone);
+			if(address != null && !address.equals("null")) company.setAddress(address);
+			if(name != null && !name.equals("null")) company.setName(name);
+			if(domain != null && !domain.equals("null")) company.setDomain(domain);
+			if(taxCode != null && !taxCode.equals("null")) company.setTaxCode(taxCode);
 			company.setLogo(employer.getLogo());
-			if(companySize != null) company.setCompanySize(companySize);
-			if(description != null) company.setDescription(description);
-			if(workTime != null) company.setWorkTime(workTime);
+			if(companySize != null && !companySize.equals("null")) company.setCompanySize(companySize);
+			if(description != null && !description.equals("null")) company.setDescription(description);
+			if(workTime != null && !workTime.equals("null")) company.setWorkTime(workTime);
 			company.setEmployer(employer);
 			employer.setCompany(company);
 

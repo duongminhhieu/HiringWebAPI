@@ -172,14 +172,14 @@ public class CandidateController {
                 System.out.println((imageUrl));
                 candidate.setAvatar(imageUrl);
             }
-            if(fullName != null && !fullName.equals("")) candidate.setFullName(fullName);
-            if(gender != null && !gender.equals("")) candidate.setGender(gender);
-            if(phone != null && !phone.equals("")) candidate.setPhone(phone);
-            if(address != null && !address.equals("")) candidate.setAddress(address);
-            if(experience != null && !experience.equals("")) candidate.setExperience(experience);
+            if(fullName != null && !fullName.equals("null")) candidate.setFullName(fullName);
+            if(gender != null && !gender.equals("null")) candidate.setGender(gender);
+            if(phone != null && !phone.equals("null")) candidate.setPhone(phone);
+            if(address != null && !address.equals("null")) candidate.setAddress(address);
+            if(experience != null && !experience.equals("null")) candidate.setExperience(experience);
             if(skill != null) candidate.setSkill(skill);
             System.out.println(dob);
-            if(dob != null && !dob.equals("")) {
+            if(dob != null && !dob.equals("null")) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = format.parse(dob);
                 candidate.setDob(date);
