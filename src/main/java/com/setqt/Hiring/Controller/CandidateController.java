@@ -163,18 +163,17 @@ public class CandidateController {
                 System.out.println((imageUrl));
                 candidate.setAvatar(imageUrl);
             }
-
-
-            candidate.setFullName(fullName);
-            candidate.setGender(gender);
-            candidate.setPhone(phone);
-            candidate.setAddress(address);
-            candidate.setExperience(experience);
-            candidate.setSkill(skill);
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = format.parse(dob);
-            candidate.setDob(date);
-
+            if(fullName != null) candidate.setFullName(fullName);
+            if(gender != null) candidate.setGender(gender);
+            if(phone != null) candidate.setPhone(phone);
+            if(address != null) candidate.setAddress(address);
+            if(experience != null) candidate.setExperience(experience);
+            if(skill != null) candidate.setSkill(skill);
+            if(dob != null) {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = format.parse(dob);
+                candidate.setDob(date);
+            }
             Candidate result = candidateService.save(candidate);
 
             if (result == null)
