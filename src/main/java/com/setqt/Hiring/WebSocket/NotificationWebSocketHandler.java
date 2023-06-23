@@ -17,6 +17,7 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
         // Thêm session vào danh sách các kết nối WebSocket đã thiết lập
+        System.out.println("comed");
         sessions.add(session);
     }
 
