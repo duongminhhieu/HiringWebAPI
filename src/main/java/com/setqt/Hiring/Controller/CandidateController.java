@@ -153,6 +153,15 @@ public class CandidateController {
             User user = (User) uService.findOneByUsername(username);
             Candidate candidate = user.getCandidate();
 
+            System.out.println(file);
+            System.out.println(fullName);
+            System.out.println(gender);
+            System.out.println(phone);
+            System.out.println(address);
+            System.out.println(dob);
+            System.out.println(Arrays.toString(skill));
+            System.out.println(experience);
+
             if(file != null){
                 // xu li file
                 firebaseImageService = new FirebaseImageService();
@@ -163,13 +172,14 @@ public class CandidateController {
                 System.out.println((imageUrl));
                 candidate.setAvatar(imageUrl);
             }
-            if(fullName != null) candidate.setFullName(fullName);
-            if(gender != null) candidate.setGender(gender);
-            if(phone != null) candidate.setPhone(phone);
-            if(address != null) candidate.setAddress(address);
-            if(experience != null) candidate.setExperience(experience);
+            if(fullName != null && !fullName.equals("")) candidate.setFullName(fullName);
+            if(gender != null && !gender.equals("")) candidate.setGender(gender);
+            if(phone != null && !phone.equals("")) candidate.setPhone(phone);
+            if(address != null && !address.equals("")) candidate.setAddress(address);
+            if(experience != null && !experience.equals("")) candidate.setExperience(experience);
             if(skill != null) candidate.setSkill(skill);
-            if(dob != null) {
+            System.out.println(dob);
+            if(dob != null && !dob.equals("")) {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = format.parse(dob);
                 candidate.setDob(date);
