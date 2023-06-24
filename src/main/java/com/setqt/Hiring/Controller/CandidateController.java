@@ -1,10 +1,8 @@
 package com.setqt.Hiring.Controller;
 
 import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
-import com.setqt.Hiring.DTO.CandidateDTO;
 import com.setqt.Hiring.DTO.RatingDTO;
 import com.setqt.Hiring.DTO.ReportDTO;
-import com.setqt.Hiring.DTO.SubmitCVDTO;
 import com.setqt.Hiring.Model.*;
 import com.setqt.Hiring.NotificationSSE.NotificationService;
 import com.setqt.Hiring.Security.JwtTokenHelper;
@@ -15,6 +13,7 @@ import com.setqt.Hiring.Service.Company.CompanyService;
 import com.setqt.Hiring.Service.Firebase.FirebaseDocumentFileService;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
 import com.setqt.Hiring.Service.JobPosting.JobPostingService;
+import com.setqt.Hiring.Service.Notification.NotificationDBService;
 import com.setqt.Hiring.Service.RatingCompany.RatingCompanyService;
 import com.setqt.Hiring.Service.Report.ReportService;
 import com.setqt.Hiring.Service.SavedJobPosting.SavedJobPostingService;
@@ -60,6 +59,8 @@ public class CandidateController {
     CVService cvService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private NotificationDBService notificationDBService;
 
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject> getAllCandidate(@RequestHeader(value = "Authorization") String jwt) {
@@ -393,6 +394,25 @@ public class CandidateController {
                                 .body(new ResponseObject("failed", "submit for Job posting failed!", null));
 
                     }
+
+                    System.out.println("id: " + jobPosting.get().getCompanyInfo().getId().toString());
+
+                    // luu zo DB
+                    Notification notification = new Notification();
+                    notification.setImage(candidate.getAvatar());
+                    notification.setStatus("new");
+                    notification.setRole("CtoE");
+                    notification.setTitle("Ứng viên cập nhật lại CV");
+                    notification.setContent("Ứng viên" + candidate.getFullName() + "vừa cập nhật lại CV. Hãy xem nào !");
+                    notification.setTime(new Date());
+                    notification.setCandidate(candidate);
+                    notification.setEmployer(null);
+                    notificationDBService.save(notification);
+
+                    // Gui thong bao den Employer
+                    NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "new", "Ứng viên cập nhật lại CV", notification.getContent(), notification.getTime());
+                    notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
+
                     return ResponseEntity.status(HttpStatus.OK)
                             .body(new ResponseObject("ok", "CV bạn đã được ghi đè !", result));
                 }
@@ -413,8 +433,20 @@ public class CandidateController {
 
             }
 
+            // luu zo DB
+            Notification notification = new Notification();
+            notification.setImage(candidate.getAvatar());
+            notification.setStatus("new");
+            notification.setRole("CtoE");
+            notification.setTitle("Ứng viên nộp CV cho Job: " + jobPosting.get().getTitle());
+            notification.setContent("Ứng viên" + candidate.getFullName() + "vừa nộp CV. Hãy xem nào !");
+            notification.setTime(new Date());
+            notification.setCandidate(candidate);
+            notification.setEmployer(null);
+            notificationDBService.save(notification);
+
             // Gui thong bao den Employer
-            NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "ok", "title", "message", new Date());
+            NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "new", "Ứng viên vừa nộp CV", notification.getContent(), notification.getTime());
             notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
 
             return ResponseEntity.status(HttpStatus.OK)
