@@ -192,14 +192,19 @@ public class EmployerController {
 					cvService.save(res);
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
 
-				} else {
+				} else if(status.equals("reject")){
+					CV res = cv.get();
+					res.setStatus("reject");
+					cvService.save(res);
+					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
+				}
+				else {
 					CV res = cv.get();
 					res.setStatus("consider");
 					cvService.save(res);
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
 
 				}
-
 			}
 
 		} catch (Exception e) {
