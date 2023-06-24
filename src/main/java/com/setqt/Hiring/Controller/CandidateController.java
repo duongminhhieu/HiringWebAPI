@@ -401,7 +401,7 @@ public class CandidateController {
             cv.setFileCV(url);
             cv.setDateCreated(new Date());
             cv.setJobPosting(jobPosting.get());
-
+              cv.setStatus("consider");
             CV result = cvService.save(cv);
             if (result == null) {
                 return ResponseEntity.status(HttpStatus.OK)
