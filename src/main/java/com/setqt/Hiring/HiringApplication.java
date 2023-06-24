@@ -1,5 +1,7 @@
 package com.setqt.Hiring;
 
+import com.setqt.Hiring.Controller.NotificationController;
+import com.setqt.Hiring.NotificationSSE.NotificationService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -26,4 +28,5 @@ public class HiringApplication {
 			}
 		};
 	}
+
 }

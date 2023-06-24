@@ -1,10 +1,12 @@
 package com.setqt.Hiring.Controller;
 
+import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
 import com.setqt.Hiring.DTO.CandidateDTO;
 import com.setqt.Hiring.DTO.RatingDTO;
 import com.setqt.Hiring.DTO.ReportDTO;
 import com.setqt.Hiring.DTO.SubmitCVDTO;
 import com.setqt.Hiring.Model.*;
+import com.setqt.Hiring.NotificationSSE.NotificationService;
 import com.setqt.Hiring.Security.JwtTokenHelper;
 import com.setqt.Hiring.Security.Model.User;
 import com.setqt.Hiring.Service.CV.CVService;
@@ -56,6 +58,8 @@ public class CandidateController {
     SavedJobPostingService savedJobPostingService;
     @Autowired
     CVService cvService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/getAll")
     public ResponseEntity<ResponseObject> getAllCandidate(@RequestHeader(value = "Authorization") String jwt) {
@@ -408,6 +412,11 @@ public class CandidateController {
                         .body(new ResponseObject("failed", "submit for Job posting failed", null));
 
             }
+
+            // Gui thong bao den Employer
+            NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "ok", "title", "message", new Date());
+            notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
+
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "Nộp CV thành công !", result));
 
