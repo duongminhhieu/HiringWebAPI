@@ -29,8 +29,8 @@ public class Notification {
     private Candidate candidate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "employer_id", nullable = false, referencedColumnName = "id")
-    private Employer employer;
+    @JoinColumn(name = "company_id", nullable = false, referencedColumnName = "id")
+    private Company company;
 
     public Candidate getCandidate() {
         return candidate;
@@ -40,12 +40,12 @@ public class Notification {
         this.candidate = candidate;
     }
 
-    public Employer getEmployer() {
-        return employer;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setEmployer(Employer employer) {
-        this.employer = employer;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Long getId() {

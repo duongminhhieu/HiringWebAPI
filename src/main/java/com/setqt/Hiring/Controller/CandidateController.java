@@ -406,7 +406,7 @@ public class CandidateController {
                     notification.setContent("Ứng viên" + candidate.getFullName() + "vừa cập nhật lại CV. Hãy xem nào !");
                     notification.setTime(new Date());
                     notification.setCandidate(candidate);
-                    notification.setEmployer(null);
+                    notification.setCompany(jobPosting.get().getCompany());
                     notificationDBService.save(notification);
 
                     // Gui thong bao den Employer
@@ -442,7 +442,7 @@ public class CandidateController {
             notification.setContent("Ứng viên" + candidate.getFullName() + "vừa nộp CV. Hãy xem nào !");
             notification.setTime(new Date());
             notification.setCandidate(candidate);
-            notification.setEmployer(null);
+            notification.setCompany(jobPosting.get().getCompany());
             notificationDBService.save(notification);
 
             // Gui thong bao den Employer
