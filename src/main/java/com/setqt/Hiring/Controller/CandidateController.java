@@ -153,14 +153,6 @@ public class CandidateController {
             User user = (User) uService.findOneByUsername(username);
             Candidate candidate = user.getCandidate();
 
-            System.out.println(file);
-            System.out.println(fullName);
-            System.out.println(gender);
-            System.out.println(phone);
-            System.out.println(address);
-            System.out.println(dob);
-            System.out.println(Arrays.toString(skill));
-            System.out.println(experience);
 
             if(file != null){
                 // xu li file

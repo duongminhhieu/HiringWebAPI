@@ -92,14 +92,52 @@ public class EmployerController {
 
 	}
 
+	@PostMapping("/updateJobPosting/{id}")
+	public ResponseEntity<ResponseObject> updateJobPosting(@PathVariable("id") Long id,
+														   @RequestBody JobPostingDTO jobPostingDTO,
+													 		@RequestHeader(value = "Authorization") String jwt) {
+
+		jwt = jwt.substring(7, jwt.length());
+
+		try {
+
+			Optional<JobPosting> jobPosting = jobService.findById(id);
+			if (jobPosting.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Không tìm thấy công việc này.", null));
+			}
+
+			JobDescription jobDescription = new JobDescription(jobPostingDTO.getDescription(),
+					jobPostingDTO.getBenefits(), jobPostingDTO.getRequirement(), jobPostingDTO.getGender(),
+					jobPostingDTO.getExperience(), jobPostingDTO.getSalary(), jobPostingDTO.getNumber_candidates(),
+					jobPostingDTO.getWorking_form(), jobPostingDTO.getAddress_work());
+
+			jobPosting.get().setTitle(jobPostingDTO.getTitle());
+			jobPosting.get().setDueDate(jobPostingDTO.getDueDate());
+			jobPosting.get().setPostDate(jobPostingDTO.getPostDate());
+			jobPosting.get().setView(0);
+			jobPosting.get().setStatus("approved");
+
+
+			jobPosting.get().setJobDescription(jobDescription);
+
+			jobService.save(jobPosting.get());
+
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Cập nhật việc thành công ", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseObject("failed", "Lỗi Server !!", null));
+
+		}
+
+	}
+
 	@PostMapping("/setJob/{id}")
 	public ResponseEntity<ResponseObject> changeJob(@RequestHeader(value = "Authorization") String jwt,
 			@PathVariable("id") Long id, @RequestParam(name = "action", defaultValue = "hide") String action) {
 
 		jwt = jwt.substring(7, jwt.length());
-
-//		String username = jwtHelper.getUsernameFromToken(jwt);
-//		User user = (User) uService.findOneByUsername(username);
 
 		try {
 
