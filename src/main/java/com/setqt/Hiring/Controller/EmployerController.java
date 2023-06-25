@@ -201,14 +201,14 @@ public class EmployerController {
 
 					// luu zo DB
 					Notification notification = new Notification();
-					notification.setImage(cv.get().getCompany().getLogo());
+					notification.setImage(cv.get().getJobPosting().getCompany().getLogo());
 					notification.setStatus("new");
 					notification.setRole("EtoC");
-					notification.setTitle("Bạn vừa được chấp nhận một công việc ");
-					notification.setContent("Công ty " + cv.get().getCompany().getName() + " vừa chấp nhận CV của bạn ");
+					notification.setTitle("Bạn vừa được tuyển dụng một công việc " + cv.get().getJobPosting().getTitle());
+					notification.setContent("Công ty " + cv.get().getJobPosting().getCompany().getName() + " vừa chấp nhận CV của bạn ");
 					notification.setTime(new Date());
 					notification.setCandidate(cv.get().getCandidate());
-					notification.setCompany(cv.get().getCompany());
+					notification.setCompany(cv.get().getJobPosting().getCompany());
 					notificationDBService.save(notification);
 
 
@@ -222,14 +222,14 @@ public class EmployerController {
 					cvService.delete(id);
 					// luu zo DB
 					Notification notification = new Notification();
-					notification.setImage(cv.get().getCompany().getLogo());
+					notification.setImage(cv.get().getJobPosting().getCompany().getLogo());
 					notification.setStatus("new");
 					notification.setRole("EtoC");
 					notification.setTitle("Rất tiếc! Một CV của bạn vừa bị từ chối");
-					notification.setContent("Công ty" + cv.get().getCompany().getName() + " vừa từ chối CV của bạn ");
+					notification.setContent("Công ty" + cv.get().getJobPosting().getCompany().getName() + " vừa từ chối CV của bạn ");
 					notification.setTime(new Date());
 					notification.setCandidate(cv.get().getCandidate());
-					notification.setCompany(cv.get().getCompany());
+					notification.setCompany(cv.get().getJobPosting().getCompany());
 					notificationDBService.save(notification);
 
 					// Gui thong bao den Candidate
