@@ -402,8 +402,8 @@ public class CandidateController {
                     notification.setImage(candidate.getAvatar());
                     notification.setStatus("new");
                     notification.setRole("CtoE");
-                    notification.setTitle("Ứng viên cập nhật lại CV");
-                    notification.setContent("Ứng viên" + candidate.getFullName() + "vừa cập nhật lại CV. Hãy xem nào !");
+                    notification.setTitle(jobPosting.get().getTitle());
+                    notification.setContent("Ứng viên " + candidate.getFullName() + " vừa cập nhật lại CV. Hãy xem nào !");
                     notification.setTime(new Date());
                     notification.setCandidate(candidate);
                     notification.setCompany(jobPosting.get().getCompany());
@@ -438,7 +438,7 @@ public class CandidateController {
             notification.setImage(candidate.getAvatar());
             notification.setStatus("new");
             notification.setRole("CtoE");
-            notification.setTitle("Ứng viên nộp CV cho Job: " + jobPosting.get().getTitle());
+            notification.setTitle(jobPosting.get().getTitle());
             notification.setContent("Ứng viên " + candidate.getFullName() + " vừa nộp CV. Hãy xem nào !");
             notification.setTime(new Date());
             notification.setCandidate(candidate);
