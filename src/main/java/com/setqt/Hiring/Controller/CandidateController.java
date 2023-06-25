@@ -100,43 +100,43 @@ public class CandidateController {
     }
     @GetMapping("/myInfoNew")
     public ResponseEntity<ResponseObject> getMyInfoNew(@RequestHeader(value = "Authorization") String jwt) {
-    	try {
-    		jwt = jwt.substring(7, jwt.length());
-    		
-    		String username = jwtHelper.getUsernameFromToken(jwt);
-    		
+        try {
+            jwt = jwt.substring(7, jwt.length());
+
+            String username = jwtHelper.getUsernameFromToken(jwt);
+
 //    		User user = (User) uService.findOneByUsername(username);
-    		Candidate candidate = candidateService.getInfo(username);
-    		if (candidate == null)
-    			return ResponseEntity.status(HttpStatus.OK)
-    					.body(new ResponseObject("failed", "not found data", null));
-    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", candidate));
-    		
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return ResponseEntity.status(HttpStatus.OK)
-    				.body(new ResponseObject("failed", "not found data", null));
-    	}
+            Candidate candidate = candidateService.getInfo(username);
+            if (candidate == null)
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", candidate));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "not found data", null));
+        }
     }
     @GetMapping("/JobSummited")
     public ResponseEntity<ResponseObject> getJobSummited(@RequestHeader(value = "Authorization") String jwt) {
-    	try {
-    		jwt = jwt.substring(7, jwt.length());
-    		
-    		String username = jwtHelper.getUsernameFromToken(jwt);
-    		
+        try {
+            jwt = jwt.substring(7, jwt.length());
 
-    		List<CV> listcv= cvService.getCVByUsername(username);
-    		if (listcv.size() == 0)
-    			return ResponseEntity.status(HttpStatus.OK)
-    					.body(new ResponseObject("failed", "not found data", null));
-    		return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", listcv));
-    		
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    		return ResponseEntity.status(HttpStatus.OK)
-    				.body(new ResponseObject("failed", "not found data", null));
-    	}
+            String username = jwtHelper.getUsernameFromToken(jwt);
+
+
+            List<CV> listcv= cvService.getCVByUsername(username);
+            if (listcv.size() == 0)
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("failed", "not found data", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "found data", listcv));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "not found data", null));
+        }
     }
 
     @PostMapping(value = "/updateInfoCandidate", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -309,30 +309,30 @@ public class CandidateController {
     }
     @GetMapping("/getJobSaved")
     public ResponseEntity<ResponseObject> getJobPosting(
-    		@RequestHeader(value = "Authorization") String jwt) {
-    	try {
-    		
-    		jwt = jwt.substring(7, jwt.length());
-    		
-    		String username = jwtHelper.getUsernameFromToken(jwt);
-    		System.out.println(username);
-    		User user = (User) uService.findOneByUsername(username);
-    		Candidate candidate = user.getCandidate();
-    	
-    		List<SavedJobPosting> svJob= savedJobPostingService.getByCandidateID(candidate.getId());
-    		
-    		if (svJob.size()==0)
-    		return ResponseEntity.status(HttpStatus.OK)
-    				.body(new ResponseObject("ok", "Chưa lưu công việc nào", svJob));
-    		else 
-    			return ResponseEntity.status(HttpStatus.OK)
-        				.body(new ResponseObject("ok", "DS  công việc đã lưu", svJob));
-        	
-    	} catch (Exception e) {
-    		e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
-    				.body(new ResponseObject("failed", "Lỗi server !....", null));
-    		
-    	}
+            @RequestHeader(value = "Authorization") String jwt) {
+        try {
+
+            jwt = jwt.substring(7, jwt.length());
+
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+
+            List<SavedJobPosting> svJob= savedJobPostingService.getByCandidateID(candidate.getId());
+
+            if (svJob.size()==0)
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "Chưa lưu công việc nào", svJob));
+            else
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "DS  công việc đã lưu", svJob));
+
+        } catch (Exception e) {
+            e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !....", null));
+
+        }
     }
 
     @PostMapping("/deleteJobPosting/{idSaved}")
@@ -410,7 +410,7 @@ public class CandidateController {
                     notificationDBService.save(notification);
 
                     // Gui thong bao den Employer
-                    NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "new", "Ứng viên cập nhật lại CV", notification.getContent(), notification.getTime());
+                    NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
                     notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
 
                     return ResponseEntity.status(HttpStatus.OK)
@@ -446,7 +446,7 @@ public class CandidateController {
             notificationDBService.save(notification);
 
             // Gui thong bao den Employer
-            NotificationResponse notificationResponse = new NotificationResponse(candidate.getAvatar(), "new", "Ứng viên vừa nộp CV", notification.getContent(), notification.getTime());
+            NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
             notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
 
             return ResponseEntity.status(HttpStatus.OK)
@@ -488,6 +488,32 @@ public class CandidateController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("failed", "Lỗi server!...", null));
+        }
+    }
+
+    @GetMapping("/getAllNotification")
+    public ResponseEntity<ResponseObject> getAllNotification(
+            @RequestHeader(value = "Authorization") String jwt) {
+        try {
+
+            jwt = jwt.substring(7, jwt.length());
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+
+
+            List<NotificationResponse> list = notificationDBService.listNotificationCandidate(candidate.getId());
+
+            if (list.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("ok", "Không có dữ liệu", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Tất cả thông báo", list));
+
+        } catch (Exception e) {
+            e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !....", null));
+
         }
     }
 

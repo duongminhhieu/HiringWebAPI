@@ -9,12 +9,43 @@ public class NotificationResponse {
     private String content;
     private Date time;
 
-    public NotificationResponse(String image, String status, String title, String content, Date time) {
+    private Long idCandidate;
+    private Long idCompany;
+    private String role;
+
+    public NotificationResponse(String image, String status, String title, String content, Date time, Long idCandidate, Long idCompany, String role) {
         this.image = image;
         this.status = status;
         this.title = title;
         this.content = content;
         this.time = time;
+        this.idCandidate = idCandidate;
+        this.idCompany = idCompany;
+        this.role = role;
+    }
+
+    public Long getIdCandidate() {
+        return idCandidate;
+    }
+
+    public void setIdCandidate(Long idCandidate) {
+        this.idCandidate = idCandidate;
+    }
+
+    public Long getIdCompany() {
+        return idCompany;
+    }
+
+    public void setIdCompany(Long idCompany) {
+        this.idCompany = idCompany;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getImage() {

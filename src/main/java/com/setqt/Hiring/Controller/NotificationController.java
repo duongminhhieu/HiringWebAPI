@@ -41,7 +41,9 @@ public class NotificationController {
 	@GetMapping("/send/{clientId}")
 	public ResponseEntity<String> sendNotification(@PathVariable String clientId, @RequestParam String message) {
 
-		NotificationResponse notificationResponse = new NotificationResponse("hello", "ok", "theeh", message, new Date());
+		NotificationResponse notificationResponse = new NotificationResponse( "notification.getImage()", "notification.getStatus()", "notification.getTitle()",
+				"notification.getContent()", new Date(), 10000L,
+				10000L, "notification.getRole()");
 		notificationService.sendNotification(clientId, notificationResponse);
 		return ResponseEntity.ok("Notification sent successfully");
 	}
