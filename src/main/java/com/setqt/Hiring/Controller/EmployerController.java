@@ -205,7 +205,7 @@ public class EmployerController {
 					notification.setStatus("new");
 					notification.setRole("EtoC");
 					notification.setTitle("Bạn vừa được chấp nhận một công việc ");
-					notification.setContent("Công ty" + cv.get().getCompany().getName() + " vừa chấp nhận CV của bạn ");
+					notification.setContent("Công ty " + cv.get().getCompany().getName() + " vừa chấp nhận CV của bạn ");
 					notification.setTime(new Date());
 					notification.setCandidate(cv.get().getCandidate());
 					notification.setCompany(cv.get().getCompany());
@@ -483,6 +483,30 @@ public class EmployerController {
 				return ResponseEntity.status(HttpStatus.OK)
 						.body(new ResponseObject("ok", "Không có dữ liệu", null));
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Tất cả thông báo", list));
+
+		} catch (Exception e) {
+			e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("failed", "Lỗi server !....", null));
+
+		}
+	}
+
+	@GetMapping("/setSentNotification")
+	public ResponseEntity<ResponseObject> setSent(
+			@RequestHeader(value = "Authorization") String jwt) {
+		try {
+
+			jwt = jwt.substring(7, jwt.length());
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+			User user = (User) uService.findOneByUsername(username);
+			Employer employer = user.getEmployer();
+			Company company = employer.getCompany();
+
+
+			notificationDBService.setSentCompany(company.getId());
+
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đã xem các thông báo", null));
 
 		} catch (Exception e) {
 			e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)

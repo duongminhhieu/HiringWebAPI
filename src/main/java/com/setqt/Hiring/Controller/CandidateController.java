@@ -439,7 +439,7 @@ public class CandidateController {
             notification.setStatus("new");
             notification.setRole("CtoE");
             notification.setTitle("Ứng viên nộp CV cho Job: " + jobPosting.get().getTitle());
-            notification.setContent("Ứng viên" + candidate.getFullName() + "vừa nộp CV. Hãy xem nào !");
+            notification.setContent("Ứng viên " + candidate.getFullName() + " vừa nộp CV. Hãy xem nào !");
             notification.setTime(new Date());
             notification.setCandidate(candidate);
             notification.setCompany(jobPosting.get().getCompany());
@@ -517,4 +517,26 @@ public class CandidateController {
         }
     }
 
+    @GetMapping("/setSentNotification")
+    public ResponseEntity<ResponseObject> setSent(
+            @RequestHeader(value = "Authorization") String jwt) {
+        try {
+
+            jwt = jwt.substring(7, jwt.length());
+            String username = jwtHelper.getUsernameFromToken(jwt);
+            System.out.println(username);
+            User user = (User) uService.findOneByUsername(username);
+            Candidate candidate = user.getCandidate();
+
+
+            notificationDBService.setSentCandidate(candidate.getId());
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đã xem các thông báo", null));
+
+        } catch (Exception e) {
+            e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("failed", "Lỗi server !....", null));
+
+        }
+    }
 }

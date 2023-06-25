@@ -26,4 +26,14 @@ public class NotificationDBService extends GenericService<Notification> implemen
     public List<NotificationResponse> listNotificationCandidate(Long idCandidate) {
         return ((NotificationRepository) genericRepository).getNotificationCandidate(idCandidate);
     }
+
+    @Override
+    public void setSentCandidate(Long idCandidate) {
+        ((NotificationRepository) genericRepository).setSentCandidate(idCandidate);
+    }
+
+    @Override
+    public void setSentCompany(Long idCompany) {
+        ((NotificationRepository) genericRepository).setSentCompany(idCompany);
+    }
 }

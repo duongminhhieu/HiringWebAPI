@@ -11,4 +11,7 @@ public interface INotification extends IGenericService<Notification> {
     public List<NotificationResponse> listNotificationCompany(Long idCompany);
     public List<NotificationResponse> listNotificationCandidate(Long idCandidate);
 
+    public void setSentCandidate(Long idCandidate);
+    public void setSentCompany(Long idCompany);
+
 }
