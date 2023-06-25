@@ -214,7 +214,7 @@ public class EmployerController {
 
 					// Gui thong bao den Candidate
 					NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
-					notificationService.sendNotification(cv.get().getCandidate().getId().toString(), notificationResponse);
+					notificationService.sendNotification(cv.get().getCandidate().getEmail(), notificationResponse);
 
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", result));
 
@@ -234,7 +234,7 @@ public class EmployerController {
 
 					// Gui thong bao den Candidate
 					NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
-					notificationService.sendNotification(cv.get().getCandidate().getId().toString(), notificationResponse);
+					notificationService.sendNotification(cv.get().getCandidate().getEmail(), notificationResponse);
 
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
 				} else {
