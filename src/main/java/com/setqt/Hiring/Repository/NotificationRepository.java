@@ -23,7 +23,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<NotificationResponse> getNotificationCandidate(Long idCandidate);
 
     @Query("UPDATE Notification n SET n.status = 'sent'"
-            + "WHERE n.candidate.id = :idCompany and n.role = 'CtoE'")
+            + "WHERE n.company.id = :idCompany and n.role = 'CtoE'")
     List<NotificationResponse> setSentCompany(Long idCompany);
 
     @Query("UPDATE Notification n SET n.status = 'sent'"
