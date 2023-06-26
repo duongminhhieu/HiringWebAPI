@@ -52,6 +52,7 @@ public class JobPosting implements Serializable {
     @JsonManagedReference(value = "saved_job_posting")
     private List<SavedJobPosting> savedJobPostingList;
 
+    @Column(columnDefinition="TEXT")
     private String title;
     private Date postDate;
     private Date dueDate;

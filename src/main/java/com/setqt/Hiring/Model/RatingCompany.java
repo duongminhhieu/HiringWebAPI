@@ -15,6 +15,7 @@ public class RatingCompany {
     private Long id;
 
     private Double rate;
+    @Column(columnDefinition="TEXT")
     private String content;
     private Date createdDate;
 

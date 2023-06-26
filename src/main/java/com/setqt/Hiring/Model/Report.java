@@ -17,6 +17,7 @@ public class Report {
     @GeneratedValue(strategy =  GenerationType.AUTO)
     private Long id;
 
+    @Column(columnDefinition="TEXT")
     private String content;
 
     @ManyToOne

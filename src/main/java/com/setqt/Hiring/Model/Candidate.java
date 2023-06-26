@@ -51,11 +51,13 @@ public class Candidate implements Serializable{
 	private String email;
 	private String gender;
 	private String phone;
+	@Column(columnDefinition="TEXT")
 	private String address;
 	private Date dob;
 	@Column(columnDefinition="TEXT")
 	private String avatar;
 	private String[] skill;
+	@Column(columnDefinition="TEXT")
 	private String experience;
 	
 	public Candidate(User user, String fullName, String email, String gender, String phone, String address, Date dob,

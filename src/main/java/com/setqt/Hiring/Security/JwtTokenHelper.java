@@ -36,7 +36,7 @@ public class JwtTokenHelper {
 
 	 public String generateToken(String subject) {
 	        long currentTimeMillis = System.currentTimeMillis();
-	        long expirationTimeMillis = currentTimeMillis + 3600 * 1000*4; // 1 hour -> 1 day
+	        long expirationTimeMillis = currentTimeMillis + 3600 * 1000*4; // 1 hour -> 4 hour
 	        Date issueDate = new Date(currentTimeMillis);
 	        Date expirationDate = new Date(expirationTimeMillis);
 
