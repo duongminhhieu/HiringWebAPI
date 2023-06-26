@@ -60,6 +60,7 @@ public class WebSecurityConfig {
 
 						auth.requestMatchers("/company/**").permitAll();
 						auth.requestMatchers("/job/**").permitAll();
+						auth.requestMatchers("/notify").permitAll();
 						//auth.requestMatchers("/candidate/**").permitAll();
 						auth.requestMatchers("/notification/**").permitAll();
 						auth.requestMatchers("employer/**").hasRole("EMPLOYER");

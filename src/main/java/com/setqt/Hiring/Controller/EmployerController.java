@@ -1,14 +1,18 @@
 package com.setqt.Hiring.Controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
 import com.setqt.Hiring.DTO.CandidateDTO;
 import com.setqt.Hiring.DTO.EmployerDTO;
 import com.setqt.Hiring.DTO.JobPostingDTO;
 import com.setqt.Hiring.DTO.APIResponse.AnalysisData;
 import com.setqt.Hiring.Model.*;
+import com.setqt.Hiring.NotificationSSE.NotificationService;
 import com.setqt.Hiring.Service.Firebase.FirebaseImageService;
+import com.setqt.Hiring.Service.Notification.NotificationDBService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,10 +53,14 @@ public class EmployerController {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	JwtTokenHelper jwtHelper;
+	@Autowired
+	private NotificationService notificationService;
+	@Autowired
+	private NotificationDBService notificationDBService;
 
 	@PostMapping("/addJobPosting")
 	public ResponseEntity<ResponseObject> addPosting(@RequestBody JobPostingDTO jobPostingDTO,
-			@RequestHeader(value = "Authorization") String jwt) {
+													 @RequestHeader(value = "Authorization") String jwt) {
 
 		jwt = jwt.substring(7, jwt.length());
 
@@ -92,14 +100,52 @@ public class EmployerController {
 
 	}
 
-	@PostMapping("/setJob/{id}")
-	public ResponseEntity<ResponseObject> changeJob(@RequestHeader(value = "Authorization") String jwt,
-			@PathVariable("id") Long id, @RequestParam(name = "action", defaultValue = "hide") String action) {
+	@PostMapping("/updateJobPosting/{id}")
+	public ResponseEntity<ResponseObject> updateJobPosting(@PathVariable("id") Long id,
+														   @RequestBody JobPostingDTO jobPostingDTO,
+														   @RequestHeader(value = "Authorization") String jwt) {
 
 		jwt = jwt.substring(7, jwt.length());
 
-//		String username = jwtHelper.getUsernameFromToken(jwt);
-//		User user = (User) uService.findOneByUsername(username);
+		try {
+
+			Optional<JobPosting> jobPosting = jobService.findById(id);
+			if (jobPosting.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("failed", "Không tìm thấy công việc này.", null));
+			}
+
+			JobDescription jobDescription = new JobDescription(jobPostingDTO.getDescription(),
+					jobPostingDTO.getBenefits(), jobPostingDTO.getRequirement(), jobPostingDTO.getGender(),
+					jobPostingDTO.getExperience(), jobPostingDTO.getSalary(), jobPostingDTO.getNumber_candidates(),
+					jobPostingDTO.getWorking_form(), jobPostingDTO.getAddress_work());
+
+			jobPosting.get().setTitle(jobPostingDTO.getTitle());
+			jobPosting.get().setDueDate(jobPostingDTO.getDueDate());
+			jobPosting.get().setPostDate(jobPostingDTO.getPostDate());
+			jobPosting.get().setView(0);
+			jobPosting.get().setStatus("approved");
+
+
+			jobPosting.get().setJobDescription(jobDescription);
+
+			jobService.save(jobPosting.get());
+
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Cập nhật việc thành công ", null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(new ResponseObject("failed", "Lỗi Server !!", null));
+
+		}
+
+	}
+
+	@PostMapping("/setJob/{id}")
+	public ResponseEntity<ResponseObject> changeJob(@RequestHeader(value = "Authorization") String jwt,
+													@PathVariable("id") Long id, @RequestParam(name = "action", defaultValue = "hide") String action) {
+
+		jwt = jwt.substring(7, jwt.length());
 
 		try {
 
@@ -151,9 +197,46 @@ public class EmployerController {
 				if (status.equals("pass")) {
 					CV res = cv.get();
 					res.setStatus("pass");
-					cvService.save(res);
-					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
+					CV result = cvService.save(res);
 
+					// luu zo DB
+					Notification notification = new Notification();
+					notification.setImage(cv.get().getJobPosting().getCompany().getLogo());
+					notification.setStatus("new");
+					notification.setRole("EtoC");
+					notification.setTitle("Bạn vừa được tuyển dụng một công việc " + cv.get().getJobPosting().getTitle());
+					notification.setContent("Công ty " + cv.get().getJobPosting().getCompany().getName() + " vừa chấp nhận CV của bạn ");
+					notification.setTime(new Date());
+					notification.setCandidate(cv.get().getCandidate());
+					notification.setCompany(cv.get().getJobPosting().getCompany());
+					notificationDBService.save(notification);
+
+
+					// Gui thong bao den Candidate
+					NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
+					notificationService.sendNotification(cv.get().getCandidate().getEmail(), notificationResponse);
+
+					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", result));
+
+				} else if(status.equals("reject")){
+					cvService.delete(id);
+					// luu zo DB
+					Notification notification = new Notification();
+					notification.setImage(cv.get().getJobPosting().getCompany().getLogo());
+					notification.setStatus("new");
+					notification.setRole("EtoC");
+					notification.setTitle("Rất tiếc! Một CV của bạn vừa bị từ chối");
+					notification.setContent("Công ty" + cv.get().getJobPosting().getCompany().getName() + " vừa từ chối CV của bạn ");
+					notification.setTime(new Date());
+					notification.setCandidate(cv.get().getCandidate());
+					notification.setCompany(cv.get().getJobPosting().getCompany());
+					notificationDBService.save(notification);
+
+					// Gui thong bao den Candidate
+					NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
+					notificationService.sendNotification(cv.get().getCandidate().getEmail(), notificationResponse);
+
+					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
 				} else {
 					CV res = cv.get();
 					res.setStatus("consider");
@@ -161,7 +244,6 @@ public class EmployerController {
 					return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Thành công !!!", null));
 
 				}
-
 			}
 
 		} catch (Exception e) {
@@ -294,11 +376,19 @@ public class EmployerController {
 		}
 	}
 
-	@PutMapping(value = "/updateInfoEmployer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<ResponseObject> addEmployer(@RequestPart("employer") EmployerDTO employerDTO,
-			@RequestPart("file") MultipartFile file, @RequestHeader(value = "Authorization") String jwt) {
+	@PostMapping(value = "/updateInfoEmployer", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<ResponseObject> updateInfoEmployer(@RequestParam(value = "file", required = false) MultipartFile file,
+															 @RequestParam("name") String name,
+															 @RequestParam("phone") String phone,
+															 @RequestParam("taxCode") String taxCode,
+															 @RequestParam("address") String address,
+															 @RequestParam("domain") String domain,
+															 @RequestParam("companySize") String companySize,
+															 @RequestParam("workTime") String workTime,
+															 @RequestParam("description") String description,
+															 @RequestHeader(value = "Authorization") String jwt) {
 		try {
-			System.out.println(employerDTO.toString());
+			//System.out.println(employerDTO.toString());
 			jwt = jwt.substring(7, jwt.length());
 
 			String username = jwtHelper.getUsernameFromToken(jwt);
@@ -307,25 +397,27 @@ public class EmployerController {
 			Employer employer = user.getEmployer();
 			Company company = employer.getCompany();
 
-			// xu li file
-			firebaseImageService = new FirebaseImageService();
-			// save file to Firebase
-			String fileName = firebaseImageService.save(file,
-					"avatars_employers/" + employer.getId() + "_" + employer.getEmail());
-			String imageUrl = firebaseImageService.getFileUrl(fileName);
+			if( file != null){
+				// xu li file
+				firebaseImageService = new FirebaseImageService();
+				// save file to Firebase
+				String fileName = firebaseImageService.save(file,
+						"avatars_employers/" + employer.getId() + "_" + employer.getEmail());
+				String imageUrl = firebaseImageService.getFileUrl(fileName);
 
-			System.out.println((imageUrl));
+				System.out.println((imageUrl));
+				employer.setLogo(imageUrl);
+			}
 
-			employer.setPhone(employerDTO.getPhone());
-			employer.setLogo(imageUrl);
-			company.setAddress(employerDTO.getAddress());
-			company.setName(employerDTO.getName());
-			company.setDomain(employerDTO.getDomain());
-			company.setTaxCode(employerDTO.getTaxCode());
+			if(phone != null && !phone.equals("null")) employer.setPhone(phone);
+			if(address != null && !address.equals("null")) company.setAddress(address);
+			if(name != null && !name.equals("null")) company.setName(name);
+			if(domain != null && !domain.equals("null")) company.setDomain(domain);
+			if(taxCode != null && !taxCode.equals("null")) company.setTaxCode(taxCode);
 			company.setLogo(employer.getLogo());
-			company.setCompanySize(employerDTO.getCompanySize());
-			company.setDescription(employerDTO.getDescription());
-			company.setWorkTime(employerDTO.getWorkTime());
+			if(companySize != null && !companySize.equals("null")) company.setCompanySize(companySize);
+			if(description != null && !description.equals("null")) company.setDescription(description);
+			if(workTime != null && !workTime.equals("null")) company.setWorkTime(workTime);
 			company.setEmployer(employer);
 			employer.setCompany(company);
 
@@ -344,7 +436,7 @@ public class EmployerController {
 
 	@PostMapping("/changePassword")
 	public ResponseEntity<ResponseObject> changePassword(@RequestHeader(value = "Authorization") String jwt,
-			@RequestParam("password") String password, @RequestParam("newPassword") String newPassword) {
+														 @RequestParam("password") String password, @RequestParam("newPassword") String newPassword) {
 		try {
 
 			jwt = jwt.substring(7, jwt.length());
@@ -369,6 +461,57 @@ public class EmployerController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("failed", "Lỗi server!...", null));
+		}
+	}
+
+	@GetMapping("/getAllNotification")
+	public ResponseEntity<ResponseObject> getAllNotification(
+			@RequestHeader(value = "Authorization") String jwt) {
+		try {
+
+			jwt = jwt.substring(7, jwt.length());
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+			User user = (User) uService.findOneByUsername(username);
+			Employer employer = user.getEmployer();
+			Company company = employer.getCompany();
+
+
+			List<NotificationResponse> list = notificationDBService.listNotificationCompany(company.getId());
+
+			if (list.isEmpty())
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(new ResponseObject("ok", "Không có dữ liệu", null));
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Tất cả thông báo", list));
+
+		} catch (Exception e) {
+			e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("failed", "Lỗi server !....", null));
+
+		}
+	}
+
+	@GetMapping("/setSentNotification")
+	public ResponseEntity<ResponseObject> setSent(
+			@RequestHeader(value = "Authorization") String jwt) {
+		try {
+
+			jwt = jwt.substring(7, jwt.length());
+			String username = jwtHelper.getUsernameFromToken(jwt);
+			System.out.println(username);
+			User user = (User) uService.findOneByUsername(username);
+			Employer employer = user.getEmployer();
+			Company company = employer.getCompany();
+
+
+			notificationDBService.setSentCompany(company.getId());
+
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseObject("ok", "Đã xem các thông báo", null));
+
+		} catch (Exception e) {
+			e.printStackTrace(); return ResponseEntity.status(HttpStatus.OK)
+					.body(new ResponseObject("failed", "Lỗi server !....", null));
+
 		}
 	}
 

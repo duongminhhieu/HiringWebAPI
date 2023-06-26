@@ -231,6 +231,8 @@ public class AuthenticationController {
         com.setName(user.getName());
         com.setDomain(user.getDomain());
         com.setTaxCode(null);
+        com.setWorkTime(user.getWorkTime());
+        com.setCompanySize(user.getCompanySize());
         com.setLogo("https://firebasestorage.googleapis.com/v0/b/jobhiringweb.appspot.com/o/avatars%2FavatarDefault.png?alt=media&token=caa9f8a4-ff38-4a35-a09b-23712bf2a504");
         com.setEmployer(em);
         em.setCompany(com);
@@ -403,7 +405,7 @@ public class AuthenticationController {
 
                 if (user == null) {
                     return ResponseEntity.ok()
-                            .contentType(MediaType.TEXT_HTML)
+                            .contentType(MediaType.TEXT_PLAIN)
                             .body("Không tìm thấy tài khoản !...".getBytes(StandardCharsets.UTF_8));
                 }
 
@@ -412,14 +414,14 @@ public class AuthenticationController {
                 User result = UService.save(user);
 
                 return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_HTML)
-                        .body("Tạo lại mật khẩu mới thành công 👍👍👍".getBytes(StandardCharsets.UTF_8));
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body("Create new password successfully :))".getBytes(StandardCharsets.UTF_8));
             }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_HTML)
-                    .body("Lỗi server !...".getBytes(StandardCharsets.UTF_8));
+                    .contentType(MediaType.TEXT_PLAIN)
+                    .body("Server is wrong !...".getBytes(StandardCharsets.UTF_8));
         }
     }
 

@@ -1,9 +1,12 @@
 package com.setqt.Hiring.Controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
 import com.setqt.Hiring.DTO.APIResponse.SearchResponse;
+import com.setqt.Hiring.NotificationSSE.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +20,8 @@ import com.setqt.Hiring.Service.JobPosting.JobPostingService;
 @RequestMapping("/job")
 @CrossOrigin(origins = "*", allowedHeaders = {"Content-Type", "Authorization"})
 public class JobPostingController {
-
+	@Autowired
+	private NotificationService notificationService;
 	@Autowired
 	JobPostingService jobService;
 
