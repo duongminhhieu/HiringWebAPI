@@ -382,11 +382,8 @@ public class CandidateController {
                     candidate.getId() + "_" + candidate.getEmail() + "_" + idPosting);
             String url = firebaseDocumentFileService.getFileUrl(fileName);
 
-	        LocalDateTime localDateTime = LocalDateTime.now();
-
-	        // Chuyển đổi LocalDateTime sang kiểu Date
-	        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-            System.out.println((url));
+            LocalDateTime localDateTime =  LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+	        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());  System.out.println((url));
             System.out.println("new notify at" +currentDate.toString());
             for(CV cv : jobPosting.get().getListCV()){
                 if(Objects.equals(cv.getCandidate().getId(), candidate.getId())){

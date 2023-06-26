@@ -56,8 +56,8 @@ public class NotificationController {
 	public ResponseEntity<ResponseObject> getAll() {
 
 		  LocalDateTime localDateTime =  LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
-	        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-	        System.out.println("Lúc " + date);
+	        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+	        System.out.println("Lúc " + currentDate);
 		try {
 			List<Notification> result = notificationDBService.findAll();
 			if (result.isEmpty())

@@ -197,9 +197,8 @@ public class EmployerController {
 				if (status == null)
 					return ResponseEntity.status(HttpStatus.OK)
 							.body(new ResponseObject("failed", "Sai status!!!", null));
-				  LocalDateTime localDateTime = LocalDateTime.now();
-			        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-				if (status.equals("pass")) {
+				 LocalDateTime localDateTime =  LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+			        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());	if (status.equals("pass")) {
 					CV res = cv.get();
 					res.setStatus("pass");
 					CV result = cvService.save(res);
