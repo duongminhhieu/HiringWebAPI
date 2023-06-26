@@ -5,6 +5,7 @@ import com.setqt.Hiring.Model.Company;
 import com.setqt.Hiring.Model.JobPosting;
 import com.setqt.Hiring.Model.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -22,13 +23,16 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             + " FROM Notification n  WHERE n.candidate.id = :idCandidate and n.role = 'EtoC' order by n.time desc ")
     List<NotificationResponse> getNotificationCandidate(Long idCandidate);
 
+    @Modifying
     @Query("UPDATE Notification n SET n.status = 'sent'"
-            + "WHERE n.company.id = :idCompany and n.role = 'CtoE'")
-    List<NotificationResponse> setSentCompany(Long idCompany);
+            + " WHERE n.company.id = :idCompany and n.role = 'CtoE'")
+    void setSentCompany(Long idCompany);
 
-    @Query("UPDATE Notification n SET n.status = 'sent'"
-            + "WHERE n.candidate.id = :idCandidate and n.role = 'EtoC'")
-    List<NotificationResponse> setSentCandidate(Long idCandidate);
+
+    @Modifying
+    @Query("UPDATE Notification SET status = 'sent'" +
+            "WHERE candidate.id = :idCandidate and role = 'EtoC'")
+    void setSentCandidate(Long idCandidate);
 
 
 
