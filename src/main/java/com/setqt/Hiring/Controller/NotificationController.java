@@ -55,7 +55,7 @@ public class NotificationController {
 	@GetMapping("/getAll")
 	public ResponseEntity<ResponseObject> getAll() {
 
-		  LocalDateTime localDateTime = LocalDateTime.now();
+		  LocalDateTime localDateTime =  LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
 	        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 	        System.out.println("Lúc " + date);
 		try {
