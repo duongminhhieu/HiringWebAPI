@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @RestController
@@ -380,13 +382,18 @@ public class CandidateController {
                     candidate.getId() + "_" + candidate.getEmail() + "_" + idPosting);
             String url = firebaseDocumentFileService.getFileUrl(fileName);
 
+	        LocalDateTime localDateTime = LocalDateTime.now();
+
+	        // Chuyển đổi LocalDateTime sang kiểu Date
+	        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
             System.out.println((url));
+            System.out.println("new notify at" +currentDate.toString());
             for(CV cv : jobPosting.get().getListCV()){
                 if(Objects.equals(cv.getCandidate().getId(), candidate.getId())){
                     cv.setName(name);
                     cv.setIntroLetter(introLetter);
                     cv.setFileCV(url);
-                    cv.setDateCreated(new Date());
+                    cv.setDateCreated(currentDate);
                     cv.setStatus("consider");
                     CV result = cvService.save(cv);
                     if (result == null) {
@@ -404,7 +411,7 @@ public class CandidateController {
                     notification.setRole("CtoE");
                     notification.setTitle(jobPosting.get().getTitle());
                     notification.setContent("Ứng viên " + candidate.getFullName() + " vừa cập nhật lại CV. Hãy xem nào !");
-                    notification.setTime(new Date());
+                    notification.setTime(currentDate);
                     notification.setCandidate(candidate);
                     notification.setCompany(jobPosting.get().getCompany());
                     notificationDBService.save(notification);
@@ -423,7 +430,7 @@ public class CandidateController {
             cv.setName(name);
             cv.setIntroLetter(introLetter);
             cv.setFileCV(url);
-            cv.setDateCreated(new Date());
+            cv.setDateCreated(currentDate);
             cv.setJobPosting(jobPosting.get());
               cv.setStatus("consider");
             CV result = cvService.save(cv);
@@ -440,7 +447,7 @@ public class CandidateController {
             notification.setRole("CtoE");
             notification.setTitle(jobPosting.get().getTitle());
             notification.setContent("Ứng viên " + candidate.getFullName() + " vừa nộp CV. Hãy xem nào !");
-            notification.setTime(new Date());
+            notification.setTime(currentDate);
             notification.setCandidate(candidate);
             notification.setCompany(jobPosting.get().getCompany());
             notificationDBService.save(notification);

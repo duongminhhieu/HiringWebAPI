@@ -1,8 +1,11 @@
 package com.setqt.Hiring.Controller;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
 import com.setqt.Hiring.DTO.CandidateDTO;
@@ -194,6 +197,8 @@ public class EmployerController {
 				if (status == null)
 					return ResponseEntity.status(HttpStatus.OK)
 							.body(new ResponseObject("failed", "Sai status!!!", null));
+				  LocalDateTime localDateTime = LocalDateTime.now();
+			        Date currentDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
 				if (status.equals("pass")) {
 					CV res = cv.get();
 					res.setStatus("pass");
@@ -206,7 +211,7 @@ public class EmployerController {
 					notification.setRole("EtoC");
 					notification.setTitle("Bạn vừa được tuyển dụng một công việc " + cv.get().getJobPosting().getTitle());
 					notification.setContent("Công ty " + cv.get().getJobPosting().getCompany().getName() + " vừa chấp nhận CV của bạn ");
-					notification.setTime(new Date());
+					notification.setTime(currentDate);
 					notification.setCandidate(cv.get().getCandidate());
 					notification.setCompany(cv.get().getJobPosting().getCompany());
 					notificationDBService.save(notification);
@@ -227,7 +232,7 @@ public class EmployerController {
 					notification.setRole("EtoC");
 					notification.setTitle("Rất tiếc! Một CV của bạn vừa bị từ chối");
 					notification.setContent("Công ty" + cv.get().getJobPosting().getCompany().getName() + " vừa từ chối CV của bạn ");
-					notification.setTime(new Date());
+					notification.setTime(currentDate);
 					notification.setCandidate(cv.get().getCandidate());
 					notification.setCompany(cv.get().getJobPosting().getCompany());
 					notificationDBService.save(notification);

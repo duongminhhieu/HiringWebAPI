@@ -1,24 +1,27 @@
 package com.setqt.Hiring.Controller;
 
-import java.io.IOException;
-
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.setqt.Hiring.DTO.APIResponse.NotificationResponse;
-import com.setqt.Hiring.Model.JobPosting;
 import com.setqt.Hiring.Model.Notification;
 import com.setqt.Hiring.Model.ResponseObject;
 import com.setqt.Hiring.NotificationSSE.NotificationService;
 import com.setqt.Hiring.Service.Notification.NotificationDBService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @RestController
 @RequestMapping(path = "/notification")
@@ -52,6 +55,9 @@ public class NotificationController {
 	@GetMapping("/getAll")
 	public ResponseEntity<ResponseObject> getAll() {
 
+		  LocalDateTime localDateTime = LocalDateTime.now();
+	        Date date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+	        System.out.println("Lúc " + date);
 		try {
 			List<Notification> result = notificationDBService.findAll();
 			if (result.isEmpty())
