@@ -101,7 +101,7 @@ public class AuthenticationController {
 
             if (!check) {
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("failed", "Đăng nhập không thành công",
+                        new ResponseObject("failed", "Email hoặc mật khẩu chưa chính xác !",
                                 ""));
             }
 
@@ -144,15 +144,15 @@ public class AuthenticationController {
 
             if (!check) {
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("failed", "Đăng nhập không thành công",
+                        new ResponseObject("failed", "Email hoặc mật khẩu chưa chính xác !",
                                 ""));
             }
 
-//            if(!user.isEnable()){
-//                return ResponseEntity.status(HttpStatus.OK).body(
-//                        new ResponseObject("failed", "Bạn chưa xác thực tài khoản!",
-//                                ""));
-//            }
+            if(!user.isEnable()){
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("failed", "Bạn chưa xác thực tài khoản!",
+                                ""));
+            }
 
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("ok", "Đăng nhập thành công",
