@@ -305,7 +305,7 @@ public class EmployerController {
             List<JobPosting> jobPosting = employerService.getAllJob(username);
             if (jobPosting.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("failed", "Không tìm thấy việc !!!!", null));
+                        .body(new ResponseObject("failed", "Không tìm thấy việc !!!!",jobPosting ));
             }
 
 //			List<CV> cv = getJob.getListCV();
