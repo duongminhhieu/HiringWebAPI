@@ -36,7 +36,7 @@ public class NotificationController {
 
 	@GetMapping("/subscribe/{clientId}")
 	public SseEmitter subscribe(@PathVariable String clientId) {
-		SseEmitter emitter = new SseEmitter();
+		SseEmitter emitter = new SseEmitter((long) (60000 * 5));
 		notificationService.addEmitter(clientId, emitter);
 		return emitter;
 	}

@@ -308,10 +308,6 @@ public class EmployerController {
                         .body(new ResponseObject("failed", "Không tìm thấy việc !!!!",jobPosting ));
             }
 
-//			List<CV> cv = getJob.getListCV();
-//			if (cv.isEmpty())
-//				return ResponseEntity.status(HttpStatus.OK)
-//						.body(new ResponseObject("failed", "Chưa có cv nào !!!!", cv));
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "Tìm tất cả công việc thành công !", jobPosting));
@@ -374,7 +370,7 @@ public class EmployerController {
 
             String username = jwtHelper.getUsernameFromToken(jwt);
             System.out.println(username);
-//			User user = (User) uService.findOneByUsername(username);
+
             Employer employer = employerService.getInfo(username);
             Company com = companyService.findCompanyByEmployerIdWithoutJobPosting(employer.getId());
             employer.setCompany(com);
@@ -402,7 +398,7 @@ public class EmployerController {
                                                              @RequestParam("description") String description,
                                                              @RequestHeader(value = "Authorization") String jwt) {
         try {
-            //System.out.println(employerDTO.toString());
+          
             jwt = jwt.substring(7, jwt.length());
 
             String username = jwtHelper.getUsernameFromToken(jwt);
