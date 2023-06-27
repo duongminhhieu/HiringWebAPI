@@ -402,6 +402,7 @@ public class CandidateController {
                     System.out.println("id: " + jobPosting.get().getCompanyInfo().getId().toString());
 
                     // luu zo DB
+                    
                     Notification notification = new Notification();
                     notification.setImage(candidate.getAvatar());
                     notification.setStatus("new");
@@ -414,9 +415,18 @@ public class CandidateController {
                     notificationDBService.save(notification);
 
                     // Gui thong bao den Employer
-                    NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
-                    notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
+                    Thread send = new Thread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							  NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
+			                    notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
 
+						}
+					});
+                    
+                  send.start();
                     return ResponseEntity.status(HttpStatus.OK)
                             .body(new ResponseObject("ok", "CV bạn đã được ghi đè !", result));
                 }
@@ -450,9 +460,19 @@ public class CandidateController {
             notificationDBService.save(notification);
 
             // Gui thong bao den Employer
-            NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
-            notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
+            Thread send = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					   NotificationResponse notificationResponse = new NotificationResponse( notification.getImage(), notification.getStatus(), notification.getTitle(), notification.getContent(), notification.getTime(), notification.getCandidate().getId(), notification.getCompany().getId(), notification.getRole());
+			            notificationService.sendNotification(jobPosting.get().getCompanyInfo().getId().toString(), notificationResponse);
 
+				}
+			});
+            
+          send.start();
+         
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("ok", "Nộp CV thành công !", result));
 
