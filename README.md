@@ -31,9 +31,7 @@ This project provides a simple REST API for managing candidate information, empl
 - Get a list of all companies: `GET /company/getAll`
 - Search for job listings by text and address: `GET /job/search?text={search-text}&address={search-address}`
 - Submit a CV for a candidate with ID 1: `POST /candidate/submitCV/1`
-## Project Structure
 
-The project is structured as follows:
 
 ## Project Structure
 
