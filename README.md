@@ -1,13 +1,3 @@
-# HiringWebAPI
-
-
-Deverloper
-### Triệu Quốc Thái
-### Dương Minh Hiếu
-
-Link: https://jorehcmus.netlify.app/
-
-
 
 HiringWebAPI is a simple Spring Boot application for managing a list of candidates and related recruitment information. 
 
